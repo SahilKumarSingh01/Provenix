@@ -1,51 +1,39 @@
 const mongoose = require("mongoose");
 
-const UserSchema = new mongoose.Schema({
-  username: String,
-  email: String,
-  password: String, // Plain-text password (for simplicity)
+const userSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    required: true,
+    unique: true, // Ensures no duplicate usernames
+  },
+  password:String,
+  email: {
+    type: String,
+    unique: true, // Ensures no duplicate emails
+  },
+  googleid: {
+    type: String, // For Google OAuth
+    unique: true,
+    sparse: true, // Index the field for uniqueness but allows empty values
+  },
+  githubid: {
+    type: String, // For GitHub OAuth
+    unique: true,
+    sparse: true, // Index the field for uniqueness but allows empty values
+  },
+  photo: String, // Optional: Store URL of profile picture (for Google/Github login)
+  displayName: String, // Optional: Store the name from Google or GitHub
+  verifiedEmail: {
+    type: Boolean,
+    default: false, // Whether the email is verified
+  },
+  verificationOTP: String, // OTP for email verification
+  OTPSendTime: Number, // Time when OTP was sent
+}, {
+  timestamps: true, // Automatically manage createdAt and updatedAt
 });
 
-const User = mongoose.model("User", UserSchema);
+// Create the User model
+const User = mongoose.model("User", userSchema);
+
 module.exports = User;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// const mongoose = require("mongoose");
-// const bcrypt = require("bcrypt");
-
-// const userSchema = new mongoose.Schema({
-//   username: { type: String, required: true, unique: true },
-//   email: { type: String, required: true, unique: true },
-//   password: { type: String },
-//   oauthProvider: { type: String, enum: ["google", "github", null], default: null },
-//   oauthId: { type: String, default: null },
-//   verified: { type: Boolean, default: false },
-//   verificationToken: { type: String },
-// }, { timestamps: true });
-
-// // Hash password before saving (only for username/password sign-ups)
-// userSchema.pre("save", async function (next) {
-//   if (this.isModified("password") && this.password) {
-//     this.password = await bcrypt.hash(this.password, 10);
-//   }
-//   next();
-// });
-
-// // Compare password for login
-// userSchema.methods.comparePassword = async function (password) {
-//   return bcrypt.compare(password, this.password);
-// };
-
-// module.exports = mongoose.model("User", userSchema);
