@@ -4,36 +4,40 @@ const userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
-    unique: true, // Ensures no duplicate usernames
+    unique: true,
   },
-  password:String,
+  password: {
+    type: String,
+    required: true,
+  },
   email: {
     type: String,
-    unique: true, // Ensures no duplicate emails
+    unique: true,
   },
   googleid: {
-    type: String, // For Google OAuth
+    type: String,
     unique: true,
-    sparse: true, // Index the field for uniqueness but allows empty values
+    sparse: true,
   },
   githubid: {
-    type: String, // For GitHub OAuth
+    type: String,
     unique: true,
-    sparse: true, // Index the field for uniqueness but allows empty values
+    sparse: true,
   },
-  photo: String, // Optional: Store URL of profile picture (for Google/Github login)
-  displayName: String, // Optional: Store the name from Google or GitHub
+  photo: String,
+  displayName: String,
   verifiedEmail: {
     type: Boolean,
-    default: false, // Whether the email is verified
+    default: false,
   },
-  verificationOTP: String, // OTP for email verification
-  OTPSendTime: Number, // Time when OTP was sent
+  verificationOTP: String,
+  OTPSendTime: Number,
+  resetPasswordToken: String,
+  resetPasswordExpiry: Number,
 }, {
-  timestamps: true, // Automatically manage createdAt and updatedAt
+  timestamps: true,
 });
 
-// Create the User model
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;

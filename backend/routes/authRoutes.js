@@ -8,6 +8,7 @@ const GithubStrategy= require('passport-github2').Strategy;
 const GoogleStrategy= require('passport-google-oauth20').Strategy;
 const cloudinary=require('../config/cloudinary.js');
 const sendMail=require('../models/sendMail.js');
+const crypto = require('crypto');
 require("dotenv").config();
 const routes  =express.Router();
 
@@ -142,7 +143,8 @@ routes.post('/signup',async (req,res)=>{
     }
 })
 
-const OTP_EXPIRY = 1; // Set time limit (e.g., 2 minutes)
+const OTP_EXPIRY_TIME = 1; // Set time limit (e.g., 2 minutes)
+const OTP_RESEND_TIME = 10;
 routes.post('/sendotp',async(req,res)=>{
   try{
     const {email}=req.body;
@@ -151,7 +153,7 @@ routes.post('/sendotp',async(req,res)=>{
       return res.status(400).json({success:false,message:"User not found"});
     if(user.verifiedEmail)
       return res.status(400).json({success:false,message:"email is already verified"});
-    if(user.OTPSendTime+OTP_EXPIRY> Date.now())
+    if(user.OTPSendTime+OTP_RESEND_TIME> Date.now())
       return res.status(429).json({success:false,message:"please wait for otp to expire"});
     verificationOTP=generateOTP();
     await sendMail({
@@ -164,7 +166,7 @@ routes.post('/sendotp',async(req,res)=>{
     console.log(verificationOTP)
     return res.status(200).json({success:true,message:"opt has been sent",email});
   }catch(e){
-    res.status(500).json({message:e.message});
+    return res.status(500).json({message:e.message});
   }
 });
 
@@ -177,11 +179,70 @@ routes.post('/verifyotp',async(req,res)=>{
         return res.status(400).json({success:false,message:"user is already verified"});
     if(user.verificationOTP!==otp)
         return res.status(400).json({success:false,message:"otp mismatch"});
+    if(user.OTPSendTime+OTP_EXPIRY_TIME<Date.now())
+      return res.status(429).json({success:false,message:"otp is expire"});
     user.verificationOTP=null;
     user.verifiedEmail=true;
     await user.save();
-    res.status(200).json({message:"email verified"});
+    return res.status(200).json({message:"email verified"});
 })
+
+
+routes.post('/forgot-password', async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user)
+      return res.status(400).json({ success: false, message: "User not found" });
+    if (!user.verifiedEmail)
+      return res.status(400).json({ success: false, message: "Email not verified" });
+    if (user.resetPasswordToken && user.resetPasswordExpiry > Date.now()) 
+      return res.status(400).json({ message: 'Please wait for the current reset link to expire before requesting a new one.' });
+    // Generate a secure random token
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    user.resetPasswordToken = resetToken;
+    user.resetPasswordExpiry = Date.now() + 15 * 60 * 1000; // Expires in 15 min
+    await user.save();
+    console.log(resetToken)
+    await sendMail({
+      from: process.env.SENDER_EMAIL,
+      to: email,
+      subject: "Password Reset Link",
+      html: `<p>Click the link below to reset your password:</p>
+             <a href="http://localhost:3000/reset-password?token=${resetToken}">Reset Password</a>
+             <p>This link will expire in 15 minutes.</p>`
+    });
+    return res.status(200).json({ success: true, message: "Password reset link sent" });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+});
+
+routes.post('/reset-password', async (req, res) => {
+  try {
+    const { token, newPassword } = req.body;
+
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpiry: { $gt: Date.now() } // Token must be valid (not expired)
+    });
+
+    if (!user)
+      return res.status(400).json({ success: false, message: "Invalid or expired token" });
+
+    // Hash new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    user.resetPasswordToken = null; // Remove token after use
+    user.resetPasswordExpiry = null;
+    await user.save();
+
+    return res.status(200).json({ success: true, message: "Password has been reset successfully" });
+  } catch (e) {
+    res.status(500).json({ message: e.message });
+  }
+});
+
   // Logout Route
 routes.get('/logout', (req, res) => {
     req.logout((err) => {
