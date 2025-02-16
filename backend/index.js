@@ -4,7 +4,7 @@ const session = require('express-session');
 const cors = require('cors');
 const mongoStore = require('connect-mongo');
 const authRoutes = require('./routes/authRoutes');
-const passport   = require('passport');
+const passport   = require('./config/passport.js');;
 require("dotenv").config();
 
 // Connect to MongoDB
@@ -16,7 +16,7 @@ const app = express();
 
 // CORS Middleware
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: process.env.CLIENT_URL,
   credentials: true
 }));
 
