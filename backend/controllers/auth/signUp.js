@@ -19,10 +19,10 @@ const signUp = async (req,res)=>{
       const hashPassword=await bcrypt.hash(password,10);
       user=await User.create({username,password:hashPassword,email});
       // console.log(user);
-      return res.status(200).json({success:true,message:"user log in successfully"});
+      return res.status(200).json({success:true,message:"user sign up successfully"});
     }catch(e){
       res.status(500).json({message:"server error"+e.message});
     }
 };
 
-module.exports={signUp};
+module.exports=signUp;

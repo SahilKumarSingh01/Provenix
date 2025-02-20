@@ -1,5 +1,7 @@
 const User = require("../../models/User.js");
 const sendMail = require("../../config/sendMail.js");
+const crypto =require('crypto');
+const bcrypt =require('bcrypt');
 require('dotenv').config();
 
 const forgotPassword= async (req, res) => {
@@ -23,7 +25,7 @@ const forgotPassword= async (req, res) => {
         to: email,
         subject: "Password Reset Link",
         html: `<p>Click the link below to reset your password:</p>
-               <a href="http://localhost:3000/reset-password?token=${resetToken}">Reset Password</a>
+               <a href="${process.env.CLIENT_URL}/reset-password?token=${resetToken}">Reset Password</a>
                <p>This link will expire in 15 minutes.</p>`
       });
       return res.status(200).json({ success: true, message: "Password reset link sent" });
@@ -34,7 +36,7 @@ const forgotPassword= async (req, res) => {
 const resetPassword =  async (req, res) => {
     try {
       const { token, newPassword } = req.body;
-  
+      console.log(token+" "+newPassword);
       const user = await User.findOne({
         resetPasswordToken: token,
         resetPasswordExpiry: { $gt: Date.now() } // Token must be valid (not expired)

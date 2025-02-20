@@ -1,0 +1,28 @@
+import { createContext, useState, useEffect } from "react";
+import axios from "../api/axios";
+
+export const AuthContext = createContext();
+
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get("/api/user", { withCredentials: true });
+        setUser(response.data.user);
+      } catch (error) {
+        console.log('User session is not in backend');
+        setUser(NULL);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  return (
+    <AuthContext.Provider value={{ user, setUser }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};

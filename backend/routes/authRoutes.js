@@ -13,10 +13,11 @@ const routes  =express.Router();
   routes.get('/google/callback',googleAuthCallback);
   
   // Login Route
+// routes.post('/me',)
 routes.post('/login',login);
 routes.post('/signup',signUp);
-routes.post('/sendotp',sendOTP);
-routes.post('/verifyotp',verifyOTP);
+routes.post('/send-otp',sendOTP);
+routes.post('/verify-otp',verifyOTP);
 routes.post('/forgot-password', forgotPassword);
 routes.post('/reset-password',resetPassword);
 //logout

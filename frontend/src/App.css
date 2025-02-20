@@ -1,75 +1,17 @@
-/* Reset & Global Styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;/*important to make everything fit into*/
-    font-family:  sans-serif;
-}
+/* 
 
-/* Body */
-body {
-    background: #0A192F; /* Deep Navy Blue */
-    color: #A8B2D1; /* Muted Dark Blue-Grey */
-}
-
-/* App Container */
 .app-container {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
 
-/* Navbar */
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 25px;
-    background: linear-gradient(to right, #0F172A, #1E293B, #334155); /* Dark Blue Gradient */
-    position: sticky;
-    top: 0;
-    width: 100%;
-    z-index: 100;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-}
 
-/* Logo */
-.logo {
-    font-size: 24px;
-    font-weight: bold;
-    color: #4F46E5; /* Indigo Blue */
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-}
 
-/* Navigation Links */
-.nav-links {
-    display: flex;
-    gap: 25px;
-}
 
-.nav-link {
-    /* flex-shrink: 1; */
-    text-decoration: none;
-    color: #94A3B8; /* Muted Dark Blue-Grey */
-    font-size: 16px;
-    padding: 10px 16px;
-    border-radius: 5px;
-    transition: all 0.3s ease-in-out;
-    font-weight: 100;
-}
 
-.nav-link:hover {
-    background: #4F46E5; /* Indigo Blue */
-    color: #0F172A; /* Dark Blue */
-    /* font-weight: bold; */
-    transform: scale(1.05); /* Slight increase for effect */
-    border-radius: 6px;
-    box-shadow: 0 0 10px rgba(79, 70, 229, 0.3);
-}
 
-/* Content */
 .content {
     flex: 1;
     padding: 40px 60px;
-}
+} */

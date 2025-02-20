@@ -19,18 +19,21 @@ try{
     if(user.verifiedEmail)
     return res.status(400).json({success:false,message:"email is already verified"});
     if(user.OTPSendTime+OTP_RESEND_TIME> Date.now())
-    return res.status(429).json({success:false,message:"please wait for otp to expire"});
+    return res.status(429).json({success:false,message:`please wait for ${Math.floor((user.OTPSendTime+OTP_RESEND_TIME-Date.now())/1000)}sec`});
     verificationOTP=generateOTP();
+    // console.log(process.env.SENDER_EMAIL+" "+email);
     await sendMail({
         from: process.env.SENDER_EMAIL,  // Sender email
         to: email,                   // Recipient email
         subject: "Your OTP Code",
-        html: `<p>Your OTP code is: <strong>${verificationOTP}</strong></p><p>This code will expire in ${OTP_EXPIRY/(1000*60)} minutes.</p>`
+        html: `<p>Your OTP code is: <strong>${verificationOTP}</strong></p><p>This code will expire in ${OTP_EXPIRY_TIME/(1000*60)} minutes.</p>`
     })
+    
     await User.updateOne({email},{verificationOTP,OTPSendTime:Date.now()});
-    console.log(verificationOTP)
+    // console.log(verificationOTP)
     return res.status(200).json({success:true,message:"opt has been sent",email});
 }catch(e){
+    console.log(e);
     return res.status(500).json({message:e.message});
 }
 };

@@ -4,8 +4,9 @@ import axios from '../api/axios'
 import "../styles/form.css";
 import GoogleLogo from "../assets/google.svg"; // Assume these SVGs exist
 import GitHubLogo from "../assets/github.svg"; // Assume these SVGs exist
-const Login = () => {
+const Signup = () => {
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -14,10 +15,10 @@ const Login = () => {
   const handleLogin =async (e) => {
     e.preventDefault();
     try{
-      const response=await axios.post('/auth/login',{username,password});
-      navigate("/");
+      const response=await axios.post('/auth/signup',{username,email,password});
+      navigate("/email-verify",{state:{email}});
     }catch(e){
-        setError(e?.response?.data?.message||"Something went wrong");
+      setError(e?.response?.data?.message||"Something went wrong");
     }
   };
 
@@ -33,7 +34,7 @@ const Login = () => {
 
   return (
     <div className="form-container">
-      <h2>Login</h2>
+      <h2>Sign Up</h2>
       <form onSubmit={handleLogin}>
           <input
             type="text"
@@ -41,6 +42,13 @@ const Login = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             placeholder="Enter your username"
+          />
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email"
           />
           <input
             type="password"
@@ -51,7 +59,7 @@ const Login = () => {
           />
         {error && <p className="error-message">{error}</p>}
         <button type="submit" className="submit-button">
-          Login
+          Sign Up
         </button>
       </form>
 
@@ -65,11 +73,10 @@ const Login = () => {
         </button>
 
         <div className='form-links'>
-        <Link to="/signup">Don't have an account? Sign Up</Link>
-        <Link to="/forgot-password">Forgot Password?</Link>
+        <Link to="/login">Already have account ? Login</Link>
         </div>
     </div>
   );
 };
 
-export default Login;
+export default Signup;

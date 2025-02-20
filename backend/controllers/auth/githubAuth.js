@@ -1,4 +1,4 @@
-const passport=require('../config/passport.js');
+const passport=require('../../config/passport.js');
 require('dotenv').config();
 
 // GitHub Authentication Handler
