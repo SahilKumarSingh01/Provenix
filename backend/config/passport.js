@@ -19,7 +19,7 @@ const UniqueUsername = async (displayName) => {
   // Local Strategy
 passport.use(new LocalStrategy(async (username, password, done) => {
     try {
-      const user = await User.findOne({ username ,});
+      const user = await User.findOne({$or:[{ username },{email:username}]});
       if (!user)
            return done(null, false, { message: "User not found" });
       if(!user.password)
@@ -90,7 +90,8 @@ passport.use(new GithubStrategy({
 ))
 
 // Serialize user (store user ID in session)
-passport.serializeUser((user, done) => {done(null, user.id);});
+passport.serializeUser((user, done) => {
+  done(null, user.id);});
 
 // Deserialize user (retrieve user from DB using stored ID)l
 passport.deserializeUser(async (id, done) => {done(null,{id});});//only user.id will be available do all lookup based on that 

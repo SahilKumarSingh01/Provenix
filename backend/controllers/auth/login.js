@@ -7,7 +7,7 @@ const passport=require('../../config/passport.js');
           
           req.logIn(user, (err) => {
               if (err) return res.status(500).json({ message: "Login failed" });
-              res.json({ message: "Login successful" });
+              res.json({ message: "Login successful" ,user:user.getInfo()});
           });
       })(req, res, next);
   }

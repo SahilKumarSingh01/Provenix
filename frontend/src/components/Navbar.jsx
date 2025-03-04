@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useState, useContext} from "react";
 import { Link } from "react-router-dom";
+import {AuthProvider,AuthContext} from'../context/AuthContext.jsx';
+// import axios from '../api/axios'
+import defaultPicture from '../assets/defaultPicture.png';
 import "../styles/navbar.css";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-
+  const {user,setUser}      = useContext(AuthContext);
   return (
     <nav className="navbar">
       <h1 className="logo">Provenix</h1>
@@ -21,7 +24,19 @@ function Navbar() {
         <Link to="/" className="nav-link" onClick={() => setIsOpen(false)}>Home</Link>
         <Link to="/explore" className="nav-link" onClick={() => setIsOpen(false)}>Explore</Link>
         <Link to="/about" className="nav-link" onClick={() => setIsOpen(false)}>About</Link>
-        <Link to="/login" className="nav-link" onClick={() => setIsOpen(false)}>Login</Link>
+        {user ? (
+          <>
+            <img 
+              src={user.photo || defaultPicture} 
+              alt="Profile" 
+              className="profile-pic"
+            />
+            
+            {/* <button className="logout-btn" >Logout</button> */}
+          </>
+        ) : (
+          <Link to="/login" className="nav-link" onClick={() => setIsOpen(false)}>Login</Link>
+        )}
       </div>
     </nav>
   );

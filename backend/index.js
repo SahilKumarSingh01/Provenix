@@ -4,14 +4,16 @@ const session = require('express-session');
 const cors = require('cors');
 const mongoStore = require('connect-mongo');
 const authRoutes = require('./routes/authRoutes');
-const passport   = require('./config/passport.js');;
+const apiRoutes  = require('./routes/apiRoutes');
+const isAuthenticated=require('./middlewares/authMiddleware');
+const passport   = require('./config/passport.js');
 require("dotenv").config();
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB is connected"))
   .catch((e) => console.log(e.message));
-
+    
 const app = express();
 
 // CORS Middleware
@@ -35,7 +37,7 @@ app.use(session({
   }),
   cookie: {
     httpOnly: true,
-    maxAge: 10*1000  // 10 minutes
+    maxAge: 2*60*1000  // 10 minutes 
   }
 }));
 
@@ -43,6 +45,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use('/auth',authRoutes);
+app.use('/api',isAuthenticated,apiRoutes);
 
  // Home Route
  app.get('/', (req, res) => {

@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from '../api/axios'
 import "../styles/form.css";
 import GoogleLogo from "../assets/google.svg"; // Assume these SVGs exist
 import GitHubLogo from "../assets/github.svg"; // Assume these SVGs exist
+import {AuthContext} from'../context/AuthContext.jsx';
+
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const {user,setUser}      = useContext(AuthContext);
   const navigate = useNavigate();
 
   // Handle form submission
@@ -15,7 +18,8 @@ const Login = () => {
     e.preventDefault();
     try{
       const response=await axios.post('/auth/login',{username,password});
-      navigate("/");
+      setUser(response.data.user);
+      navigate("/",{state:{user:response.data.user}});
     }catch(e){
         setError(e?.response?.data?.message||"Something went wrong");
     }
@@ -40,7 +44,7 @@ const Login = () => {
             id="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder="Enter your username"
+            placeholder="username or email"
           />
           <input
             type="password"

@@ -9,11 +9,13 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get("/api/user", { withCredentials: true });
+        const response = await axios.get("/auth/me");
+        console.log(response.data.user);
         setUser(response.data.user);
       } catch (error) {
+        console.log(error);
         console.log('User session is not in backend');
-        setUser(NULL);
+        setUser(null);
       }
     };
 

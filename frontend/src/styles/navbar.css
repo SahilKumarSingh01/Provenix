@@ -43,7 +43,18 @@
     border-radius: 6px;
     box-shadow: 0 0 10px rgba(79, 70, 229, 0.3);
 }
-
+/*prfile picture*/
+.profile-pic {
+    width: 40px; /* Adjust as needed */
+    height: 40px; /* Keep it square */
+    border-radius: 50%; /* Makes it circular */
+    object-fit: cover; /* Ensures the image scales properly */
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .profile-pic:hover {
+    transform: scale(1.5); /* Slight zoom effect on hover */
+  }
 /* Hamburger Menu */
 .menu-icon {
     display: none;

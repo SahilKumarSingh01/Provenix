@@ -8,18 +8,23 @@ import Signup from "./pages/Signup";
 import EmailVerify from "./pages/EmailVerify"
 import ForgotPassword from "./pages/ForgotPassword"
 import ResetPassword from './pages/ResetPassword'
+import Editor from './pages/Editor.jsx'
+import {AuthProvider} from'./context/AuthContext.jsx';
+
 // import Signup from "../pages/Signup";
 import "./App.css";
 
 function App() {
   return (
+    <AuthProvider>
     <Router>
       <Navbar/>
       <Routes>
         {/* public routes */}
         <Route path='/' element={<Home/>}/>
         <Route path='/about' element={<About/>}/>
-        <Route path='/explore' element={<Explore/>}/>
+        <Route path='/explore' element={<Editor/>}/>
+        {/* <Route path='/explore' element={<Explore/>}/> */}
         <Route path='/login' element={<Login/>}/>
         <Route path='/signup' element={<Signup/>}/>
         <Route path='/email-verify' element={<EmailVerify/>}/>
@@ -27,6 +32,7 @@ function App() {
         <Route path='/reset-password' element={<ResetPassword/>}/>
       </Routes>
     </Router>
+    </AuthProvider>
   );
 }
 
