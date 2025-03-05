@@ -1,0 +1,94 @@
+/* Container for the whole page */
+.create-course-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #0F172A; /* Dark background for contrast */
+    color: #E2E8F0; /* Light text color for readability */
+    padding: 20px;
+}
+
+/* Card that holds the form */
+.create-course-card {
+    width: 100%;
+    max-width: 420px;
+    background: #1E293B; /* Darker card background */
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Soft shadow for depth */
+    text-align: center;
+}
+
+/* Heading inside the card */
+.create-course-card h2 {
+    color: #4F46E5; /* Highlighted heading color */
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Form container */
+.create-course-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Spacing between form fields */
+}
+
+/* Common styling for input, textarea, and select */
+.create-course-form input,
+.create-course-form textarea,
+.create-course-form select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    background: #0F172A;
+    color: #E2E8F0;
+    font-size: 14px;
+    transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+/* Focus effect for input fields */
+.create-course-form input:focus,
+.create-course-form textarea:focus,
+.create-course-form select:focus {
+    border-color: #4F46E5;
+    box-shadow: 0 0 8px rgba(79, 70, 229, 0.5);
+    outline: none;
+}
+
+/* Submit button styling */
+.create-course-form button {
+    background-color: #4F46E5;
+    color: white;
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+}
+
+/* Button hover effect removed */
+
+/* Button click effect */
+.create-course-form button:active {
+    background: #3730A3;
+    transform: translateY(1px);
+}
+
+/* Thumbnail preview container */
+.thumbnail-preview {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+/* Thumbnail image styling */
+.thumbnail-img {
+    width: 150px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}

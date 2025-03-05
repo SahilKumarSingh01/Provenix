@@ -4,6 +4,8 @@ import About from "./pages/About";
 import Explore from "./pages/Explore";
 import Navbar from './components/Navbar';
 import Login from "./pages/Login";
+import CourseCreation from "./pages/CourseCreation";
+
 import Signup from "./pages/Signup";
 import EmailVerify from "./pages/EmailVerify"
 import ForgotPassword from "./pages/ForgotPassword"
@@ -26,6 +28,8 @@ function App() {
         <Route path='/explore' element={<Editor/>}/>
         {/* <Route path='/explore' element={<Explore/>}/> */}
         <Route path='/login' element={<Login/>}/>
+        <Route path='/course-creation' element={<CourseCreation/>}/>
+
         <Route path='/signup' element={<Signup/>}/>
         <Route path='/email-verify' element={<EmailVerify/>}/>
         <Route path='/forgot-password' element={<ForgotPassword/>}/>

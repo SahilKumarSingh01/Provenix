@@ -1,0 +1,197 @@
+:root {
+    --primary-color: #E6F1FF; /* Bright Blue-White for headings */
+    --secondary-color: #64FFDA; /* Teal for primary accents */
+    --accent-color: #57CBFF; /* Bright Blue for secondary accents */
+    --background-dark: #0A192F; /* Main background color */
+    --background-medium: #112240; /* Secondary background */
+    --text-primary: #A8B2D1; /* Primary text color */
+    --text-secondary: #8892B0; /* Secondary text color */
+  }
+  
+  /* Base Styles */
+  .about-container {
+    line-height: 1.6;
+    background-color: var(--background-dark);
+  }
+  
+  /* Hero Section */
+  .about-hero {
+    background: linear-gradient(rgba(10, 25, 47, 0.9), rgba(10, 25, 47, 0.9)),
+      url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+    background-size: cover;
+    background-position: center;
+    color: var(--primary-color);
+    padding: 8rem 1rem;
+    text-align: center;
+  }
+  
+  .hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--secondary-color);
+  }
+  
+  .hero-content p {
+    font-size: 1.5rem;
+    max-width: 800px;
+    margin: 0 auto;
+    color: var(--text-primary);
+  }
+  
+  /* Mission Section */
+  .mission-section {
+    padding: 4rem 1rem;
+    text-align: center;
+    background-color: var(--background-medium);
+  }
+  
+  .mission-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .mission-content h2 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: var(--secondary-color);
+  }
+  
+  .mission-content p {
+    color: var(--text-primary);
+  }
+  
+  /* Features Section */
+  .features-section {
+    padding: 4rem 1rem;
+    background-color: var(--background-dark);
+  }
+  
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .feature-card {
+    background: var(--background-medium);
+    padding: 2rem;
+    border-radius: 10px;
+    border: 1px solid rgba(100, 255, 218, 0.1);
+    transition: transform 0.3s ease;
+  }
+  
+  .feature-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--secondary-color);
+  }
+  
+  .feature-card h3 {
+    color: var(--secondary-color);
+    margin-bottom: 1rem;
+  }
+  
+  .feature-card p {
+    color: var(--text-primary);
+  }
+  
+  /* Stats Section */
+  .stats-section {
+    background-color: var(--background-medium);
+    padding: 4rem 1rem;
+  }
+  
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  .stat-item h4 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--accent-color);
+  }
+  
+  .stat-item p {
+    color: var(--text-primary);
+  }
+  
+  /* CTA Section */
+  .cta-section {
+    text-align: center;
+    padding: 4rem 1rem;
+    background-color: var(--background-dark);
+  }
+  
+  .cta-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: var(--secondary-color);
+  }
+  
+  .cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  
+  .cta-btn {
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(100, 255, 218, 0.3);
+  }
+  
+  .learner-cta {
+    background-color: var(--secondary-color);
+    color: var(--background-dark);
+  }
+  
+  .educator-cta {
+    background-color: var(--accent-color);
+    color: var(--background-dark);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .hero-content h1 {
+      font-size: 2rem;
+    }
+  
+    .hero-content p {
+      font-size: 1.2rem;
+    }
+  
+    .mission-content h2,
+    .cta-section h2 {
+      font-size: 2rem;
+    }
+  
+    .stats-grid {
+      gap: 2rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .about-hero {
+      padding: 4rem 1rem;
+    }
+  
+    .cta-buttons {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
