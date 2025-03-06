@@ -69,26 +69,8 @@
     transition: background 0.3s ease-in-out;
 }
 
-/* Button hover effect removed */
-
 /* Button click effect */
 .create-course-form button:active {
     background: #3730A3;
     transform: translateY(1px);
-}
-
-/* Thumbnail preview container */
-.thumbnail-preview {
-    text-align: center;
-    margin-bottom: 15px;
-}
-
-/* Thumbnail image styling */
-.thumbnail-img {
-    width: 150px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 8px;
-    border: 2px solid #ddd;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }

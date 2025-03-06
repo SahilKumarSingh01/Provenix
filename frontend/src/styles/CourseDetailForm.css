@@ -1,0 +1,84 @@
+.course-detail-container {
+    max-width: 600px;
+    margin: 30px auto 25px; /* Added top margin to push below navbar */
+    padding: 30px;
+    background: #1E293B; /* Slightly lighter than global background */
+    color: #E2E8F0; /* Light text for readability */
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Form Title */
+.form-title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #E2E8F0; /* Keeping it simple and readable */
+}
+
+/* Course Form */
+.course-form {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Input and Textarea Container */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+/* Labels */
+.form-group label {
+    font-size: 16px;
+    margin-bottom: 5px;
+    color: #94A3B8; /* Muted Dark Blue */
+}
+
+/* Inputs, Textarea, and Select Styling */
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #334155; /* Neutral dark border */
+    background: #0F172A; /* Dark background */
+    color: #E2E8F0; /* Light text */
+    font-size: 14px;
+    border-radius: 8px;
+    transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+/* Focus Effect */
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: #64748B; /* Subtle blue border */
+    box-shadow: 0 0 8px rgba(100, 116, 139, 0.5);
+    outline: none;
+}
+
+/* Adjusting textarea height */
+textarea {
+    resize: vertical;
+    height: 80px;
+}
+
+/* Submit Button */
+.submit-btn {
+    background: #4F46E5; /* Consistent with other buttons */
+    color: white;
+    padding: 12px;
+    font-size: 18px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border-radius: 8px;
+}
+
+/* Hover Effect */
+.submit-btn:hover {
+    background: #3730A3; /* Darker shade of blue */
+    transform: scale(1.05);
+}

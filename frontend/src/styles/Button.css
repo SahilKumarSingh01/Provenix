@@ -9,14 +9,14 @@
   }
   
   .primary {
-    background: #64FFDA;
+    background: #4F46E5;
     color: #0A192F;
   }
   
   .secondary {
     background: transparent;
-    color: #64FFDA;
-    border: 2px solid #64FFDA;
+    color: #4F46E5;
+    border: 2px solid #4F46E5;
   }
   
   .primary:hover {

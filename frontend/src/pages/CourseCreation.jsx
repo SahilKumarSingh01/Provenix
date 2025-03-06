@@ -6,20 +6,10 @@ const CreateCourse = () => {
     const [courseName, setCourseName] = useState("");
     const [description, setDescription] = useState("");
     const [category, setCategory] = useState("");
-    const [thumbnail, setThumbnail] = useState(null);
-
-    const defaultThumbnail = "/default-thumbnail.jpg"; // Default image path
-
-    const handleThumbnailChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setThumbnail(URL.createObjectURL(file));
-        }
-    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log({ courseName, description, category, thumbnail });
+        console.log({ courseName, description, category });
     };
 
     return (
@@ -27,17 +17,6 @@ const CreateCourse = () => {
             <div className="create-course-card">
                 <h2>Create Course</h2>
                 <form onSubmit={handleSubmit} className="create-course-form">
-                    
-                    {/* Thumbnail Upload */}
-                    <label>Thumbnail:</label>
-                    <div className="thumbnail-preview">
-                        <img 
-                            src={thumbnail || defaultThumbnail} 
-                            alt="Thumbnail Preview" 
-                            className="thumbnail-img"
-                        />
-                    </div>
-                    <input type="file" accept="image/*" onChange={handleThumbnailChange} />
 
                     {/* Course Name */}
                     <label>Course Name:</label>
@@ -45,6 +24,7 @@ const CreateCourse = () => {
                         type="text"
                         value={courseName}
                         onChange={(e) => setCourseName(e.target.value)}
+                        required
                     />
 
                     {/* Description */}
@@ -52,6 +32,7 @@ const CreateCourse = () => {
                     <textarea
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
+                        required
                     ></textarea>
 
                     {/* Category Selection */}
@@ -59,6 +40,7 @@ const CreateCourse = () => {
                     <select
                         value={category}
                         onChange={(e) => setCategory(e.target.value)}
+                        required
                     >
                         <option value="">Select Category</option>
                         <option value="private">Private</option>

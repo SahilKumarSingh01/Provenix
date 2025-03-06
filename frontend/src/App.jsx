@@ -6,6 +6,9 @@ import Navbar from './components/Navbar';
 import Login from "./pages/Login";
 import CourseCreation from "./pages/CourseCreation";
 
+import CourseDetailForm from "./pages/CourseDetailForm";
+
+
 import Signup from "./pages/Signup";
 import EmailVerify from "./pages/EmailVerify"
 import ForgotPassword from "./pages/ForgotPassword"
@@ -25,10 +28,13 @@ function App() {
         {/* public routes */}
         <Route path='/' element={<Home/>}/>
         <Route path='/about' element={<About/>}/>
-        <Route path='/explore' element={<Editor/>}/>
-        {/* <Route path='/explore' element={<Explore/>}/> */}
+        {/* <Route path='/explore' element={<Editor/>}/> */}
+        <Route path='/explore' element={<Explore/>}/>
         <Route path='/login' element={<Login/>}/>
         <Route path='/course-creation' element={<CourseCreation/>}/>
+
+        <Route path='/course-detailform' element={<CourseDetailForm/>}/>
+
 
         <Route path='/signup' element={<Signup/>}/>
         <Route path='/email-verify' element={<EmailVerify/>}/>

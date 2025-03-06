@@ -1,0 +1,44 @@
+.image-upload-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #112240; /* Dark Blue Box */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    width: 300px;
+    text-align: center;
+    z-index: 10;
+  }
+  
+  h2 {
+    color: #a8b2d1;
+    margin-bottom: 10px;
+  }
+  
+  input {
+    display: block;
+    margin: 10px auto;
+    padding: 8px;
+    border: none;
+    background: #1e293b;
+    color: #a8b2d1;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+  
+  .image-preview {
+    width: 100%;
+    margin-top: 15px;
+    border-radius: 5px;
+    max-height: 200px;
+    object-fit: cover;
+  }
+  
