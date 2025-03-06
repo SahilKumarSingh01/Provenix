@@ -1,13 +1,19 @@
-import React from "react";
+// src/pages/HomePage.jsx
+import React from 'react';
+import Hero from '../components/Hero';
+ import FeaturesList from '../components/FeaturesList';
+ import CTA from '../components/CTA';
+ import Footer from '../components/Footer';
 
-const Home = () => {
+const HomePage = () => {
   return (
-    <div style={{ textAlign: "center", padding: "50px" }}>
-      <h1>Welcome to Provenix</h1>
-      <p>This is a dummy home page.</p>
-      <button onClick={() => alert("Button Clicked!")}>Click Me</button>
+    <div className="home-container">
+      <Hero />
+      <FeaturesList />
+      <CTA />
+      <Footer />
     </div>
   );
 };
 
-export default Home;
+export default HomePage;

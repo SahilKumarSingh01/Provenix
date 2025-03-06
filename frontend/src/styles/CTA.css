@@ -1,0 +1,12 @@
+/* src/styles/CTA.css */
+.cta-section {
+    text-align: center;
+    padding: 5rem 5%;
+    background: #112240;
+  }
+  
+  .cta-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #CCD6F6;
+  }

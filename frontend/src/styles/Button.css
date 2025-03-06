@@ -1,0 +1,29 @@
+/* src/styles/Button.css */
+.btn {
+    padding: 0.8rem 1.5rem;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+  
+  .primary {
+    background: #64FFDA;
+    color: #0A192F;
+  }
+  
+  .secondary {
+    background: transparent;
+    color: #64FFDA;
+    border: 2px solid #64FFDA;
+  }
+  
+  .primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(100, 255, 218, 0.3);
+  }
+  
+  .secondary:hover {
+    background: rgba(100, 255, 218, 0.1);
+  }

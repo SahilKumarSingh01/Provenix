@@ -1,0 +1,17 @@
+/* src/styles/FeatureCard.css */
+.feature-card {
+    background: #0A192F;
+    padding: 2rem;
+    border-radius: 4px;
+    text-align: center;
+    transition: transform 0.3s ease;
+  }
+  
+  .feature-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .feature-card h3 {
+    color: #64FFDA;
+    margin-bottom: 1rem;
+  }
