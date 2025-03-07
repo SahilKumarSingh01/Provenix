@@ -1,0 +1,90 @@
+/* MCQ Card Container */
+.mcq-card {
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    width: 350px;
+    background: #112240; /* Dark Blue */
+    color: #E6F1FF; /* Light Blue */
+    font-family: sans-serif;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Question Styling */
+.mcq-question {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+/* Options List */
+.mcq-options {
+    list-style: none;
+    padding: 0;
+}
+
+/* Individual Option */
+.mcq-option {
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #233554; /* Darker Blue */
+    transition: background 0.3s ease;
+    font-size: 16px;
+}
+
+/* Hover Effect */
+.mcq-option:hover {
+    background-color: #3a506b; /* Lighter Blue */
+}
+
+/* Selected Option Before Submission */
+.mcq-option.selected {
+    background-color: #8892B0; /* Grayish Blue */
+}
+
+/* Correct Answer */
+.mcq-option.correct {
+    background-color: green;
+    color: white;
+}
+
+/* Wrong Selected Answer */
+.mcq-option.wrong {
+    background-color: red;
+    color: white;
+}
+
+/* Submit Button */
+.mcq-submit-btn {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background: #64FFDA; /* Cyan-Green */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    color: #0A192F; /* Dark Background */
+}
+
+.mcq-submit-btn:hover {
+    background: #3FB8AF; /* Darker Cyan */
+}
+
+/* Feedback Message */
+.mcq-feedback {
+    font-weight: bold;
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+.mcq-feedback.correct {
+    color: green;
+}
+
+.mcq-feedback.wrong {
+    color: red;
+}

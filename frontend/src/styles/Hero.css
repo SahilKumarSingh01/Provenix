@@ -1,38 +1,123 @@
 /* src/styles/Hero.css */
 .hero {
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 0 5%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 5%;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(45deg, #0A192F 0%, #020c1b 100%);
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(100, 255, 218, 0.1) 0%, transparent 70%);
+  animation: float 20s infinite linear;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-content h1 {
+  font-size: 4.5rem;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(45deg, #CCD6F6 60%, #64FFDA 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.1;
+  letter-spacing: -2px;
+  text-shadow: 0 4px 20px rgba(100, 255, 218, 0.2);
+  animation: fadeInUp 1s ease-out;
+}
+
+.hero-subtext {
+  font-size: 1.4rem;
+  max-width: 700px;
+  margin: 0 auto 3rem;
+  line-height: 1.7;
+  color: #8892B0;
+  animation: fadeInUp 1s ease-out 0.2s backwards;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  animation: fadeInUp 1s ease-out 0.4s backwards;
+}
+
+/* Animated background shapes */
+.hero-deco {
+  position: absolute;
+  opacity: 0.1;
+}
+
+.hero-deco-line {
+  width: 150vw;
+  height: 1px;
+  background: #64FFDA;
+  transform: rotate(-45deg);
+  position: absolute;
+  left: -25%;
+  animation: lineSlide 20s linear infinite;
+}
+
+@keyframes float {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(-25%, 25%) rotate(180deg); }
+  100% { transform: translate(0, 0) rotate(360deg); }
+}
+
+@keyframes fadeInUp {
+  from {
+      opacity: 0;
+      transform: translateY(40px);
   }
-  
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+@keyframes lineSlide {
+  0% { transform: rotate(-45deg) translateX(-100%); }
+  100% { transform: rotate(-45deg) translateX(100%); }
+}
+
+@media (max-width: 768px) {
   .hero-content h1 {
-    font-size: 3.5rem;
-    margin-bottom: 1.5rem;
-    color: #CCD6F6;
+      font-size: 3rem;
+      line-height: 1.2;
   }
   
   .hero-subtext {
-    font-size: 1.2rem;
-    max-width: 600px;
-    margin: 0 auto 2rem;
-    line-height: 1.6;
+      font-size: 1.1rem;
+      padding: 0 1rem;
   }
   
   .hero-buttons {
-    display: flex;
-    gap: 1.5rem;
-    justify-content: center;
+      flex-direction: column;
+      gap: 1rem;
+  }
+}
+
+@media (min-width: 1600px) {
+  .hero-content h1 {
+      font-size: 5.5rem;
   }
   
-  @media (max-width: 768px) {
-    .hero-content h1 {
-      font-size: 2.5rem;
-    }
-    
-    .hero-buttons {
-      flex-direction: column;
-    }
+  .hero-subtext {
+      font-size: 1.6rem;
+      max-width: 800px;
   }
+}

@@ -1,0 +1,52 @@
+.code-toggle-container {
+    margin: 15px 0;
+    text-align: left;
+}
+
+.code-toggle-btn {
+    background-color: #007BFF;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s ease;
+}
+
+.code-toggle-btn:hover {
+    background-color: #0056b3;
+}
+
+.code-box {
+    background-color: #1e1e1e;
+    color: #f8f8f8;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    position: relative;
+    overflow: auto;
+    max-width: 100%;
+}
+
+.code-box pre {
+    margin: 0;
+    white-space: pre-wrap;
+}
+
+.copy-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.copy-btn:hover {
+    background-color: #388E3C;
+}

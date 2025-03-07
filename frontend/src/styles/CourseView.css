@@ -49,7 +49,8 @@
     padding: 15px;
 }
 
-.language {
+/* Course Category */
+.category {
     background: #233554;
     color: #64FFDA;
     font-size: 12px;
@@ -86,9 +87,7 @@
 }
 
 /* Subscription Button */
-.subscribe-btn {
-    background: #64FFDA;
-    color: #0A192F; /* Navy Blue */
+.subscribe-btn, .study-btn {
     font-size: 14px;
     padding: 8px 12px;
     border: none;
@@ -98,6 +97,22 @@
     font-weight: bold;
 }
 
+/* Get Subscription Button */
+.subscribe-btn {
+    background: #64FFDA;
+    color: #0A192F; /* Navy Blue */
+}
+
 .subscribe-btn:hover {
     background: #3FB8AF;
+}
+
+/* Study Panel Button */
+.study-btn {
+    background: #3FB8AF;
+    color: #112240; /* Dark Blue */
+}
+
+.study-btn:hover {
+    background: #64FFDA;
 }
