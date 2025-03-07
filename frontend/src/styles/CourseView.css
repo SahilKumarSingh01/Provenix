@@ -1,0 +1,103 @@
+/* Course Card */
+.course-card {
+    display: flex;
+    max-width: 800px;
+    background: #112240; /* Dark Blue */
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    border: 1px solid #233554; /* Slightly Lighter Navy */
+    margin: 20px auto;
+    font-family: sans-serif;
+}
+
+/* Left Side - Course Image */
+.course-image {
+    width: 35%;
+    position: relative;
+}
+
+.course-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-right: 1px solid #233554;
+}
+
+/* Preview Button */
+.preview-btn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #64FFDA; /* Cyan-Green */
+    font-size: 12px;
+    padding: 5px 10px;
+    border: 1px solid #64FFDA;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.preview-btn:hover {
+    background: #3FB8AF; /* Darker Cyan */
+}
+
+/* Right Side - Course Info */
+.course-info {
+    width: 65%;
+    padding: 15px;
+}
+
+.language {
+    background: #233554;
+    color: #64FFDA;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 3px 8px;
+    border-radius: 5px;
+}
+
+.course-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #E6F1FF; /* Light Blue */
+    margin: 8px 0;
+}
+
+.instructor {
+    font-size: 14px;
+    color: #A8B2D1;
+}
+
+.description {
+    font-size: 14px;
+    color: #A8B2D1;
+    margin: 10px 0;
+}
+
+/* Course Stats */
+.course-stats {
+    display: flex;
+    gap: 10px;
+    font-size: 12px;
+    color: #8892B0;
+    margin-top: 5px;
+}
+
+/* Subscription Button */
+.subscribe-btn {
+    background: #64FFDA;
+    color: #0A192F; /* Navy Blue */
+    font-size: 14px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+.subscribe-btn:hover {
+    background: #3FB8AF;
+}

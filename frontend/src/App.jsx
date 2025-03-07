@@ -8,6 +8,9 @@ import CourseCreation from "./pages/CourseCreation";
 
 import CourseDetailForm from "./pages/CourseDetailForm";
 
+import CourseView from "./pages/CourseView";
+
+
 
 import Signup from "./pages/Signup";
 import EmailVerify from "./pages/EmailVerify"
@@ -35,6 +38,7 @@ function App() {
 
         <Route path='/course-detailform' element={<CourseDetailForm/>}/>
 
+        <Route path='/course-view' element={<CourseView/>}/>
 
         <Route path='/signup' element={<Signup/>}/>
         <Route path='/email-verify' element={<EmailVerify/>}/>
