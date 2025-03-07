@@ -1,17 +1,23 @@
 import React, { useState } from "react";
+import ImageUploader from "../components/ImageUpload"; // Import ImageUploader component
 import "../styles/CourseDetailForm.css"; // Import the CSS file
 
 const CourseDetailForm = () => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    thumbnail: "",
+    thumbnail: "", // Now this will be set by ImageUploader
     accessType: "public",
     price: "",
     category: "",
     tags: "",
     level: "Beginner",
   });
+
+  // Function to handle image upload
+  const handleImageUpload = (imageUrl) => {
+    setFormData({ ...formData, thumbnail: imageUrl });
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,9 +43,15 @@ const CourseDetailForm = () => {
           <textarea name="description" value={formData.description} onChange={handleChange} required />
         </div>
 
+        {/* Image Uploader Component */}
         <div className="form-group">
-          <label>Thumbnail URL:</label>
-          <input type="text" name="thumbnail" value={formData.thumbnail} onChange={handleChange} required />
+          <label>Thumbnail:</label>
+          <ImageUploader onImageUpload={handleImageUpload} />
+          {formData.thumbnail && (
+            <div className="thumbnail-preview">
+              <img src={formData.thumbnail} alt="Course Thumbnail" />
+            </div>
+          )}
         </div>
 
         <div className="form-group">

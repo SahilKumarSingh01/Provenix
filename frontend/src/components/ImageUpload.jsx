@@ -1,32 +1,38 @@
 import React, { useState } from "react";
 
+const ImageUploader = ({ onImageUpload }) => {
+  const [preview, setPreview] = useState("");
 
-const ImageUpload = () => {
-  const [image, setImage] = useState(null);
-  const [error, setError] = useState("");
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
     if (file) {
-      if (file.size > 10 * 1024 * 1024) {
-        setError("File size exceeds 10MB limit.");
-        setImage(null);
-      } else {
-        setError("");
-        setImage(URL.createObjectURL(file));
-      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result);
+        onImageUpload(reader.result); // Pass the image URL to parent component
+      };
+      reader.readAsDataURL(file);
     }
   };
 
+  // Remove image function
+  const handleRemoveImage = () => {
+    setPreview("");
+    onImageUpload(""); // Clear the image from parent form
+  };
+
   return (
-    <div className="image-upload-container">
-      <h2>Upload Image</h2>
+    <div className="image-uploader">
       <input type="file" accept="image/*" onChange={handleImageChange} />
-      {error && <p className="error-message">{error}</p>}
-      {image && <img src={image} alt="Uploaded Preview" className="image-preview" />}
+
+      {preview && (
+        <div className="thumbnail-preview">
+          <img src={preview} alt="Thumbnail Preview" className="image-preview" />
+          <button onClick={handleRemoveImage} className="remove-btn">Remove</button>
+        </div>
+      )}
     </div>
   );
 };
 
-export default ImageUpload;
+export default ImageUploader;
