@@ -1,0 +1,23 @@
+const mongoose = require("mongoose");
+
+const itemSchema = new mongoose.Schema({
+  type: {
+    type: String,
+    enum: ["heading", "text", "code", "MCQ", "hidden", "reference"],
+    required: true,
+  },
+  data: { type: mongoose.Schema.Types.Mixed, required: true }, // Holds actual data or nested reference
+});
+
+const contentSectionSchema = new mongoose.Schema({
+  pageId: { type: mongoose.Schema.Types.ObjectId, required: true }, // Links to Lesson or Practice
+  section: { type: String, required: true }, 
+  courseId: { type: String, required: true },
+  creatorId: { type: String, required: true },
+  items: [itemSchema], 
+}, { timestamps: true });
+
+contentSectionSchema.index({ courseId: 1, section: 1 });
+
+
+module.exports = mongoose.model("ContentSection", contentSectionSchema);

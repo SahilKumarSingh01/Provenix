@@ -1,10 +1,10 @@
 const passport=require('../../config/passport.js');
 require('dotenv').config();
 // Google Authentication Handler
-googleAuth = passport.authenticate("google", { scope: ["email", "profile"] });
+const googleAuth = passport.authenticate("google", { scope: ["email", "profile"] });
 
 // Google Authentication Callback Handler
-googleAuthCallback = (req, res, next) => {
+const googleAuthCallback = (req, res, next) => {
   passport.authenticate("google", (err, user, info) => {
     if (err) return next(err);
     if (!user) return res.redirect(process.env.CLIENT_URL+"/login");
