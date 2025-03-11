@@ -8,6 +8,12 @@ import Reviews from "../components/Reviews";
 
 import CodeToggle from "../components/CodeToggle";
 
+import CodeBox from "../components/CodeBox"; 
+
+import CourseCard from "../components/CourseCard"; 
+
+
+
 
 import ImageUpload from "../components/ImageUpload";
 
@@ -24,6 +30,20 @@ function add(a, b) {
 }
 console.log(add(2, 3));
 `;
+const codeData = [
+  { lang: "JavaScript", data: "console.log('Hello, World!');\nlet x = 10;" },
+  { lang: "Python", data: "print('Hello, World!')\nx = 10" },
+];
+
+const courseData = {
+  title: "React for Beginners",
+  creator: "John Doe",
+  students: 1200,
+  category: "Web Development",
+  price: 19.99,
+  rating: 4.8,
+  thumbnail: "", // Agar koi custom thumbnail nahi hai toh default use hoga
+};
 
   return (
     <div>
@@ -32,6 +52,10 @@ console.log(add(2, 3));
       <Reviews />
       <MCQCard {...sampleMCQ} />
       <CodeToggle codeSnippet={sampleCode} language="javascript" />
+      <CodeBox codeData={codeData} />
+      <CourseCard course={courseData} />
+
+
 
 
       <ImageUpload />

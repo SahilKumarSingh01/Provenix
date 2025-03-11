@@ -1,0 +1,94 @@
+/* CodeBox Container */
+.codebox-container {
+    width: 100%;
+    max-width: 700px;
+    margin: 20px auto;
+    border-radius: 8px;
+    background: #112240; /* Dark Navy */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    border: 1px solid #233554;
+    font-family: "Courier New", monospace; /* Monospace font ensures perfect alignment */
+}
+
+/* Tabs */
+.codebox-tabs {
+    display: flex;
+    background: #233554; /* Lighter Navy */
+    padding: 8px;
+}
+
+.codebox-tab {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    background: transparent;
+    color: #A8B2D1; /* Muted Text Color */
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.codebox-tab:hover {
+    color: #64FFDA; /* Teal Hover */
+}
+
+.codebox-tab.active {
+    color: #64FFDA;
+    border-bottom: 2px solid #64FFDA;
+}
+
+/* Code Display */
+.codebox-content {
+    display: flex;
+    position: relative;
+    padding: 15px;
+    color: #E6F1FF; /* Light Blue Text */
+    background: #0A192F; /* Dark Navy */
+    overflow-x: auto;
+}
+
+/* Line Numbers */
+.line-numbers {
+    text-align: right;
+    user-select: none;
+    font-size: 14px;
+    color: #6272a4; /* Faded Blue for Line Numbers */
+    background: #112240;
+    padding-right: 10px;
+    padding-top: 5px;
+    line-height: 1.5; /* Ensure line spacing is correct */
+    min-width: 40px; /* Fixed width for alignment */
+    border-right: 1px solid #233554;
+}
+
+/* Code Lines */
+.codebox-lines {
+    padding-left: 10px;
+    line-height: 1.5; /* Same as line-numbers for alignment */
+    white-space: pre;
+    font-size: 14px;
+    overflow-x: auto;
+}
+
+/* Copy Button */
+.copy-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #64FFDA;
+    color: #0A192F;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 3px;
+    transition: background 0.3s ease;
+}
+
+.copy-btn:hover {
+    background: #4CAF50; /* Darker Green */
+}

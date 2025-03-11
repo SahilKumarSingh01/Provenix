@@ -1,0 +1,258 @@
+/* Search Page Styles */
+.search-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+  
+  .filters-section {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+    background: #112240; /* Darker Navy Blue */
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .search-input, .filter-select, .sort-select, .price-input {
+    padding: 0.8rem;
+    border: 1px solid #233554; /* Border color */
+    border-radius: 4px;
+    background: #0A192F; /* Matching body background */
+    color: #A8B2D1;
+    transition: all 0.3s ease;
+  }
+  
+  .search-input:focus, .filter-select:focus, 
+  .sort-select:focus, .price-input:focus {
+    outline: none;
+    border-color: #4F46E5; /* Teal accent */
+    box-shadow: 0 0 0 2px rgba(100, 255, 218, 0.2);
+  }
+  
+  .price-range {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .price-input {
+    width: 100px;
+  }
+  
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .course-card {
+    background: #112240;
+    padding: 1.5rem;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+  }
+  
+  .course-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .course-card h3 {
+    color: #4F46E5; /* Teal accent */
+    margin-bottom: 0.5rem;
+  }
+  
+  .category {
+    color: #8892B0; /* Lighter text color */
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+  
+  .course-details {
+    display: flex;
+    justify-content: space-between;
+    color: #A8B2D1;
+    font-size: 0.9rem;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .filters-section {
+      flex-direction: column;
+    }
+    
+    .price-range {
+      flex-wrap: wrap;
+    }
+    
+    .price-input {
+      width: 100%;
+    }
+  }
+
+//* Pagination Controls */
+.pagination-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 2rem 0;
+    padding: 1rem;
+    background: #112240;
+    border-radius: 6px;
+  }
+  
+  .page-navigation {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  
+  .page-button {
+    padding: 0.75rem 1.5rem;
+    background: #233554;
+    border: none;
+    border-radius: 4px;
+    color: #4F46E5;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+  }
+  
+  .page-button:hover:not(:disabled) {
+    background: #4F46E5;
+    color: #0A192F;
+  }
+  
+  .page-button:disabled {
+    background: #112240;
+    color: #49516f;
+    cursor: not-allowed;
+  }
+  
+  .page-info {
+    color: #8892B0;
+    font-size: 0.9rem;
+  }
+  
+  .items-per-page {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .items-per-page label {
+    color: #4F46E5;
+    font-size: 0.9rem;
+  }
+  
+  .page-select {
+    padding: 0.5rem;
+    background: #0A192F;
+    color: #A8B2D1;
+    border: 1px solid #233554;
+    border-radius: 4px;
+  }
+
+/* Profile Update Styles */
+.profile-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .form-group label {
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  
+  .profile-preview {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-top: 0.5rem;
+    border: 2px solid #4F46E5;
+  }
+  
+  textarea.search-input {
+    min-height: 100px;
+    padding: 1rem;
+    line-height: 1.5;
+  }
+  
+  .success-message {
+    text-align: center;
+    padding: 1rem;
+    background: rgba(100, 255, 218, 0.1);
+    border-radius: 4px;
+    animation: fadeIn 0.3s ease;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Enhanced Image Uploader */
+.crop-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(10, 25, 47, 0.95);
+    z-index: 1000;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .cancel-button {
+    margin-top: 1rem;
+    padding: 0.8rem 1.5rem;
+    background: #233554;
+    color: #64FFDA;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .cancel-button:hover {
+    background: #64FFDA;
+    color: #0A192F;
+  }
+  
+  .error-message {
+    color: #ff6b6b;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+  }
+  
+  /* Loading State */
+  .loading-spinner {
+    border: 3px solid #233554;
+    border-top: 3px solid #64FFDA;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
