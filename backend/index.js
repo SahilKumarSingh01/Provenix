@@ -4,7 +4,9 @@ const session = require('express-session');
 const cors = require('cors');
 const mongoStore = require('connect-mongo');
 const authRoutes = require('./routes/authRoutes');
-const apiRoutes  = require('./routes/apiRoutes');
+const multer = require("multer");
+
+const courseRoutes  = require('./routes/courseRoutes.js');
 const isAuthenticated=require('./middlewares/authMiddleware');
 const passport   = require('./config/passport.js');
 require("dotenv").config();
@@ -22,9 +24,9 @@ app.use(cors({
   credentials: true
 }));
 
-// Express Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Express Middleware allowing 1mb json only
+app.use(express.json({limit: "1mb"}));
+app.use(express.urlencoded({ extended: true ,limit: "1mb"}));
 // Session Middleware (Must be before passport)
 app.use(session({
   secret: process.env.SESSION_SECRET,
@@ -37,7 +39,7 @@ app.use(session({
   }),
   cookie: {
     httpOnly: true,
-    maxAge: 2*60*1000  // 10 minutes 
+    maxAge: 10*60*1000  // 10 minutes 
   }
 }));
 
@@ -45,14 +47,34 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use('/auth',authRoutes);
-app.use('/api',isAuthenticated,apiRoutes);
+app.use('/api/course',isAuthenticated,courseRoutes);
 
  // Home Route
  app.get('/', (req, res) => {
-  // console.log(req.user);
-  // console.log(req.session.cookie);
-  res.status(200).json({ data: "somevalue", data2: "somevalue" });
+  res.status(200).json({ data: "you are visiting home", data2: "it has nothing try something else" });
 });
+
+
+// Set up Multer storage
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+      cb(null, "uploads/"); // Store files in "uploads" folder
+  },
+  filename: (req, file, cb) => {
+      cb(null, Date.now() + "-" + file.originalname); // Rename file
+  }
+});
+
+// Initialize Multer with a file size limit
+const upload = multer({storage: multer.memoryStorage()});
+
+app.post("/upload",upload.single('file'), (req, res) => {
+  console.log("File uploaded:", req.file);
+  res.send("File uploaded successfully");
+});
+
+
+
 
 // Start Server
 const PORT = process.env.PORT || 5000;

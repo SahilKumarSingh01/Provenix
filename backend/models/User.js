@@ -6,6 +6,8 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  photo: String,
+  displayName: String,
   password: {
     type: String,
   },
@@ -23,8 +25,7 @@ const userSchema = new mongoose.Schema({
     unique: true,
     sparse: true,
   },
-  photo: String,
-  displayName: String,
+  
   verifiedEmail: {
     type: Boolean,
     default: false,
