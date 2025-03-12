@@ -1,0 +1,16 @@
+.featureCard {
+  background: #0A192F;
+  padding: 2rem;
+  border-radius: 4px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.featureCard:hover {
+  transform: translateY(-5px);
+}
+
+.featureCard h3 {
+  color: #4F46E5;
+  margin-bottom: 1rem;
+}

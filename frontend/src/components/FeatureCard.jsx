@@ -1,10 +1,9 @@
-// src/components/FeatureCard.jsx
 import React from 'react';
-import '../styles/FeatureCard.css';
+import styles from '../styles/FeatureCard.module.css';
 
 const FeatureCard = ({ icon, title, description }) => {
   return (
-    <div className="feature-card">
+    <div className={styles.featureCard}>
       <h3>{icon} {title}</h3>
       <p>{description}</p>
     </div>

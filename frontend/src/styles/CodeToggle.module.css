@@ -1,9 +1,10 @@
-.code-toggle-container {
+/* CodeToggle.module.css */
+.codeToggleContainer {
     margin: 15px 0;
     text-align: left;
 }
 
-.code-toggle-btn {
+.codeToggleBtn {
     background-color: #007BFF;
     color: white;
     padding: 8px 12px;
@@ -14,11 +15,11 @@
     transition: background 0.3s ease;
 }
 
-.code-toggle-btn:hover {
+.codeToggleBtn:hover {
     background-color: #0056b3;
 }
 
-.code-box {
+.codeBox {
     background-color: #1e1e1e;
     color: #f8f8f8;
     padding: 10px;
@@ -29,12 +30,12 @@
     max-width: 100%;
 }
 
-.code-box pre {
+.codeBox pre {
     margin: 0;
     white-space: pre-wrap;
 }
 
-.copy-btn {
+.copyBtn {
     position: absolute;
     top: 5px;
     right: 5px;
@@ -47,6 +48,6 @@
     cursor: pointer;
 }
 
-.copy-btn:hover {
+.copyBtn:hover {
     background-color: #388E3C;
 }

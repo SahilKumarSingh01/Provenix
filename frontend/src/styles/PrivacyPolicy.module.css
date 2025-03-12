@@ -1,0 +1,143 @@
+.privacyContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  min-height: 100vh;
+}
+
+.privacyHeader {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.privacyHeader h1 {
+  color: #4F46E5;
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.updateDate {
+  color: #8892B0;
+  font-size: 0.9rem;
+}
+
+.policySection {
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: #112240;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.sectionTitle {
+  color: #4F46E5;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  position: relative;
+  padding-left: 1rem;
+}
+
+.sectionTitle::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 60%;
+  width: 3px;
+  background: #4F46E5;
+}
+
+.dataTypes {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.dataCard {
+  background: #0A192F;
+  padding: 1.5rem;
+  border-radius: 6px;
+  border: 1px solid #233554;
+}
+
+.dataCard h3 {
+  color: #CCD6F6;
+  margin-bottom: 1rem;
+}
+
+.usageList {
+  list-style: none;
+  display: grid;
+  gap: 1rem;
+}
+
+.usageList li {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  color: #CCD6F6;
+}
+
+.securityFeatures {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.securityCard {
+  background: #0A192F;
+  padding: 1.5rem;
+  border-radius: 6px;
+  text-align: center;
+  border: 1px solid #233554;
+}
+
+.rightsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  text-align: center;
+}
+
+.rightsGrid p {
+  padding: 1rem;
+  background: #0A192F;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.contactSection {
+  text-align: center;
+  margin-top: 3rem;
+  padding: 2rem;
+  background: #112240;
+  border-radius: 8px;
+}
+
+.contactSection a {
+  color: #4F46E5;
+  text-decoration: none;
+  transition: opacity 0.3s;
+}
+
+.contactSection a:hover {
+  opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  .privacyContainer {
+      padding: 1.5rem 1rem;
+  }
+  
+  .policySection {
+      padding: 1.5rem;
+  }
+  
+  .privacyHeader h1 {
+      font-size: 2rem;
+  }
+}

@@ -1,29 +1,28 @@
-/* CodeBox Container */
-.codebox-container {
+/* CodeBox.module.css */
+.codeboxContainer {
     width: 100%;
     max-width: 700px;
     margin: 20px auto;
     border-radius: 8px;
-    background: #112240; /* Dark Navy */
+    background: #112240;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
     overflow: hidden;
     border: 1px solid #233554;
-    font-family: "Courier New", monospace; /* Monospace font ensures perfect alignment */
+    font-family: "Courier New", monospace;
 }
 
-/* Tabs */
-.codebox-tabs {
+.codeboxTabs {
     display: flex;
-    background: #233554; /* Lighter Navy */
+    background: #233554;
     padding: 8px;
 }
 
-.codebox-tab {
+.codeboxTab {
     flex: 1;
     padding: 10px;
     border: none;
     background: transparent;
-    color: #A8B2D1; /* Muted Text Color */
+    color: #A8B2D1;
     cursor: pointer;
     font-size: 14px;
     font-weight: bold;
@@ -31,50 +30,46 @@
     transition: all 0.3s ease;
 }
 
-.codebox-tab:hover {
-    color: #64FFDA; /* Teal Hover */
+.codeboxTab:hover {
+    color: #64FFDA;
 }
 
-.codebox-tab.active {
+.active {
     color: #64FFDA;
     border-bottom: 2px solid #64FFDA;
 }
 
-/* Code Display */
-.codebox-content {
+.codeboxContent {
     display: flex;
     position: relative;
     padding: 15px;
-    color: #E6F1FF; /* Light Blue Text */
-    background: #0A192F; /* Dark Navy */
+    color: #E6F1FF;
+    background: #0A192F;
     overflow-x: auto;
 }
 
-/* Line Numbers */
-.line-numbers {
+.lineNumbers {
     text-align: right;
     user-select: none;
     font-size: 14px;
-    color: #6272a4; /* Faded Blue for Line Numbers */
+    color: #6272a4;
     background: #112240;
     padding-right: 10px;
     padding-top: 5px;
-    line-height: 1.5; /* Ensure line spacing is correct */
-    min-width: 40px; /* Fixed width for alignment */
+    line-height: 1.5;
+    min-width: 40px;
     border-right: 1px solid #233554;
 }
 
-/* Code Lines */
-.codebox-lines {
+.codeboxLines {
     padding-left: 10px;
-    line-height: 1.5; /* Same as line-numbers for alignment */
+    line-height: 1.5;
     white-space: pre;
     font-size: 14px;
     overflow-x: auto;
 }
 
-/* Copy Button */
-.copy-btn {
+.copyBtn {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -89,6 +84,6 @@
     transition: background 0.3s ease;
 }
 
-.copy-btn:hover {
-    background: #4CAF50; /* Darker Green */
+.copyBtn:hover {
+    background: #4CAF50;
 }

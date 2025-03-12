@@ -1,12 +1,11 @@
-// src/components/FeaturesList.jsx
 import React from 'react';
 import FeatureCard from './FeatureCard';
 import { features } from '../assets/features';
-import '../styles/FeaturesList.css';
+import styles from '../styles/FeaturesList.module.css';
 
 const FeaturesList = () => {
   return (
-    <section className="features">
+    <section className={styles.features}>
       {features.map((feature, index) => (
         <FeatureCard
           key={index}

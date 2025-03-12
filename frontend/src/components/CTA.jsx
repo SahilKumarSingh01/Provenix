@@ -1,13 +1,12 @@
-// src/components/CTA.jsx
 import React from 'react';
 import Button from './Button';
-import '../styles/CTA.css';
+import styles from '../styles/CTA.module.css';
 
 const CTA = () => {
   return (
-    <section className="cta-section">
-      <h2>Start Your Learning Journey Today</h2>
-      <p>Join over 1 million learners worldwide</p>
+    <section className={styles.ctaSection}>
+      <h2 className={styles.heading}>Start Your Learning Journey Today</h2>
+      <p className={styles.subtext}>Join over 1 million learners worldwide</p>
       <Button variant="primary">Join for Free</Button>
     </section>
   );

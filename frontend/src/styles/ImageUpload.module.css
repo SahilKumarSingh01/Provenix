@@ -1,0 +1,68 @@
+.imageUploader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.inputFile {
+  display: block;
+  margin: 10px auto;
+  padding: 8px;
+  border: none;
+  background: #1e293b;
+  color: #a8b2d1;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.thumbnailPreview {
+  margin-top: 10px;
+  text-align: center;
+}
+
+.imagePreview {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #64748b;
+  margin-top: 10px;
+}
+
+.removeBtn {
+  display: block;
+  margin-top: 5px;
+  background: #dc2626;
+  color: white;
+  padding: 5px 10px;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  border-radius: 5px;
+}
+
+.removeBtn:hover {
+  background: #b91c1c;
+}
+
+/* Modal Styling */
+.imageUploadContainer {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #112240;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  width: 300px;
+  text-align: center;
+  z-index: 10;
+}
+
+.errorMessage {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
+}

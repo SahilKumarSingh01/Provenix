@@ -1,5 +1,4 @@
-/* Error404.css */
-.error-container {
+.errorContainer {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -8,7 +7,7 @@
     padding: 4rem 2rem;
 }
 
-.error-content {
+.errorContent {
     position: relative;
     max-width: 1200px;
     margin: 0 auto;
@@ -17,53 +16,59 @@
     align-items: center;
 }
 
-.error-number {
-    font-size: 12rem; /* Increased from 8rem */
+.errorNumber {
+    font-size: 12rem;
     font-weight: 900;
     color: #233554;
     opacity: 0.4;
     line-height: 1;
     position: absolute;
-    top: -80px; /* Adjusted positioning */
+    top: -80px;
     left: -80px;
     z-index: -1;
 }
 
-.error-heading {
-    font-size: 4rem; /* Increased from 2.5rem */
+.errorHeading {
+    font-size: 4rem;
     color: #E6F1FF;
     margin-bottom: 2rem;
     letter-spacing: -2px;
 }
 
-.error-message {
-    font-size: 1.5rem; /* Increased from 1.25rem */
+.errorMessage {
+    font-size: 1.5rem;
     color: #8892B0;
     margin-bottom: 3rem;
     line-height: 1.6;
     max-width: 600px;
 }
 
-.home-link {
-    font-size: 1.25rem; /* Increased from 1.1rem */
+.homeLink {
+    font-size: 1.25rem;
     padding: 1rem 2rem;
     border-width: 2px;
+    text-decoration: none;
+    color: #64ffda;
+}
+
+.homeLink:hover {
+    text-decoration: underline;
 }
 
 .octocat {
-    font-size: 12rem; /* Increased from 8rem */
+    font-size: 12rem;
     opacity: 0.8;
     margin-right: -50px;
 }
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
-    .error-content {
+    .errorContent {
         flex-direction: column;
         gap: 3rem;
     }
 
-    .error-number {
+    .errorNumber {
         font-size: 8rem;
         top: -30px;
         left: 0;
@@ -71,12 +76,12 @@
         text-align: center;
     }
 
-    .error-heading {
+    .errorHeading {
         font-size: 3rem;
         text-align: center;
     }
 
-    .error-message {
+    .errorMessage {
         font-size: 1.25rem;
         text-align: center;
         margin-left: auto;
@@ -88,18 +93,18 @@
         margin-right: 0;
     }
 
-    .home-link {
+    .homeLink {
         font-size: 1.1rem;
         padding: 0.75rem 1.5rem;
     }
 }
 
 @media (max-width: 480px) {
-    .error-number {
+    .errorNumber {
         font-size: 6rem;
     }
 
-    .error-heading {
+    .errorHeading {
         font-size: 2.25rem;
     }
 

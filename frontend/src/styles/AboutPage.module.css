@@ -1,0 +1,197 @@
+:root {
+  --primary-color: #E6F1FF;
+  --secondary-color: #4F46E5;
+  --accent-color: #57CBFF;
+  --background-dark: #0A192F;
+  --background-medium: #112240;
+  --text-primary: #A8B2D1;
+  --text-secondary: #8892B0;
+}
+
+/* Base Styles */
+.aboutContainer {
+  line-height: 1.6;
+  background-color: var(--background-dark);
+}
+
+/* Hero Section */
+.aboutHero {
+  background: linear-gradient(rgba(10, 25, 47, 0.9), rgba(10, 25, 47, 0.9)),
+    url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+  background-size: cover;
+  background-position: center;
+  color: var(--primary-color);
+  padding: 8rem 1rem;
+  text-align: center;
+}
+
+.heroContent h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: var(--secondary-color);
+}
+
+.heroContent p {
+  font-size: 1.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+  color: var(--text-primary);
+}
+
+/* Mission Section */
+.missionSection {
+  padding: 4rem 1rem;
+  text-align: center;
+  background-color: var(--background-medium);
+}
+
+.missionContent {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.missionContent h2 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  color: var(--secondary-color);
+}
+
+.missionContent p {
+  color: var(--text-primary);
+}
+
+/* Features Section */
+.featuresSection {
+  padding: 4rem 1rem;
+  background-color: var(--background-dark);
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.featureCard {
+  background: var(--background-medium);
+  padding: 2rem;
+  border-radius: 10px;
+  border: 1px solid rgba(100, 255, 218, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.featureCard:hover {
+  transform: translateY(-5px);
+  border-color: var(--secondary-color);
+}
+
+.featureCard h3 {
+  color: var(--secondary-color);
+  margin-bottom: 1rem;
+}
+
+.featureCard p {
+  color: var(--text-primary);
+}
+
+/* Stats Section */
+.statsSection {
+  background-color: var(--background-medium);
+  padding: 4rem 1rem;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.statItem h4 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--accent-color);
+}
+
+.statItem p {
+  color: var(--text-primary);
+}
+
+/* CTA Section */
+.ctaSection {
+  text-align: center;
+  padding: 4rem 1rem;
+  background-color: var(--background-dark);
+}
+
+.ctaSection h2 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  color: var(--secondary-color);
+}
+
+.ctaButtons {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.ctaBtn {
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.ctaBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(100, 255, 218, 0.3);
+}
+
+.learnerCta {
+  background-color: var(--secondary-color);
+  color: var(--background-dark);
+}
+
+.educatorCta {
+  background-color: var(--accent-color);
+  color: var(--background-dark);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .heroContent h1 {
+    font-size: 2rem;
+  }
+
+  .heroContent p {
+    font-size: 1.2rem;
+  }
+
+  .missionContent h2,
+  .ctaSection h2 {
+    font-size: 2rem;
+  }
+
+  .statsGrid {
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .aboutHero {
+    padding: 4rem 1rem;
+  }
+
+  .ctaButtons {
+    flex-direction: column;
+    align-items: center;
+  }
+}

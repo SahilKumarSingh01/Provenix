@@ -1,4 +1,4 @@
-.course-detail-container {
+.courseDetailContainer {
     max-width: 600px;
     margin: 30px auto 25px; /* Added top margin to push below navbar */
     padding: 30px;
@@ -9,7 +9,7 @@
 }
 
 /* Form Title */
-.form-title {
+.formTitle {
     text-align: center;
     font-size: 24px;
     margin-bottom: 20px;
@@ -17,29 +17,29 @@
 }
 
 /* Course Form */
-.course-form {
+.courseForm {
     display: flex;
     flex-direction: column;
 }
 
 /* Input and Textarea Container */
-.form-group {
+.formGroup {
     display: flex;
     flex-direction: column;
     margin-bottom: 15px;
 }
 
 /* Labels */
-.form-group label {
+.formGroup label {
     font-size: 16px;
     margin-bottom: 5px;
     color: white; /* Muted Dark Blue */
 }
 
 /* Inputs, Textarea, and Select Styling */
-.form-group input,
-.form-group textarea,
-.form-group select {
+.formGroup input,
+.formGroup textarea,
+.formGroup select {
     width: 100%;
     padding: 12px;
     border: 1px solid #334155; /* Neutral dark border */
@@ -51,9 +51,9 @@
 }
 
 /* Focus Effect */
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus {
+.formGroup input:focus,
+.formGroup textarea:focus,
+.formGroup select:focus {
     border-color: #4F46E5; /* Subtle blue border */
     box-shadow: 0 0 8px rgba(100, 116, 139, 0.5);
     outline: none;
@@ -66,7 +66,7 @@ textarea {
 }
 
 /* Submit Button */
-.submit-btn {
+.submitBtn {
     background: #4F46E5; /* Consistent with other buttons */
     color: white;
     padding: 12px;
@@ -78,17 +78,18 @@ textarea {
 }
 
 /* Hover Effect */
-.submit-btn:hover {
+.submitBtn:hover {
     background: #3730A3; /* Darker shade of blue */
     transform: scale(1.05);
 }
 
-.thumbnail-preview {
+/* Thumbnail Preview */
+.thumbnailPreview {
     margin-top: 10px;
     text-align: center;
 }
 
-.thumbnail-preview img {
+.thumbnailPreview img {
     width: 100px;
     height: 100px;
     object-fit: cover;
@@ -96,20 +97,23 @@ textarea {
     border: 1px solid #64748B;
 }
 
-.image-uploader input {
+.imageUploader input {
     margin-top: 5px;
 }
 
-.image-preview {
+.imagePreview {
     width: 100px;
     height: 100px;
     border-radius: 8px;
     object-fit: cover;
     margin-top: 10px;
+    max-width: 100px; /* Ensure it doesn't exceed 100px */
+    max-height: 100px;
+    display: block; 
 }
 
 /* Remove Button */
-.remove-btn {
+.removeBtn {
     display: block;
     margin-top: 5px;
     background: #DC2626; /* Red Button */
@@ -122,7 +126,6 @@ textarea {
     border-radius: 5px;
 }
 
-.remove-btn:hover {
+.removeBtn:hover {
     background: #B91C1C;
 }
-

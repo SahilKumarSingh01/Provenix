@@ -1,10 +1,10 @@
 // src/components/Button.jsx
 import React from 'react';
-import '../styles/Button.css';
+import styles from '../styles/Button.module.css';
 
 const Button = ({ children, variant = 'primary', ...props }) => {
   return (
-    <button className={`btn ${variant}`} {...props}>
+    <button className={`${styles.btn} ${styles[variant]}`} {...props}>
       {children}
     </button>
   );

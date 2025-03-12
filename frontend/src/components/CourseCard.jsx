@@ -1,27 +1,27 @@
 import React from 'react';
-import '../styles/CourseCard.css';
+import styles from '../styles/CourseCard.module.css';
 import defaultThumbnail from '../assets/DefaultThumbnail.png'; // ✅ Default thumbnail
 
 const CourseCard = ({ course }) => {
   return (
-    <div className="cc-container">
+    <div className={styles.ccContainer}>
       {/* Left Side - Thumbnail (Always Visible) */}
-      <div className="cc-thumbnail-wrapper">
+      <div className={styles.ccThumbnailWrapper}>
         <img 
           src={course.thumbnail || defaultThumbnail} 
           alt="Course Thumbnail" 
-          className="cc-thumbnail-image"
+          className={styles.ccThumbnailImage}
         />
       </div>
 
       {/* Right Side - Course Details */}
-      <div className="cc-info">
-        <h3 className="cc-course-title">{course.title}</h3>
-        <p className="cc-course-meta">
+      <div className={styles.ccInfo}>
+        <h3 className={styles.ccCourseTitle}>{course.title}</h3>
+        <p className={styles.ccCourseMeta}>
           {course.creator} • {course.students} students • {course.category}
         </p>
-        <p className="cc-course-price">${course.price.toFixed(2)}</p>
-        <p className="cc-course-rating">⭐ {course.rating}</p>
+        <p className={styles.ccCoursePrice}>${course.price.toFixed(2)}</p>
+        <p className={styles.ccCourseRating}>⭐ {course.rating}</p>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ImageUploader from "../components/ImageUpload"; // Import ImageUploader component
-import "../styles/CourseDetailForm.css"; // Import the CSS file
+import styles from "../styles/CourseDetailForm.module.css"; // Import CSS module
 
 const CourseDetailForm = () => {
   const [formData, setFormData] = useState({
@@ -14,7 +14,6 @@ const CourseDetailForm = () => {
     level: "Beginner",
   });
 
-  // Function to handle image upload
   const handleImageUpload = (imageUrl) => {
     setFormData({ ...formData, thumbnail: imageUrl });
   };
@@ -30,31 +29,33 @@ const CourseDetailForm = () => {
   };
 
   return (
-    <div className="course-detail-container">
-      <h2 className="form-title">Course Details</h2>
-      <form onSubmit={handleSubmit} className="course-form">
-        <div className="form-group">
+    <div className={styles.courseDetailContainer}>
+      <h2 className={styles.formTitle}>Course Details</h2>
+      <form onSubmit={handleSubmit} className={styles.courseForm}>
+        <div className={styles.formGroup}>
           <label>Title:</label>
           <input type="text" name="title" value={formData.title} onChange={handleChange} required />
         </div>
 
-        <div className="form-group">
+        <div className={styles.formGroup}>
           <label>Description:</label>
           <textarea name="description" value={formData.description} onChange={handleChange} required />
         </div>
 
-        {/* Image Uploader Component */}
-        <div className="form-group">
+        <div className={styles.formGroup}>
           <label>Thumbnail:</label>
           <ImageUploader onImageUpload={handleImageUpload} />
           {formData.thumbnail && (
-            <div className="thumbnail-preview">
+            <div className={styles.thumbnailPreview}>
               <img src={formData.thumbnail} alt="Course Thumbnail" />
+              <button type="button" onClick={() => setFormData({ ...formData, thumbnail: "" })}>
+                Remove
+              </button>
             </div>
           )}
         </div>
 
-        <div className="form-group">
+        <div className={styles.formGroup}>
           <label>Access Type:</label>
           <select name="accessType" value={formData.accessType} onChange={handleChange}>
             <option value="public">Public</option>
@@ -62,22 +63,22 @@ const CourseDetailForm = () => {
           </select>
         </div>
 
-        <div className="form-group">
+        <div className={styles.formGroup}>
           <label>Price (Rs.):</label>
-          <input type="number" name="price" value={formData.price} onChange={handleChange} required />
+          <input type="number" name="price" value={formData.price} onChange={handleChange} min="0" required />
         </div>
 
-        <div className="form-group">
+        <div className={styles.formGroup}>
           <label>Category:</label>
           <input type="text" name="category" value={formData.category} onChange={handleChange} required />
         </div>
 
-        <div className="form-group">
+        <div className={styles.formGroup}>
           <label>Tags (comma-separated):</label>
           <input type="text" name="tags" value={formData.tags} onChange={handleChange} required />
         </div>
 
-        <div className="form-group">
+        <div className={styles.formGroup}>
           <label>Level:</label>
           <select name="level" value={formData.level} onChange={handleChange}>
             <option value="Beginner">Beginner</option>
@@ -86,7 +87,7 @@ const CourseDetailForm = () => {
           </select>
         </div>
 
-        <button type="submit" className="submit-btn">Submit Details</button>
+        <button type="submit" className={styles.submitBtn}>Submit Details</button>
       </form>
     </div>
   );

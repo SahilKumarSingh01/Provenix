@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import "../styles/form.css"; 
-import "../styles/CourseCreation.css"; 
+import styles from "../styles/CourseCreation.module.css";
 
 const CreateCourse = () => {
     const [courseName, setCourseName] = useState("");
@@ -13,10 +12,10 @@ const CreateCourse = () => {
     };
 
     return (
-        <div className="create-course-container">
-            <div className="create-course-card">
+        <div className={styles.createCourseContainer}>
+            <div className={styles.createCourseCard}>
                 <h2>Create Course</h2>
-                <form onSubmit={handleSubmit} className="create-course-form">
+                <form onSubmit={handleSubmit} className={styles.createCourseForm}>
 
                     {/* Course Name */}
                     <label>Course Name:</label>

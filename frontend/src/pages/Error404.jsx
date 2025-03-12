@@ -1,26 +1,26 @@
-// Error404.jsx
-import '../styles/Error404.css'; // We'll create this next
-import Footer from '../components/Footer'; // Your existing footer component
+import React from "react";
+import styles from "../styles/Error404.module.css"; // Importing the CSS module
+import Footer from "../components/Footer"; // Your existing footer component
 
 const Error404 = () => {
   return (
-    <div className="error-container">
-      <div className="error-content">
-        <div className="error-number">404</div>
-        <div className="error-text">
-          <h1 className="error-heading">Page not found</h1>
-          <p className="error-message">
+    <div className={styles.errorContainer}>
+      <div className={styles.errorContent}>
+        <div className={styles.errorNumber}>404</div>
+        <div className={styles.errorText}>
+          <h1 className={styles.errorHeading}>Page not found</h1>
+          <p className={styles.errorMessage}>
             Oops! The page you're looking for doesn't exist or has been moved.
           </p>
-          <a href="/" className="home-link">
+          <a href="/" className={styles.homeLink}>
             ← Return to homepage
           </a>
         </div>
-        <div className="error-illustration">
-          <div className="octocat">🐙</div> {/* You can replace with SVG */}
+        <div className={styles.errorIllustration}>
+          <div className={styles.octocat}>🐙</div> {/* You can replace this with an SVG if needed */}
         </div>
       </div>
-      <Footer /> {/* Include your existing footer */}
+      <Footer />
     </div>
   );
 };

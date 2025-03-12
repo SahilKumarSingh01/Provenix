@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import CourseCard from '../components/CourseCard'; // Your existing CourseCard component
-import styles from '../styles/Search.css'; // CSS module for Search component
+import CourseCard from '../components/CourseCard';
+import styles from '../styles/Search.module.css'; // ✅ Updated to use CSS module
 
 const coursesData = [
   { id: 1, title: 'React for Beginners', category: 'Web Development', price: 20 },
@@ -22,7 +22,6 @@ const Search = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(6);
 
-  // 🔹 Filter and sort courses
   const filteredCourses = coursesData
     .filter(course => 
       (keyword === '' || course.title.toLowerCase().includes(keyword.toLowerCase())) &&
@@ -36,15 +35,14 @@ const Search = () => {
       return 0;
     });
 
-  // 🔹 Pagination logic
   const totalPages = Math.ceil(filteredCourses.length / itemsPerPage);
   const paginatedCourses = filteredCourses.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
     <div className={styles.searchContainer}>
       <h2 className={styles.title}>Search Courses</h2>
-      
-      {/* 🔹 Search Filters */}
+
+      {/* 🔹 Filters */}
       <div className={styles.filters}>
         <input 
           type="text" 
@@ -82,7 +80,7 @@ const Search = () => {
         </select>
       </div>
 
-      {/* 🔹 Courses Display */}
+      {/* 🔹 Course List */}
       <div className={styles.courseGrid}>
         {paginatedCourses.length > 0 ? (
           paginatedCourses.map(course => <CourseCard key={course.id} course={course} />)
@@ -91,7 +89,7 @@ const Search = () => {
         )}
       </div>
 
-      {/* 🔹 Pagination Controls */}
+      {/* 🔹 Pagination */}
       <div className={styles.pagination}>
         <button 
           onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} 

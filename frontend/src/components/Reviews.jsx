@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../styles/Reviews.css"; // Import CSS file
+import styles from "../styles/Reviews.module.css"; // Import CSS module
 
 const Reviews = () => {
     const [reviews, setReviews] = useState([]);
@@ -9,7 +9,7 @@ const Reviews = () => {
         // Dummy Static Data
         const fakeReviews = [
             { id: 1, user: "John Doe", comment: "Great course!", rating: 5 },
-            { id: 2, user: "Jane Smith", comment: "Very helpful and well explained.orem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur Excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserunt mollit anim id est laborum", rating: 4 },
+            { id: 2, user: "Jane Smith", comment: "Very helpful and well explained.", rating: 4 },
             { id: 3, user: "Alice Brown", comment: "Decent but could be better.", rating: 3 },
             { id: 4, user: "Mike Johnson", comment: "Absolutely loved it! Must enroll.", rating: 5 },
         ];
@@ -21,20 +21,20 @@ const Reviews = () => {
     }, []);
 
     return (
-        <div className="reviews-container">
-            <h2 className="reviews-title">Student Reviews</h2>
+        <div className={styles.reviewsContainer}>
+            <h2 className={styles.reviewsTitle}>Student Reviews</h2>
             {loading ? (
-                <p className="loading">Loading reviews...</p>
+                <p className={styles.loading}>Loading reviews...</p>
             ) : (
                 reviews.map((review) => (
-                    <div key={review.id} className="review-card">
-                        <div className="review-header">
-                            <span className="review-user">{review.user}</span>
-                            <span className="review-rating">
+                    <div key={review.id} className={styles.reviewCard}>
+                        <div className={styles.reviewHeader}>
+                            <span className={styles.reviewUser}>{review.user}</span>
+                            <span className={styles.reviewRating}>
                                 {Array(review.rating).fill("⭐").join("")}
                             </span>
                         </div>
-                        <p className="review-comment">{review.comment}</p>
+                        <p className={styles.reviewComment}>{review.comment}</p>
                     </div>
                 ))
             )}
@@ -43,17 +43,3 @@ const Reviews = () => {
 };
 
 export default Reviews;
-
-
-
-
-// [
-//     { "id": 1, "user": "John Doe", "comment": "Great course!", "rating": 5 },
-//     { "id": 2, "user": "Jane Smith", "comment": "Very helpful and well explained.", "rating": 4 },
-//     { "id": 3, "user": "Alice Brown", "comment": "Decent but could be better.", "rating": 3 },
-//     { "id": 4, "user": "Mike Johnson", "comment": "Absolutely loved it! Must enroll.", "rating": 5 }
-//   ]
-//   Backend API ka response aise hona chahiye:
-
-  
-  

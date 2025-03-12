@@ -1,25 +1,24 @@
-// PrivacyPolicy.js
 import React from 'react';
-import '../styles/PrivacyPolicy.css'; // Your global CSS
+import styles from '../styles/PrivacyPolicy.module.css';
 
 const PrivacyPolicy = () => {
   return (
-    <div className="privacy-container">
-      <header className="privacy-header">
+    <div className={styles.privacyContainer}>
+      <header className={styles.privacyHeader}>
         <h1>Privacy Policy</h1>
-        <p className="update-date">Last updated: [Insert Date]</p>
+        <p className={styles.updateDate}>Last updated: [Insert Date]</p>
       </header>
 
-      <main className="privacy-content">
-        <section className="policy-section">
-          <h2 className="section-title">Introduction</h2>
+      <main className={styles.privacyContent}>
+        <section className={styles.policySection}>
+          <h2 className={styles.sectionTitle}>Introduction</h2>
           <p>Welcome to [Your Platform Name], a learning platform connecting learners and mentors. We are committed to protecting your personal information and your right to privacy.</p>
         </section>
 
-        <section className="policy-section">
-          <h2 className="section-title">Data We Collect</h2>
-          <div className="data-types">
-            <div className="data-card">
+        <section className={styles.policySection}>
+          <h2 className={styles.sectionTitle}>Data We Collect</h2>
+          <div className={styles.dataTypes}>
+            <div className={styles.dataCard}>
               <h3>Learner Information</h3>
               <ul>
                 <li>Account registration details</li>
@@ -27,7 +26,7 @@ const PrivacyPolicy = () => {
                 <li>Payment information</li>
               </ul>
             </div>
-            <div className="data-card">
+            <div className={styles.dataCard}>
               <h3>Mentor Information</h3>
               <ul>
                 <li>Professional credentials</li>
@@ -38,9 +37,9 @@ const PrivacyPolicy = () => {
           </div>
         </section>
 
-        <section className="policy-section">
-          <h2 className="section-title">How We Use Your Data</h2>
-          <ul className="usage-list">
+        <section className={styles.policySection}>
+          <h2 className={styles.sectionTitle}>How We Use Your Data</h2>
+          <ul className={styles.usageList}>
             <li>➜ Personalize learning experiences</li>
             <li>➜ Facilitate mentor-student communication</li>
             <li>➜ Process payments securely</li>
@@ -48,24 +47,24 @@ const PrivacyPolicy = () => {
           </ul>
         </section>
 
-        <section className="policy-section">
-          <h2 className="section-title">Data Security</h2>
+        <section className={styles.policySection}>
+          <h2 className={styles.sectionTitle}>Data Security</h2>
           <p>We implement:</p>
-          <div className="security-features">
-            <div className="security-card">
+          <div className={styles.securityFeatures}>
+            <div className={styles.securityCard}>
               <h3>Encryption</h3>
               <p>End-to-end data encryption</p>
             </div>
-            <div className="security-card">
+            <div className={styles.securityCard}>
               <h3>Access Control</h3>
               <p>Strict role-based access</p>
             </div>
           </div>
         </section>
 
-        <section className="policy-section">
-          <h2 className="section-title">Your Rights</h2>
-          <div className="rights-grid">
+        <section className={styles.policySection}>
+          <h2 className={styles.sectionTitle}>Your Rights</h2>
+          <div className={styles.rightsGrid}>
             <p>📋 Access your data</p>
             <p>✏️ Request corrections</p>
             <p>🗑️ Delete account</p>
@@ -73,7 +72,7 @@ const PrivacyPolicy = () => {
           </div>
         </section>
 
-        <div className="contact-section">
+        <div className={styles.contactSection}>
           <p>Contact us at <a href="mailto:privacy@example.com">privacy@example.com</a> for any questions.</p>
         </div>
       </main>

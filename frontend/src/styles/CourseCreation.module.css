@@ -1,5 +1,7 @@
+/* CreateCourse.module.css */
+
 /* Container for the whole page */
-.create-course-container {
+.createCourseContainer {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -10,7 +12,7 @@
 }
 
 /* Card that holds the form */
-.create-course-card {
+.createCourseCard {
     width: 100%;
     max-width: 420px;
     background: #1E293B; /* Darker card background */
@@ -21,23 +23,23 @@
 }
 
 /* Heading inside the card */
-.create-course-card h2 {
+.createCourseCard h2 {
     color: #4F46E5; /* Highlighted heading color */
     font-size: 24px;
     margin-bottom: 20px;
 }
 
 /* Form container */
-.create-course-form {
+.createCourseForm {
     display: flex;
     flex-direction: column;
     gap: 12px; /* Spacing between form fields */
 }
 
 /* Common styling for input, textarea, and select */
-.create-course-form input,
-.create-course-form textarea,
-.create-course-form select {
+.createCourseForm input,
+.createCourseForm textarea,
+.createCourseForm select {
     width: 100%;
     padding: 12px;
     border: 1px solid #334155;
@@ -49,16 +51,16 @@
 }
 
 /* Focus effect for input fields */
-.create-course-form input:focus,
-.create-course-form textarea:focus,
-.create-course-form select:focus {
+.createCourseForm input:focus,
+.createCourseForm textarea:focus,
+.createCourseForm select:focus {
     border-color: #4F46E5;
     box-shadow: 0 0 8px rgba(79, 70, 229, 0.5);
     outline: none;
 }
 
 /* Submit button styling */
-.create-course-form button {
+.createCourseForm button {
     background-color: #4F46E5;
     color: white;
     padding: 12px;
@@ -70,7 +72,7 @@
 }
 
 /* Button click effect */
-.create-course-form button:active {
+.createCourseForm button:active {
     background: #3730A3;
     transform: translateY(1px);
 }

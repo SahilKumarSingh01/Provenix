@@ -1,5 +1,5 @@
 .searchContainer {
-  max-width: 900px;
+  max-width: 1200px;
   margin: auto;
   padding: 20px;
   background: #111;
@@ -30,14 +30,18 @@
   min-width: 150px;
 }
 
-.courseList {
+.courseGrid {
   display: flex;
-  flex-direction: column;
-  gap: 5px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
 }
 
-.courseItem {
-  width: 100%;  /* Ensures full row width */
+.noResults {
+  text-align: center;
+  font-size: 18px;
+  color: #ff6b6b;
 }
 
 .pagination {
@@ -60,10 +64,4 @@
 .pagination button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-}
-
-.noResults {
-  text-align: center;
-  font-size: 18px;
-  color: #ff6b6b;
 }

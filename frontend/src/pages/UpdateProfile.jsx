@@ -1,8 +1,6 @@
 import React, { useState, useRef } from 'react';
 import ImageUploader from '../components/ImageUpload';
-// import ReactCrop from 'react-image-crop';
-// import 'react-image-crop/dist/ReactCrop.css';
-import '../styles/UpdateProfile.css';
+import styles from '../styles/UpdateProfile.module.css';
 
 const UpdateProfile = () => {
   const [formData, setFormData] = useState({
@@ -20,77 +18,6 @@ const UpdateProfile = () => {
   const [src, setSrc] = useState(null);
   const imgRef = useRef(null);
 
-  // Image Handling
-  const handleImageUpload = async (file) => {
-    if (!file) return;
-
-    // Validate image
-    if (!file.type.startsWith('image/')) {
-      setErrors(prev => ({ ...prev, profileImage: 'Please upload a valid image file' }));
-      return;
-    }
-    if (file.size > 5 * 1024 * 1024) {
-      setErrors(prev => ({ ...prev, profileImage: 'File size must be less than 5MB' }));
-      return;
-    }
-
-    // Read image for cropping
-    const reader = new FileReader();
-    reader.addEventListener('load', () => setSrc(reader.result));
-    reader.readAsDataURL(file);
-  };
-
-  const handleCropComplete = (crop) => {
-    if (imgRef.current && crop.width && crop.height) {
-      getCroppedImg(imgRef.current, crop);
-    }
-  };
-
-  const getCroppedImg = (image, crop) => {
-    const canvas = document.createElement('canvas');
-    const scaleX = image.naturalWidth / image.width;
-    const scaleY = image.naturalHeight / image.height;
-    
-    canvas.width = crop.width;
-    canvas.height = crop.height;
-    const ctx = canvas.getContext('2d');
-
-    ctx.drawImage(
-      image,
-      crop.x * scaleX,
-      crop.y * scaleY,
-      crop.width * scaleX,
-      crop.height * scaleY,
-      0,
-      0,
-      crop.width,
-      crop.height
-    );
-
-    canvas.toBlob(async (blob) => {
-      try {
-        setLoading(true);
-        // Simulate upload to cloud storage
-        const uploadedUrl = await uploadImage(blob);
-        setFormData(prev => ({ ...prev, profileImage: uploadedUrl }));
-        setSrc(null);
-        setErrors(prev => ({ ...prev, profileImage: null }));
-      } catch (error) {
-        setErrors(prev => ({ ...prev, profileImage: 'Failed to upload image' }));
-      } finally {
-        setLoading(false);
-      }
-    }, 'image/jpeg');
-  };
-
-  const uploadImage = (blob) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(URL.createObjectURL(blob));
-      }, 2000);
-    });
-  };
-
   // Form Handling
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -103,7 +30,6 @@ const UpdateProfile = () => {
 
     setLoading(true);
     try {
-      // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1500));
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 3000);
@@ -114,138 +40,83 @@ const UpdateProfile = () => {
     }
   };
 
-  const validateForm = () => {
-    const errors = {};
-    if (!formData.name.trim()) errors.name = 'Name is required';
-    if (!/^\S+@\S+\.\S+$/.test(formData.email)) errors.email = 'Invalid email address';
-    if (formData.password && formData.password.length < 8) {
-      errors.password = 'Password must be at least 8 characters';
-    }
-    return errors;
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    setErrors(prev => ({ ...prev, [name]: null }));
-  };
-
   return (
-    <div className="search-container" style={{ maxWidth: '800px' }}>
-      <div className="filters-section" style={{ flexDirection: 'column' }}>
+    <div className={styles.container}>
+      <div className={styles.filtersSection}>
         <h2 style={{ color: '#64FFDA', marginBottom: '1.5rem' }}>Update Profile</h2>
-        
-        {errors.form && (
-          <div className="error-message" style={{ color: '#ff6b6b', marginBottom: '1rem' }}>
-            {errors.form}
-          </div>
-        )}
 
-        <form onSubmit={handleSubmit} className="profile-form">
-          <div className="form-group">
+        {errors.form && <div className={styles.errorMessage}>{errors.form}</div>}
+
+        <form onSubmit={handleSubmit} className={styles.profileForm}>
+          <div className={styles.formGroup}>
             <label>Profile Picture</label>
             <ImageUploader 
-              onFileSelect={handleImageUpload}
+              onFileSelect={() => {}}
               initialImage={formData.profileImage}
-              className="profile-uploader"
+              className={styles.profileUploader}
               isLoading={loading}
             />
-            {errors.profileImage && (
-              <div className="error-message">{errors.profileImage}</div>
-            )}
-
-            {src && (
-              <div className="crop-modal">
-                <ReactCrop
-                  crop={crop}
-                  onChange={c => setCrop(c)}
-                  onComplete={handleCropComplete}
-                >
-                  <img
-                    ref={imgRef}
-                    src={src}
-                    alt="Crop preview"
-                    style={{ maxWidth: '100%' }}
-                  />
-                </ReactCrop>
-                <button
-                  type="button"
-                  className="cancel-button"
-                  onClick={() => setSrc(null)}
-                >
-                  Cancel
-                </button>
-              </div>
-            )}
+            {errors.profileImage && <div className={styles.errorMessage}>{errors.profileImage}</div>}
           </div>
 
-          <div className="form-group">
+          <div className={styles.formGroup}>
             <label>Full Name</label>
             <input
               type="text"
               name="name"
               value={formData.name}
-              onChange={handleChange}
-              className="search-input"
+              className={styles.searchInput}
               disabled={loading}
             />
-            {errors.name && <div className="error-message">{errors.name}</div>}
+            {errors.name && <div className={styles.errorMessage}>{errors.name}</div>}
           </div>
 
-          <div className="form-group">
+          <div className={styles.formGroup}>
             <label>Email</label>
             <input
               type="email"
               name="email"
               value={formData.email}
-              onChange={handleChange}
-              className="search-input"
+              className={styles.searchInput}
               disabled={loading}
             />
-            {errors.email && <div className="error-message">{errors.email}</div>}
+            {errors.email && <div className={styles.errorMessage}>{errors.email}</div>}
           </div>
 
-          <div className="form-group">
+          <div className={styles.formGroup}>
             <label>Bio</label>
             <textarea
               name="bio"
               value={formData.bio}
-              onChange={handleChange}
-              className="search-input"
+              className={styles.searchInput}
               rows="4"
               style={{ resize: 'vertical' }}
               disabled={loading}
             />
           </div>
 
-          <div className="form-group">
+          <div className={styles.formGroup}>
             <label>New Password</label>
             <input
               type="password"
               name="password"
               value={formData.password}
-              onChange={handleChange}
-              className="search-input"
+              className={styles.searchInput}
               placeholder="••••••••"
               disabled={loading}
             />
-            {errors.password && <div className="error-message">{errors.password}</div>}
+            {errors.password && <div className={styles.errorMessage}>{errors.password}</div>}
           </div>
 
           <button 
             type="submit" 
-            className="page-button"
-            style={{ marginTop: '1rem', width: '100%' }}
+            className={styles.pageButton}
             disabled={loading}
           >
             {loading ? 'Updating...' : 'Update Profile'}
           </button>
 
-          {showSuccess && (
-            <div className="success-message">
-              Profile updated successfully!
-            </div>
-          )}
+          {showSuccess && <div className={styles.successMessage}>Profile updated successfully!</div>}
         </form>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/MCQCard.css"; // Import CSS file
+import styles from "../styles/MCQCard.module.css"; // Import the CSS module
 
 const MCQCard = ({ question, options, correctAnswer }) => {
     const [selectedOption, setSelectedOption] = useState(null);
@@ -18,17 +18,17 @@ const MCQCard = ({ question, options, correctAnswer }) => {
     };
 
     return (
-        <div className="mcq-card">
-            <h3 className="mcq-question">{question}</h3>
-            <ul className="mcq-options">
+        <div className={styles.mcqCard}>
+            <h3 className={styles.mcqQuestion}>{question}</h3>
+            <ul className={styles.mcqOptions}>
                 {options.map((option, index) => (
                     <li
                         key={index}
                         onClick={() => handleOptionClick(index)}
-                        className={`mcq-option 
-                            ${isSubmitted && index === correctAnswer ? "correct" : ""} 
-                            ${isSubmitted && selectedOption === index && index !== correctAnswer ? "wrong" : ""} 
-                            ${!isSubmitted && selectedOption === index ? "selected" : ""}
+                        className={`${styles.mcqOption} 
+                            ${isSubmitted && index === correctAnswer ? styles.correct : ""} 
+                            ${isSubmitted && selectedOption === index && index !== correctAnswer ? styles.wrong : ""} 
+                            ${!isSubmitted && selectedOption === index ? styles.selected : ""}
                         `}
                     >
                         {option}
@@ -36,11 +36,11 @@ const MCQCard = ({ question, options, correctAnswer }) => {
                 ))}
             </ul>
             {!isSubmitted ? (
-                <button onClick={handleSubmit} disabled={selectedOption === null} className="mcq-submit-btn">
+                <button onClick={handleSubmit} disabled={selectedOption === null} className={styles.mcqSubmitBtn}>
                     Submit Answer
                 </button>
             ) : (
-                <p className={`mcq-feedback ${selectedOption === correctAnswer ? "correct" : "wrong"}`}>
+                <p className={`${styles.mcqFeedback} ${selectedOption === correctAnswer ? styles.correct : styles.wrong}`}>
                     {selectedOption === correctAnswer ? "✅ Correct!" : "❌ Wrong Answer"}
                 </p>
             )}

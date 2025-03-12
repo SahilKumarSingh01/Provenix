@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/CodeBox.css";
+import styles from "../styles/CodeBox.module.css";
 
 const CodeBox = ({ codeData }) => {
     const [activeTab, setActiveTab] = useState(0);
@@ -12,13 +12,13 @@ const CodeBox = ({ codeData }) => {
     const codeLines = codeData[activeTab].data.split("\n");
 
     return (
-        <div className="codebox-container">
+        <div className={styles.codeboxContainer}>
             {/* Tabs for Different Languages */}
-            <div className="codebox-tabs">
+            <div className={styles.codeboxTabs}>
                 {codeData.map((code, index) => (
                     <button
                         key={index}
-                        className={`codebox-tab ${index === activeTab ? "active" : ""}`}
+                        className={`${styles.codeboxTab} ${index === activeTab ? styles.active : ""}`}
                         onClick={() => setActiveTab(index)}
                     >
                         {code.lang}
@@ -27,23 +27,23 @@ const CodeBox = ({ codeData }) => {
             </div>
 
             {/* Code Display with Line Numbers */}
-            <div className="codebox-content">
+            <div className={styles.codeboxContent}>
                 {/* Line Numbers */}
-                <div className="line-numbers">
+                <div className={styles.lineNumbers}>
                     {codeLines.map((_, idx) => (
                         <div key={idx}>{idx + 1}</div>
                     ))}
                 </div>
 
                 {/* Actual Code */}
-                <pre className="codebox-lines">
+                <pre className={styles.codeboxLines}>
                     {codeLines.map((line, idx) => (
                         <div key={idx}>{line}</div>
                     ))}
                 </pre>
 
                 {/* Copy Button */}
-                <button className="copy-btn" onClick={handleCopy}>Copy</button>
+                <button className={styles.copyBtn} onClick={handleCopy}>Copy</button>
             </div>
         </div>
     );

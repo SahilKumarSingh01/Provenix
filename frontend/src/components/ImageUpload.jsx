@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import styles from "../styles/ImageUpload.module.css"; // Importing the CSS module
 
 const ImageUploader = ({ onImageUpload }) => {
   const [preview, setPreview] = useState("");
@@ -15,20 +16,19 @@ const ImageUploader = ({ onImageUpload }) => {
     }
   };
 
-  // Remove image function
   const handleRemoveImage = () => {
     setPreview("");
     onImageUpload(""); // Clear the image from parent form
   };
 
   return (
-    <div className="image-uploader">
-      <input type="file" accept="image/*" onChange={handleImageChange} />
+    <div className={styles.imageUploader}>
+      <input type="file" accept="image/*" onChange={handleImageChange} className={styles.inputFile} />
 
       {preview && (
-        <div className="thumbnail-preview">
-          <img src={preview} alt="Thumbnail Preview" className="image-preview" />
-          <button onClick={handleRemoveImage} className="remove-btn">Remove</button>
+        <div className={styles.thumbnailPreview}>
+          <img src={preview} alt="Thumbnail Preview" className={styles.imagePreview} />
+          <button onClick={handleRemoveImage} className={styles.removeBtn}>Remove</button>
         </div>
       )}
     </div>

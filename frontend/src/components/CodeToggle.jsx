@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/CodeToggle.css"; // Import CSS file
+import styles from "../styles/CodeToggle.module.css"; // Import CSS Module
 
 const CodeToggle = ({ codeSnippet, language }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -14,16 +14,16 @@ const CodeToggle = ({ codeSnippet, language }) => {
     };
 
     return (
-        <div className="code-toggle-container">
-            <button onClick={handleToggle} className="code-toggle-btn">
+        <div className={styles.codeToggleContainer}>
+            <button onClick={handleToggle} className={styles.codeToggleBtn}>
                 {isOpen ? "Hide Code" : "Show Code"}
             </button>
             {isOpen && (
-                <div className="code-box">
+                <div className={styles.codeBox}>
                     <pre>
                         <code className={`language-${language}`}>{codeSnippet}</code>
                     </pre>
-                    <button onClick={handleCopy} className="copy-btn">Copy</button>
+                    <button onClick={handleCopy} className={styles.copyBtn}>Copy</button>
                 </div>
             )}
         </div>

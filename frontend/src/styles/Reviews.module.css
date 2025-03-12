@@ -1,5 +1,5 @@
 /* Reviews Container */
-.reviews-container {
+.reviewsContainer {
     max-width: 600px;
     margin: 20px auto;
     background: #112240; /* Dark Theme */
@@ -11,7 +11,7 @@
 }
 
 /* Title */
-.reviews-title {
+.reviewsTitle {
     color: #64FFDA;
     text-align: center;
     margin-bottom: 15px;
@@ -24,7 +24,7 @@
 }
 
 /* Review Card */
-.review-card {
+.reviewCard {
     background: #233554;
     padding: 15px;
     margin-bottom: 10px;
@@ -34,7 +34,7 @@
 }
 
 /* Review Header */
-.review-header {
+.reviewHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -43,18 +43,18 @@
 }
 
 /* User Name */
-.review-user {
+.reviewUser {
     color: #64FFDA;
 }
 
 /* Star Ratings */
-.review-rating {
+.reviewRating {
     color: gold;
     font-size: 14px;
 }
 
 /* Review Comment */
-.review-comment {
+.reviewComment {
     margin-top: 5px;
     font-size: 13px;
     color: #A8B2D1;

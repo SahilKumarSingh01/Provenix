@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import "../styles/VideoUpload.css";
-
+import styles from "../styles/VideoUpload.module.css"; // Importing the CSS module
 
 const VideoUpload = () => {
   const [video, setVideo] = useState(null);
@@ -21,12 +20,12 @@ const VideoUpload = () => {
   };
 
   return (
-    <div className="video-upload-container">
-      <h2>Upload Video</h2>
-      <input type="file" accept="video/*" onChange={handleVideoChange} />
-      {error && <p className="error-message">{error}</p>}
+    <div className={styles.videoUploadContainer}>
+      <h2 className={styles.title}>Upload Video</h2>
+      <input type="file" accept="video/*" onChange={handleVideoChange} className={styles.inputFile} />
+      {error && <p className={styles.errorMessage}>{error}</p>}
       {video && (
-        <video controls className="video-preview">
+        <video controls className={styles.videoPreview}>
           <source src={video} type="video/mp4" />
           Your browser does not support the video tag.
         </video>

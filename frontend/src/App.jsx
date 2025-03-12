@@ -12,8 +12,18 @@ import CourseView from "./pages/CourseView";
 
 import UpdateProfile from "./pages/UpdateProfile";
 
+import Search from "./pages/Search";
+
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+
+
+
+
+
 
 import Error404 from "./pages/Error404";
+
+
 
 
 
@@ -48,6 +58,11 @@ function App() {
         <Route path='/*' element={<Error404/>}/>
 
         <Route path='/update-profile' element={<UpdateProfile/>}/>
+
+        <Route path='/privacy-policy' element={<PrivacyPolicy/>}/>
+
+        <Route path='/search' element={<Search/>}/>
+
 
 
 
