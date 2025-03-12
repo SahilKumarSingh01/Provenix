@@ -49,7 +49,22 @@ const searchCourses = async (req, res) => {
         }
       });
       pipeline.push({ $unwind: "$creator" }); // To flatten the array (if needed)
-      
+      pipeline.push({
+        $project: {
+            title: 1,
+            category: 1,
+            tags: 1,
+            level: 1,
+            price: 1,
+            status: 1,
+            createdAt: 1,
+            updatedAt: 1,
+            "creator.username": 1,
+            "creator.displayName": 1,
+            "creator.photo": 1  // Changed from "thumbnail" to "photo"
+        }
+    });
+    
       const courses = await Course.aggregate(pipeline);
       res.status(200).json({ success: true, courses });
     } catch (error) {

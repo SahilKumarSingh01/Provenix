@@ -30,7 +30,7 @@ const removeCourse = async (req, res) => {
             Page.deleteMany({ courseId: course._id }),       // Delete all pages of the course
             Comment.deleteMany({ courseId: course._id }),    // Delete all comments
             Review.deleteMany({ courseId: course._id }),     // Delete all reviews
-            ContentSection.deleteMany({ courseId: course._id }), // Delete related content sections
+            ContentSection.updateMany({ courseId }, { status: "deleted" }), // Soft delete ContentSection
             Course.findByIdAndDelete(course._id) // Finally, delete the course itself
         ]);
 

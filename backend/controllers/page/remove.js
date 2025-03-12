@@ -25,25 +25,18 @@ const remove = async (req, res) => {
 
     const { courseId, section, order } = page;
 
-    // Delete related data in parallel
-    const [deletedContent, deletedComments] = await Promise.all([
-      ContentSection.deleteMany({ pageId }), 
-      Comment.deleteMany({ pageId }) 
-    ]);
+   // Perform all deletions & updates in a single Promise.all
+   const [updatedContent, deletedComments, deletedPage, updatedPages] = await Promise.all([
+    ContentSection.updateMany({ pageId }, { status: "deleted" }), // Soft delete ContentSection
+    Comment.deleteMany({ pageId }), // Delete Comments
+    Page.deleteOne({ _id: pageId }), // Delete Page
+    Page.updateMany({ courseId, section, order: { $gt: order } }, { $inc: { order: -1 } }) // Adjust order
+  ]);
 
-    // Delete the page
-    await Page.deleteOne({ _id: pageId });
-
-    // Adjust order of remaining pages in the same section
-    await Page.updateMany(
-      { courseId, section, order: { $gt: order } },
-      { $inc: { order: -1 } }
-    );
-
-    res.json({ 
-      success: true, 
-      message: `Page deleted successfully. Removed ${deletedContent.deletedCount} content sections and ${deletedComments.deletedCount} comments.` 
-    });
+  res.json({ 
+    success: true, 
+    message: `Page deleted. ${deletedComments.deletedCount} comments removed. ${updatedContent.modifiedCount} content sections marked for deletion. Order adjusted for ${updatedPages.modifiedCount} pages.`
+  });
 
   } catch (error) {
     res.status(500).json({ message: error.message });

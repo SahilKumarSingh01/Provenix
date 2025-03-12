@@ -34,7 +34,7 @@ const removeAll = async (req, res) => {
     const [pagesResult, commentsResult, contentSectionsResult] = await Promise.all([
       Page.deleteMany({ courseId, section }),
       Comment.deleteMany({ courseId, section }),
-      ContentSection.deleteMany({ courseId, section }),
+      ContentSection.updateMany({ courseId,section }, { status: "deleted" }), // Soft delete ContentSection
     ]);
 
     const pagesDeleted = pagesResult.deletedCount || 0;

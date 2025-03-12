@@ -15,9 +15,10 @@ const contentSectionSchema = new mongoose.Schema({
   courseId: { type: String, required: true },
   creatorId: { type: String, required: true },
   items: [itemSchema], 
+  parentContent: { type: mongoose.Schema.Types.ObjectId, ref: "ContentSection", default: null }, // For nesting
+  status: { type: String, enum: ["active", "deleted"], default: "active" }, // Soft delete status
 }, { timestamps: true });
 
 contentSectionSchema.index({ courseId: 1, section: 1 });
-
 
 module.exports = mongoose.model("ContentSection", contentSectionSchema);

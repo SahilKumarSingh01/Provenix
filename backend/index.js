@@ -4,9 +4,8 @@ const session = require('express-session');
 const cors = require('cors');
 const mongoStore = require('connect-mongo');
 const authRoutes = require('./routes/authRoutes');
-const multer = require("multer");
-
 const courseRoutes  = require('./routes/courseRoutes.js');
+const uploadRoutes  = require('./routes/uploadRoutes.js');
 const isAuthenticated=require('./middlewares/authMiddleware');
 const passport   = require('./config/passport.js');
 require("dotenv").config();
@@ -48,36 +47,46 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use('/auth',authRoutes);
 app.use('/api/course',isAuthenticated,courseRoutes);
+// app.use('/api/upload',isAuthenticated,uploadRoutes);
+
+
+
+
+
+
+
+
+
+
+app.use('/upload',uploadRoutes);//this is not wrong use above code
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
  // Home Route
  app.get('/', (req, res) => {
-  res.status(200).json({ data: "you are visiting home", data2: "it has nothing try something else" });
+  res.status(200).json({ data: "this is backend entry point has nothing to offer " });
 });
-
-
-// Set up Multer storage
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-      cb(null, "uploads/"); // Store files in "uploads" folder
-  },
-  filename: (req, file, cb) => {
-      cb(null, Date.now() + "-" + file.originalname); // Rename file
-  }
-});
-
-// Initialize Multer with a file size limit
-const upload = multer({storage: multer.memoryStorage()});
-
-app.post("/upload",upload.single('file'), (req, res) => {
-  console.log("File uploaded:", req.file);
-  res.send("File uploaded successfully");
-});
-
-
 
 
 // Start Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`App is listening at http://localhost:${PORT}`);
-});
+  console.log(`App is listening at http://localhost:${PORT}`); 
+})

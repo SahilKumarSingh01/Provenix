@@ -18,6 +18,7 @@ routes.put('/:courseId/reorder-section',courseController.reorderSection);
 
 routes.delete('/:courseId/remove-section',courseController.removeSection);
 routes.get('/:courseId/buy',courseController.buyCourse);
-routes.use('/:courseId/page',pageRoutes);//check if authorize then pass
 routes.use('/:courseId/review',reviewRoutes);
+routes.use('/:courseId/page',pageRoutes);//check if authorize then pass
+
 module.exports=routes;

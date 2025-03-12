@@ -7,6 +7,7 @@ const pageSchema = new mongoose.Schema({
   courseId: { type: mongoose.Schema.Types.ObjectId, required: true }, 
   creatorId: { type: mongoose.Schema.Types.ObjectId, required: true }, 
   section: { type: String, required: true }, // Specifies the section this page belongs to
+  commentCount: { type: Number, default: 0 }, // Tracks number of comments
 }, { timestamps: true });
 pageSchema.index({ courseId: 1, section: 1 });
 
