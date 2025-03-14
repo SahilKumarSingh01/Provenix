@@ -58,7 +58,7 @@ app.use('/api/course',isAuthenticated,courseRoutes);
 
 
 
-app.use('/upload',uploadRoutes);//this is not wrong use above code
+app.use('/upload',uploadRoutes);//this is  wrong use above code
 
 
 

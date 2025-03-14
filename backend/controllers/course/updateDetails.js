@@ -8,7 +8,7 @@ const updateDetails = async (req, res) => {
       // Check if user is the creator
       if (!course.creator.equals(req.user.id))
         return res.status(403).json({ success: false, message: "Unauthorized to update this course" });
-      const isEnrolled = await Enrollment.exists({ user: req.user.id, course: course._id, status: "active" });
+      const isEnrolled = await Enrollment.exists({ course: course._id, status: "active" });
 
       // Allow only limited fields if course has enrollments
       const allowedUpdates = ["description", "thumbnail", "tags"];

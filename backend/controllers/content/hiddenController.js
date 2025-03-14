@@ -1,4 +1,6 @@
 const ContentSection = require("../../models/ContentSection");
+const canEditText = require("./canEditText");
+const Enrollment = require("../../models/Enrollment");
 
 const create = async (req, res) => {
   try {
@@ -7,7 +9,7 @@ const create = async (req, res) => {
 
     // Find the parent content section (to copy values)
     const parentContentSection = await ContentSection.findOne(
-      { _id: contentSectionId, creatorId },
+      { _id: contentSectionId, creatorId, status: "active" },
       { pageId: 1, section: 1, courseId: 1, creatorId: 1 } // Fetch only required fields
     );
 
@@ -31,22 +33,23 @@ const create = async (req, res) => {
       data: { name: "Edit name here...", contentSectionId: newContentSection._id }
     };
 
-    // Push the hidden item into the parent content section
-    await ContentSection.updateOne(
+    // Push the hidden item into the parent content section and fetch the updated document
+    const updatedSection = await ContentSection.findOneAndUpdate(
       { _id: contentSectionId },
-      { $push: { items: newItem } }
+      { $push: { items: newItem } },
+      { new: true, projection: { "items": { $slice: -1 } } } // Return only the last added item
     );
 
     res.status(201).json({
       success: true,
       message: "Hidden section created successfully",
-      item: newItem, // Return newItem instead of just ID
+      newItem: updatedSection.items[0], // Return the last added item
     });
-
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 const update = async (req, res) => {
   try {
@@ -54,28 +57,49 @@ const update = async (req, res) => {
     const { name } = req.body;
     const creatorId = req.user.id;
 
-    // Ensure the content section exists and belongs to the user
-    const contentSection = await ContentSection.findOne(
-      { _id: contentSectionId, creatorId },
-      { _id: 1 } // Fetch only _id for efficiency
-    );
+    if (typeof name !== "string") {
+      return res.status(400).json({ message: "Invalid input. name must be a string." });
+    }
+
+    // Check if the content section exists with status "active" and belongs to the user
+    const [contentSection, activeEnrollment] = await Promise.all([
+      ContentSection.findOne(
+        { _id: contentSectionId, creatorId, status: "active", "items._id": itemId, "items.type": "hidden" },
+        { "items.$": 1 } // Fetch only the matched item
+      ),
+      Enrollment.exists({ contentSection: contentSectionId, status: "active" })
+    ]);
 
     if (!contentSection) {
       return res.status(404).json({ message: "Content section not found or unauthorized" });
     }
 
-    // Update the hidden section name
-    const result = await ContentSection.updateOne(
-      { _id: contentSectionId, "items._id": itemId, "items.type": "hidden" },
-      { $set: { "items.$.data.name": name } }
-    );
-
-    if (result.modifiedCount === 0) {
+    const hiddenItem = contentSection.items[0].data;
+    if (!hiddenItem) {
       return res.status(404).json({ message: "Hidden section not found" });
     }
 
-    res.json({ success: true, message: "Hidden section updated successfully" });
+    // Check edit restrictions if active enrollment exists
+    if (activeEnrollment && !canEditText(hiddenItem.name, name)) {
+      return res.status(403).json({ message: "Edit limit exceeded. Only minor changes allowed." });
+    }
 
+    // Update the hidden section name and fetch updated document
+    const updatedSection = await ContentSection.findOneAndUpdate(
+      { _id: contentSectionId, "items._id": itemId, "items.type": "hidden" },
+      { $set: { "items.$.data.name": name } },
+      { new: true, projection: { "items.$": 1 } } // Return only the updated item
+    );
+
+    if (!updatedSection) {
+      return res.status(500).json({ message: "Failed to update hidden section" });
+    }
+
+    res.json({
+      success: true,
+      message: "Hidden section updated successfully",
+      newItem: updatedSection.items[0]
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -131,17 +155,17 @@ const remove = async (req, res) => {
 
     const sectionIdsToDelete = relatedSections[0].allSections;
 
-    // Update all found sections to status "deleted"
-    await ContentSection.updateMany(
-      { _id: { $in: sectionIdsToDelete }, status: "active" },
-      { $set: { status: "deleted" } }
-    );
-
-    // Remove the hidden section from the parent content section's items array
-    await ContentSection.updateOne(
-      { _id: contentSectionId },
-      { $pull: { items: { _id: itemId, type: "hidden" } } }
-    );
+    // Update all found sections to status "deleted" and remove the hidden section concurrently
+    await Promise.all([
+      ContentSection.updateMany(
+        { _id: { $in: sectionIdsToDelete }, status: "active" },
+        { $set: { status: "deleted" } }
+      ),
+      ContentSection.updateOne(
+        { _id: contentSectionId },
+        { $pull: { items: { _id: itemId, type: "hidden" } } }
+      )
+    ]);
 
     res.json({ success: true, message: "Hidden section marked as deleted" });
 

@@ -25,8 +25,8 @@ const removeAll = async (req, res) => {
     }
 
     // Check active enrollments
-    const activeEnrollments = await Enrollment.countDocuments({ course:courseId, status: "active" });
-    if (activeEnrollments > 0) {
+    const activeEnrollment = await Enrollment.exists({ course:courseId, status: "active" });
+    if (activeEnrollment > 0) {
       return res.status(403).json({ message: "This course has active enrollments; can't delete section" });
     }
 

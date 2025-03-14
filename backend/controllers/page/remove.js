@@ -18,8 +18,8 @@ const remove = async (req, res) => {
     }
 
     // Check active enrollments before deletion
-    const activeEnrollments = await Enrollment.countDocuments({ course: page.courseId, status: "active" });
-    if (activeEnrollments > 0) {
+    const activeEnrollments = await Enrollment.exists({ course: page.courseId, status: "active" });
+    if (activeEnrollments) {
       return res.status(403).json({ message: "This course has active enrollments; can't delete page" });
     }
 

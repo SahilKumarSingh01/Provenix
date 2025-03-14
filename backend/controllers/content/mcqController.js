@@ -1,188 +1,416 @@
-const Comment = require("../../models/Comment");
-const Page = require("../../models/Page");
+const OrphanResource = require("../../models/OrphanResource");
+const ContentSection = require("../../models/ContentSection");
+const cloudinary = require("../../config/cloudinary");
+const canEditText = require("./canEditText");
 
+const IMAGE_EXPIRY_TIME = 5 * 60 * 60;
 
-const notifyAllMentions = async (content, comment) => {
-  // Extract mentions from content (assumes mentions are in "@username" format)
-  const mentionRegex = /@(\w+)/g;
-  
-  const mentionedUsernames = content.match(mentionRegex)?.map(name => name.slice(1)) || [];
-  
-  if (mentionedUsernames.length === 0) return; // No mentions, exit
-
-  // Update all mentioned users, pushing notification while keeping max 10
-  await User.updateMany(
-    { username: { $in: mentionedUsernames } },
-    {
-      $push: {
-        notifications: {
-          $each: [{ type: "comment", notification: comment }],
-          $slice: -10 // Keeps only the latest 10 notifications
-        }
-      }
-    }
-  );
-};
 
 const create = async (req, res) => {
   try {
-    const { content, parentComment } = req.body;
-    const { pageId } = req.params;
-    const userId = req.user.id;
+    const { contentSectionId } = req.params;
+    const creatorId = req.user.id;
 
-    // Fetch the Page first (trusted source)
-    const page = await Page.findById(pageId);
-    if (!page) {
-      return res.status(404).json({ success: false, message: "Page not found" });
+    // Default MCQ template
+    const mcqTemplate = {
+      type: "mcq",
+      data: {
+        ques: { text: "Write your question here..." },
+        options: [
+          { text: "Write option here..." },
+          { text: "Write option here..." }
+        ],
+      },
+    };
+
+    // Add MCQ template to content section
+    const updatedSection = await ContentSection.findOneAndUpdate(
+      { _id: contentSectionId, creatorId, status: "active" },
+      { $push: { items: mcqTemplate } },
+      { new: true, projection: { "items.$": 1 } } // Return only the newly added item
+    );
+
+    if (!updatedSection) {
+      return res.status(404).json({ message: "Content section not found or unauthorized" });
     }
 
-    const { courseId, section } = page;
-
-    // Verify if parent comment exists (if it's a reply)
-    let parent = null;
-    if (parentComment) {
-      parent = await Comment.findById(parentComment);
-      if (!parent || !parent.pageId.equals( pageId) ){
-        return res.status(400).json({ success: false, message: "Invalid parent comment" });
-      }
-    }
-
-    // Create the new comment
-    const newComment = await Comment.create({
-      content,
-      userId,
-      courseId,
-      pageId,
-      section,
-      parentComment: parentComment || null,
+    res.status(201).json({
+      success: true,
+      message: "MCQ template added successfully",
+      newItem: updatedSection.items[0],
     });
 
-    // Increment replies count in parent comment (if it's a reply)
-    if (parent) {
-      await Comment.updateOne({ _id: parentComment }, { $inc: { repliesCount: 1 } });
-    }
-    notifyAllMentions(content, newComment)
-    .catch(error => console.error("Error in notifyAllMentions:", error));
-  
-    res.status(201).json({ success: true, comment: newComment });
   } catch (error) {
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+    res.status(500).json({ message: error.message });
   }
 };
 
 
-
-const getAll = async (req, res) => {
+const addOption = async (req, res) => {
   try {
-    const { pageId, courseId } = req.params; // Using both pageId and courseId from params
-    const { skip = 0, limit = 6, parentComment = null } = req.query;
+    const { contentSectionId } = req.params;
+    const { itemId } = req.body;
+    const creatorId = req.user.id;
 
-    const filter = { pageId, courseId, parentComment }; // Using courseId directly from params
+    // Default option template
+    const newOption = { text: "Write option here..." };
 
-    const comments = await Comment.find(filter)
-      .sort("-createdAt")
-      .skip(Number(skip))
-      .limit(Number(limit))
-      .populate("user", "username photo displayName"); // Populating user instead of userId
+    // Update the specific MCQ item by pushing a new option
+    const updatedSection = await ContentSection.findOneAndUpdate(
+      { _id: contentSectionId, creatorId, "items._id": itemId, "items.type": "mcq", status: "active" },
+      { $push: { "items.$.data.options": newOption } },
+      { new: true, projection: { "items.$": 1 } } // Return only the updated item
+    );
 
-    res.status(200).json({ success: true, comments });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-};
-
-
-const getComment = async (req, res) => {
-  try {
-    const { commentId } = req.params;
-
-    const comment = await Comment.findById(commentId)
-      .populate("userId", "username photo displayName");
-
-    if (!comment) {
-      return res.status(404).json({ success: false, message: "Comment not found" });
+    if (!updatedSection) {
+      return res.status(404).json({ message: "MCQ item not found or unauthorized" });
     }
 
-    res.status(200).json({ success: true, comment });
+    res.status(201).json({
+      success: true,
+      message: "Option added successfully",
+      newItem: updatedSection.items[0], // Updated MCQ item
+    });
+
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
+
+const removeOption = async (req, res) => {
+  try {
+    const { contentSectionId } = req.params;
+    const { itemId, index } = req.body;
+    const creatorId = req.user.id;
+
+    // Find the MCQ item first to get the option details
+    const contentSection = await ContentSection.findOne(
+      { _id: contentSectionId, creatorId, "items._id": itemId, "items.type": "mcq", status: "active" },
+      { "items.$": 1 }
+    );
+
+    if (!contentSection) {
+      return res.status(404).json({ message: "MCQ item not found or unauthorized" });
+    }
+
+    const mcqItem = contentSection.items[0];
+
+    // Validate index
+    if (index < 0 || index >= mcqItem.data.options.length) {
+      return res.status(400).json({ message: "Invalid index" });
+    }
+
+    // Extract the option to be removed
+    const [removedOption] = mcqItem.data.options.splice(index, 1);
+
+    // Update the database with the modified options array
+    await ContentSection.updateOne(
+      { _id: contentSectionId, "items._id": itemId },
+      { $set: { "items.$.data.options": mcqItem.data.options } }
+    );
+
+    // If the removed option has a publicId, add it to OrphanResource
+    if (removedOption.publicId) {
+      await OrphanResource.create({publicId: removedOption.publicId,type: "image",category: "pageImage"});
+    }
+
+    res.json({ success: true, message: "Option removed successfully" });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const refreshUrlQues = async (req, res) => {
+  try {
+    const { contentSectionId, courseId } = req.params;
+    const { itemId } = req.body;
+    const userId = req.user.id;
+
+    // Check if user is creator or enrolled
+    const [contentSection, isEnrolled] = await Promise.all([
+      ContentSection.findOne(
+        { _id: contentSectionId, "items._id": itemId, "items.type": "mcq", status: "active" },
+        { "items.$": 1, creatorId: 1 }
+      ),
+      Enrollment.exists({ course: courseId, user: userId, status: "active" })
+    ]);
+
+    if (!contentSection || (!contentSection.creatorId.equals(userId) && !isEnrolled)) {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+    const publicId = contentSection.items[0].data.ques.publicId;
+    if (!publicId) return res.status(400).json({ message: "No image associated with this MCQ" });
+
+    const url = cloudinary.utils.signed_url(publicId, {
+      type: "authenticated",
+      resource_type: "image",
+      format: "webp",
+      expires_at: Math.floor(Date.now() / 1000) + IMAGE_EXPIRY_TIME,
+    });
+
+    res.json({ success: true, message: "URL refreshed", url });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const editQues = async (req, res) => {
+  try {
+    const { contentSectionId, courseId } = req.params;
+    const { itemId, text, publicId } = req.body;
+    const creatorId = req.user.id;
+
+    if (typeof text !== "string" || (publicId && typeof publicId !== "string")) {
+      return res.status(400).json({ message: "Invalid text or publicId" });
+    }
+
+    const [orphanExists, activeEnrollmentExists, contentSection] = await Promise.all([
+      publicId ? OrphanResource.exists({ publicId, type: "image", category: "pagePhoto" }) : null,
+      Enrollment.exists({ course: courseId, status: "active" }),
+      ContentSection.findOne(
+        { _id: contentSectionId, creatorId, "items._id": itemId, "items.type": "mcq", status: "active" },
+        { "items.$": 1 }
+      ),
+    ]);
+
+    if (!contentSection) return res.status(404).json({ message: "MCQ not found or unauthorized" });
+
+    const existingItem = contentSection.items[0];
+
+    // Check if editing text is allowed
+    if (activeEnrollmentExists && !canEditText(existingItem.data.ques.text, text)) {
+      return res.status(403).json({ message: "Edit limit exceeded. Only minor changes allowed." });
+    }
+
+    if (publicId && existingItem.data.ques.publicId !== publicId && !orphanExists) {
+      return res.status(400).json({ message: "Invalid request" });
+    }
+
+    const [updatedSection] = await Promise.all([
+      ContentSection.findOneAndUpdate(
+        { _id: contentSectionId, "items._id": itemId },
+        { $set: { "items.$.data.ques": { text, publicId } } },
+        { new: true, projection: { "items.$": 1 } }
+      ),
+      publicId && existingItem.data.ques.publicId !== publicId
+        ? OrphanResource.bulkWrite([
+            { insertOne: { document: { publicId: existingItem.data.ques.publicId, type: "image", category: "pagePhoto" } } },
+            { deleteOne: { filter: { publicId, type: "image", category: "pagePhoto" } } },
+          ])
+        : Promise.resolve(),
+    ]);
+
+    // Generate signed URL if publicId is present
+    const url = publicId
+      ? cloudinary.utils.signed_url(publicId, {
+          type: "authenticated",
+          resource_type: "image",
+          format: "webp",
+          expires_at: Math.floor(Date.now() / 1000) + IMAGE_EXPIRY_TIME,
+        })
+      : null;
+
+    res.json({
+      success: true,
+      message: "MCQ updated successfully",
+      newItem: updatedSection.items[0],
+      url, // Include signed URL if available
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+const refreshUrlOption = async (req, res) => {
+  try {
+    const { contentSectionId, courseId } = req.params;
+    const { itemId, optionIndex } = req.body;
+    const userId = req.user.id;
+
+    if (!Number.isInteger(optionIndex) || optionIndex < 0) {
+      return res.status(400).json({ message: "Invalid option index" });
+    }
+
+    // Check if user is creator or enrolled
+    const [contentSection, isEnrolled] = await Promise.all([
+      ContentSection.findOne(
+        { _id: contentSectionId, "items._id": itemId, "items.type": "mcq", status: "active" },
+        { "items.$": 1, creatorId: 1 }
+      ),
+      Enrollment.exists({ course: courseId, user: userId, status: "active" }),
+    ]);
+
+    if (!contentSection || (!contentSection.creatorId.equals(userId) && !isEnrolled)) {
+      return res.status(403).json({ message: "Access denied" });
+    }
+
+    const existingItem = contentSection.items[0];
+
+    if (optionIndex >= existingItem.data.options.length) {
+      return res.status(400).json({ message: "Invalid option index" });
+    }
+
+    const publicId = existingItem.data.options[optionIndex].publicId;
+    if (!publicId) return res.status(400).json({ message: "No image associated with this option" });
+
+    const url = cloudinary.utils.signed_url(publicId, {
+      type: "authenticated",
+      resource_type: "image",
+      format: "webp",
+      expires_at: Math.floor(Date.now() / 1000) + IMAGE_EXPIRY_TIME,
+    });
+
+    res.json({ success: true, message: "URL refreshed", url });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+const editOption = async (req, res) => {
+  try {
+    const { contentSectionId, courseId } = req.params;
+    const { itemId, optionIndex, text, publicId } = req.body;
+    const creatorId = req.user.id;
+
+    if (!Number.isInteger(optionIndex) || optionIndex < 0) {
+      return res.status(400).json({ message: "Invalid option index" });
+    }
+    if (typeof text !== "string" || (publicId && typeof publicId !== "string")) {
+      return res.status(400).json({ message: "Invalid text or publicId" });
+    }
+
+    const [orphanExists, activeEnrollmentExists, contentSection] = await Promise.all([
+      publicId ? OrphanResource.exists({ publicId, type: "image", category: "pagePhoto" }) : null,
+      Enrollment.exists({ course: courseId, status: "active" }),
+      ContentSection.findOne(
+        { _id: contentSectionId, creatorId, "items._id": itemId, "items.type": "mcq", status: "active" },
+        { "items.$": 1 }
+      ),
+    ]);
+
+    if (!contentSection) return res.status(404).json({ message: "MCQ not found or unauthorized" });
+
+    const existingItem = contentSection.items[0];
+
+    if (optionIndex >= existingItem.data.options.length) {
+      return res.status(400).json({ message: "Invalid option index" });
+    }
+
+    // Check if editing the option text is allowed
+    if (activeEnrollmentExists && !canEditText(existingItem.data.options[optionIndex].text, text)) {
+      return res.status(403).json({ message: "Edit limit exceeded. Only minor changes allowed." });
+    }
+
+    if (publicId && existingItem.data.options[optionIndex].publicId !== publicId && !orphanExists) {
+      return res.status(400).json({ message: "Invalid request" });
+    }
+
+    const [updatedSection] = await Promise.all([
+      ContentSection.findOneAndUpdate(
+        { _id: contentSectionId, "items._id": itemId },
+        { $set: { [`items.$.data.options.${optionIndex}`]: { text, publicId } } },
+        { new: true, projection: { "items.$": 1 } }
+      ),
+      publicId && existingItem.data.options[optionIndex].publicId !== publicId
+        ? OrphanResource.bulkWrite([
+            { insertOne: { document: { publicId: existingItem.data.options[optionIndex].publicId, type: "image", category: "pagePhoto" } } },
+            { deleteOne: { filter: { publicId, type: "image", category: "pagePhoto" } } },
+          ])
+        : Promise.resolve(),
+    ]);
+
+    // Generate signed URL if publicId is present
+    const url = publicId
+      ? cloudinary.utils.signed_url(publicId, {
+          type: "authenticated",
+          resource_type: "image",
+          format: "webp",
+          expires_at: Math.floor(Date.now() / 1000) + IMAGE_EXPIRY_TIME,
+        })
+      : null;
+
+    res.json({
+      success: true,
+      message: "Option updated successfully",
+      newItem: updatedSection.items[0],
+      url, // Include signed URL if available
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 
 const remove = async (req, res) => {
   try {
-    const { commentId } = req.params;
+    const { contentSectionId, courseId } = req.params;
+    const { itemId } = req.body;
+    const creatorId = req.user.id;
 
-    const comment = await Comment.findById(commentId);
-    if (!comment) {
-      return res.status(404).json({ success: false, message: "Comment not found" });
-    }
-
-    const commentsToDelete = await Comment.aggregate([
-      { $match: { _id: comment._id } },
-      {
-        $graphLookup: {
-          from: "comments",
-          startWith: "$_id",
-          connectFromField: "_id",
-          connectToField: "parentComment",
-          as: "replies"
-        }
-      }
+    // Run both queries in parallel for efficiency
+    const [activeEnrollmentExists, contentSection] = await Promise.all([
+      Enrollment.exists({ course: courseId, status: "active" }),
+      ContentSection.findOne(
+        { _id: contentSectionId, creatorId, "items._id": itemId, "items.type": "mcq" },
+        { "items.$": 1 } // Fetch the item before deletion
+      ),
     ]);
 
-    const allCommentIds = [commentId, ...commentsToDelete[0]?.replies.map(c => c._id)];
-
-    await Comment.deleteMany({ _id: { $in: allCommentIds } });
-
-    if (comment.parentComment) {
-      await Comment.findByIdAndUpdate(comment.parentComment, { $inc: { repliesCount: -1 } });
+    if (!contentSection) {
+      return res.status(404).json({ message: "MCQ not found or unauthorized" });
     }
 
-    await Page.findByIdAndUpdate(comment.pageId, { $inc: { commentCount: -allCommentIds.length } });
+    if (activeEnrollmentExists) {
+      return res.status(403).json({ message: "Modification not allowed. Active enrollments exist." });
+    }
 
-    res.status(200).json({ success: true, message: "Comment and all replies deleted successfully" });
+    const existingItem = contentSection.items[0];
+
+    // Collect all publicIds from the question and options
+    const orphanEntries = [];
+
+    if (existingItem.data.ques.publicId) {
+      orphanEntries.push({
+        publicId: existingItem.data.ques.publicId,
+        type: "image",
+        category: "pagePhoto",
+      });
+    }
+
+    for (const option of existingItem.data.options) {
+      if (option.publicId) {
+        orphanEntries.push({
+          publicId: option.publicId,
+          type: "image",
+          category: "pagePhoto",
+        });
+      }
+    }
+
+    await Promise.all([
+      // Remove the MCQ item
+      ContentSection.updateOne(
+        { _id: contentSectionId },
+        { $pull: { items: { _id: itemId } } }
+      ),
+
+      // Insert orphan entries in bulk if there are any
+      orphanEntries.length > 0 ? OrphanResource.insertMany(orphanEntries) : Promise.resolve(),
+    ]);
+
+    res.json({ success: true, message: "MCQ removed successfully" });
+
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
 
 
 
-const update = async (req, res) => {
-  try {
-    const { commentId } = req.params;
-    const { content } = req.body;
-    const userId = req.user._id;
-
-    const comment = await Comment.findById(commentId);
-    if (!comment) {
-      return res.status(404).json({ success: false, message: "Comment not found" });
-    }
-
-    if (comment.user.equals(userId)) {
-      return res.status(403).json({ success: false, message: "Unauthorized to update this comment" });
-    }
-
-    comment.content = content;
-    await comment.save();
-    notifyAllMentions(content, newComment)
-    .catch(error => console.error("Error in notifyAllMentions:", error));
-    res.status(200).json({ success: true, message: "Comment updated successfully", comment });
-
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-};
-
-
-
-module.exports = {
-  create,
-  remove,
-  getAll,
-  getComment,
-  update,
-};
+module.exports = { create ,addOption,removeOption,refreshUrlQues,editQues,editOption,refreshUrlOption,remove};
