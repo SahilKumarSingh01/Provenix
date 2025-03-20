@@ -73,7 +73,7 @@ passport.use(new GoogleStrategy({
 passport.use(new GithubStrategy({
         clientID:process.env.GITHUB_CLIENT_ID,
         clientSecret:process.env.GITHUB_CLIENT_SECRET,
-        callbackURL:SERVER_URL+"/auth/github/callback"
+        callbackURL:process.env.SERVER_URL+"/auth/github/callback"
         },
         async (accessToken, refreshToken, profile, done) => {
         // console.log(profile);

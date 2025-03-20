@@ -1,5 +1,5 @@
 const fetch = require('node-fetch');
-const Profile = require('../models/Profile');
+const Profile = require('../../models/Profile');
 const crypto = require('crypto');
 
 const verifyGithub = async (req, res) => {
