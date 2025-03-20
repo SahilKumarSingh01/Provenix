@@ -66,15 +66,3 @@ app.listen(PORT, () => {
   console.log(`App is listening at http://localhost:${PORT}`); 
 })
 
-
-//delete below thing because its only for test
-
-app.post("/create-account", async (req, res) => {
-    try {
-      const account = await razorpay.accounts.fetch('acc_Q8fCLhNwdeC0P4');
-    console.log("Account details:", account);
-    } catch (error) {
-        console.error('Error creating linked account:', error);
-    }
-
-});
