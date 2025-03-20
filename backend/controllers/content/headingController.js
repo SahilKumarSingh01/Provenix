@@ -1,5 +1,5 @@
 const ContentSection = require("../../models/ContentSection");
-const canEditText = require("./canEditText");
+const canEditText = require("../../utils/canEditText");
 const Enrollment = require("../../models/Enrollment");
 
 const create = async (req, res) => {

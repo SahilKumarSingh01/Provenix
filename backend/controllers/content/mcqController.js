@@ -1,7 +1,7 @@
 const OrphanResource = require("../../models/OrphanResource");
 const ContentSection = require("../../models/ContentSection");
 const cloudinary = require("../../config/cloudinary");
-const canEditText = require("./canEditText");
+const canEditText = require("../../utils/canEditText");
 
 const IMAGE_EXPIRY_TIME = 5 * 60 * 60;
 
@@ -214,11 +214,13 @@ const editQues = async (req, res) => {
         })
       : null;
 
+    const newItem=updatedSection.items[0];
+  
+    newItem.data.ques.url = url;// Include signed URL if available
     res.json({
       success: true,
       message: "MCQ updated successfully",
-      newItem: updatedSection.items[0],
-      url, // Include signed URL if available
+      newItem
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -275,7 +277,7 @@ const refreshUrlOption = async (req, res) => {
 const editOption = async (req, res) => {
   try {
     const { contentSectionId, courseId } = req.params;
-    const { itemId, optionIndex, text, publicId } = req.body;
+    const { itemId, optionIndex, text, publicId, isCorrect } = req.body;
     const creatorId = req.user.id;
 
     if (!Number.isInteger(optionIndex) || optionIndex < 0) {
@@ -284,6 +286,9 @@ const editOption = async (req, res) => {
     if (typeof text !== "string" || (publicId && typeof publicId !== "string")) {
       return res.status(400).json({ message: "Invalid text or publicId" });
     }
+
+    // Convert isCorrect to boolean
+    const isCorrectBoolean = Boolean(isCorrect);
 
     const [orphanExists, activeEnrollmentExists, contentSection] = await Promise.all([
       publicId ? OrphanResource.exists({ publicId, type: "image", category: "pagePhoto" }) : null,
@@ -314,7 +319,7 @@ const editOption = async (req, res) => {
     const [updatedSection] = await Promise.all([
       ContentSection.findOneAndUpdate(
         { _id: contentSectionId, "items._id": itemId },
-        { $set: { [`items.$.data.options.${optionIndex}`]: { text, publicId } } },
+        { $set: { [`items.$.data.options.${optionIndex}`]: { text, publicId, isCorrect: isCorrectBoolean } } },
         { new: true, projection: { "items.$": 1 } }
       ),
       publicId && existingItem.data.options[optionIndex].publicId !== publicId
@@ -335,16 +340,19 @@ const editOption = async (req, res) => {
         })
       : null;
 
+    const newItem = updatedSection.items[0];
+    newItem.data.options[optionIndex].url = url;
+
     res.json({
       success: true,
       message: "Option updated successfully",
-      newItem: updatedSection.items[0],
-      url, // Include signed URL if available
+      newItem
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 
 const remove = async (req, res) => {

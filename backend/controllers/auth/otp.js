@@ -28,7 +28,6 @@ try{
         subject: "Your OTP Code",
         html: `<p>Your OTP code is: <strong>${verificationOTP}</strong></p><p>This code will expire in ${OTP_EXPIRY_TIME/(1000*60)} minutes.</p>`
     })
-    
     await User.updateOne({email},{verificationOTP,OTPSendTime:Date.now()});
     // console.log(verificationOTP)
     return res.status(200).json({success:true,message:"opt has been sent",email});

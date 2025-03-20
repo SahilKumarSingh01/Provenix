@@ -16,7 +16,7 @@ const notifyAllMentions = async (content, comment) => {
     {
       $push: {
         notifications: {
-          $each: [{ type: "comment", notification: comment }],
+          $each: [{ type: "comment", data: comment }],
           $slice: -10 // Keeps only the latest 10 notifications
         }
       }

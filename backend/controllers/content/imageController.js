@@ -58,12 +58,12 @@ const create = async (req, res) => {
       format: "webp",
       expires_at: Math.floor(Date.now() / 1000) + IMAGE_EXPIRY_TIME,
     });
+    newItem.data.url = url;
 
     res.status(201).json({
       success: true,
       message: "Image added successfully",
       newItem,
-      url // Temporary URL (not stored in DB)
     });
 
   } catch (error) {
@@ -170,12 +170,14 @@ const update = async (req, res) => {
       format: "webp",
       expires_at: Math.floor(Date.now() / 1000) + IMAGE_EXPIRY_TIME,
     });
+    const newItem=updatedSection.items[0];
+    
+    newItem.data.url = url;
 
     res.json({
       success: true,
       message: "Image updated successfully",
-      newItem: updatedSection.items[0], // The updated item
-      url,
+      newItem
     });
 
   } catch (error) {

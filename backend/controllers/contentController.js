@@ -1,4 +1,37 @@
 const ContentSection = require("../models/ContentSection");
+const addUrls        = require('../utils/addUrls');
+const getContent = async (req, res) => {
+  try {
+    const { contentSectionId } = req.params;
+    const userId = req.user.id;
+
+    // Resolve content section and enrollment in parallel
+    const [contentSection, enrollment] = await Promise.all([
+      ContentSection.findOne({ _id: contentSectionId, status: "active" }),
+      Enrollment.findOne({
+        course: (await ContentSection.findById(contentSectionId)).courseId,
+        user: userId,
+        status: "active",
+      }),
+    ]);
+
+    if (!contentSection) {
+      return res.status(404).json({ message: "Content section not found" });
+    }
+
+    // Check if user is the creator or has active enrollment
+    if (!enrollment && contentSection.creatorId !== userId) {
+      return res.status(403).json({ message: "Access denied. No active enrollment." });
+    }
+
+    // Modify content
+    const modifiedContent = addUrls(contentSection);
+
+    res.json({ success: true, content: modifiedContent });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 const reorder = async (req, res) => {
   try {
@@ -7,14 +40,16 @@ const reorder = async (req, res) => {
     const userId = req.user.id;
 
     // Fetch only the necessary fields to validate ownership and size
-    const contentSection = await ContentSection.findById(contentSectionId);
+    const contentSection = await ContentSection.find({_id:contentSectionId,status:"draft"});
     if (!contentSection) return res.status(404).json({ message: "Content section not found" });
 
     // Ensure only the creator can reorder
     if (!contentSection.creatorId.equals(userId)) {
       return res.status(403).json({ message: "Unauthorized" });
     }
-
+    if (contentSection.status !== "draft") {
+      return res.status(400).json({ message: "Reordering is only allowed in draft status" });
+    }
     // Validate indices
     if (
       index1 === index2 ||
@@ -46,4 +81,4 @@ const reorder = async (req, res) => {
   }
 };
 
-module.exports = { reorder };
+module.exports = { reorder,getContent };

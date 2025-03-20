@@ -2,6 +2,7 @@ const OrphanResource = require("../../models/OrphanResource");
 const ContentSection = require("../../models/ContentSection");
 const Enrollment = require("../../models/Enrollment");
 const cloudinary = require("../../config/cloudinary");
+const Course = require("../../models/Course");
 
 const VIDEO_EXPIRY_TIME = 5 * 60 * 60; // 5 hours
 
@@ -19,7 +20,7 @@ const create = async (req, res) => {
     const updatedSection = await ContentSection.findOneAndUpdate(
       { _id: contentSectionId, creatorId, status: "active" },
       { $push: { items: { type: "video", data: { publicId } } } },
-      { new: true, projection: { "items.$": 1 } } // Return only the newly added item
+      { new: true, projection: { "items.$": 1 ,courseId: 1} } // Return only the newly added item
     );
 
     if (!updatedSection) {
@@ -41,6 +42,9 @@ const create = async (req, res) => {
       return res.status(400).json({ message: "File might have been deleted. Please try reuploading it." });
     }
 
+    await Course.updateOne({ _id: updatedSection.courseId }, { $inc: { videoCount: 1 } });
+
+
     // Generate a temporary signed URL (valid for VIDEO_EXPIRY_TIME seconds)
     const url = cloudinary.utils.signed_url(publicId, {
       type: "authenticated",
@@ -48,8 +52,9 @@ const create = async (req, res) => {
       format: "mp4",
       expires_at: Math.floor(Date.now() / 1000) + VIDEO_EXPIRY_TIME,
     });
+    newItem.data.url = url;
 
-    res.status(201).json({ success: true, message: "Video added successfully", newItem, url });
+    res.status(201).json({ success: true, message: "Video added successfully", newItem});
 
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -154,7 +159,10 @@ const update = async (req, res) => {
       expires_at: Math.floor(Date.now() / 1000) + VIDEO_EXPIRY_TIME,
     });
 
-    res.json({success: true,message: "Video updated successfully",newItem: updatedSection.items[0],url});
+    const newItem=updatedSection.items[0];
+    
+    newItem.data.url = url;
+    res.json({success: true,message: "Video updated successfully",newItem});
 
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -196,6 +204,7 @@ const remove = async (req, res) => {
         type: "video",
         category: "pageVideo"
       }),
+      Course.updateOne({ _id: courseId ,creator:creatorId}, { $inc: { videoCount: -1 } }) // Decrement video count
     ]);
 
     res.json({ success: true, message: "Video removed successfully" });

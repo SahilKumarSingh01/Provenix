@@ -17,7 +17,16 @@ const signUp = async (req,res)=>{
       if(user)
         return res.status(400).json({message:"you already have account try sign in"});
       const hashPassword=await bcrypt.hash(password,10);
-      user=await User.create({username,password:hashPassword,email});
+
+      const [newUser, newProfile] = await Promise.all([
+          User.create({username,password:hashPassword,email}),
+          Profile.create({})
+      ]);
+      await Promise.all([ 
+        User.updateOne({ _id: newUser._id }, { profile: newProfile._id }),
+        Profile.updateOne({ _id: newProfile._id }, { user: newUser._id }),
+      ]);
+      user=newUser;
       // console.log(user);
       return res.status(200).json({success:true,message:"user sign up successfully"});
     }catch(e){

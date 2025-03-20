@@ -1,20 +1,22 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const session = require('express-session');
 const cors = require('cors');
 const mongoStore = require('connect-mongo');
 const authRoutes = require('./routes/authRoutes');
 const courseRoutes  = require('./routes/courseRoutes.js');
 const uploadRoutes  = require('./routes/uploadRoutes.js');
+const enrollmentRoutes  = require('./routes/enrollmentRoutes.js');
+const profileRoutes  = require('./routes/profileRoutes.js');
+const webhookRoutes    = require('./routes/webhookRoutes.js');
 const isAuthenticated=require('./middlewares/authMiddleware');
 const passport   = require('./config/passport.js');
+const connectDatabase=require('./utils/connectDatabase.js');
+const razorpay=require('./config/razorpay.js');
 require("dotenv").config();
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB is connected"))
-  .catch((e) => console.log(e.message));
-    
+connectDatabase(); 
+
 const app = express();
 
 // CORS Middleware
@@ -47,40 +49,13 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use('/auth',authRoutes);
 app.use('/api/course',isAuthenticated,courseRoutes);
-// app.use('/api/upload',isAuthenticated,uploadRoutes);
-
-
-
-
-
-
-
-
-
-
-app.use('/upload',uploadRoutes);//this is  wrong use above code
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+app.use('/api/upload',isAuthenticated,uploadRoutes);
+app.use('/api/enrollment',isAuthenticated,enrollmentRoutes);
+app.use('/api/profile',isAuthenticated,profileRoutes)
+app.use('/api/webhook',webhookRoutes);
 
  // Home Route
- app.get('/', (req, res) => {
+app.get('/', (req, res) => {
   res.status(200).json({ data: "this is backend entry point has nothing to offer " });
 });
 
@@ -90,3 +65,16 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`App is listening at http://localhost:${PORT}`); 
 })
+
+
+//delete below thing because its only for test
+
+app.post("/create-account", async (req, res) => {
+    try {
+      const account = await razorpay.accounts.fetch('acc_Q8fCLhNwdeC0P4');
+    console.log("Account details:", account);
+    } catch (error) {
+        console.error('Error creating linked account:', error);
+    }
+
+});

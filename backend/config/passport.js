@@ -4,6 +4,7 @@ const LocalStrategy = require('passport-local');
 const GithubStrategy= require('passport-github2').Strategy;
 const GoogleStrategy= require('passport-google-oauth20').Strategy;
 const User = require('../models/User.js');
+const Profile = require('../models/Profile.js');
 const cloudinary=require('../config/cloudinary.js');
 require("dotenv").config();
 const UniqueUsername = async (displayName) => {
@@ -35,7 +36,7 @@ passport.use(new LocalStrategy(async (username, password, done) => {
 passport.use(new GoogleStrategy({
            clientID:process.env.GOOGLE_CLIENT_ID,
            clientSecret:process.env.GOOGLE_CLIENT_SECRET,
-           callbackURL:"http://localhost:5000/auth/google/callback"
+           callbackURL:process.env.SERVER_URL+"/auth/google/callback"
            },
            async(accessToken,refreshToken,profile,done)=>{
             try{
@@ -46,11 +47,19 @@ passport.use(new GoogleStrategy({
               // console.log(username);
               if(!user)
               {
-                  const result=await cloudinary.uploader.upload(profile.photos[0].value, {folder: "profile_pictures",});
+                  const result=await cloudinary.uploader.upload(profile.photos[0].value, {folder: "profile",});
                   const photo =result.url;
                   const displayName=profile.displayName;
                   const username=await UniqueUsername(displayName);
-                  user=await User.create({googleid,email,photo,displayName,verifiedEmail:true,username});
+                  const [newUser, newProfile] = await Promise.all([
+                    User.create({ googleid, email, photo, displayName, verifiedEmail: true, username }),
+                    Profile.create({})
+                ]);
+                await Promise.all([ 
+                  User.updateOne({ _id: newUser._id }, { profile: newProfile._id }),
+                  Profile.updateOne({ _id: newProfile._id }, { user: newUser._id }),
+                ]);
+                user=newUser;
               }
               console.log(user);
               return done(null,user);
@@ -64,7 +73,7 @@ passport.use(new GoogleStrategy({
 passport.use(new GithubStrategy({
         clientID:process.env.GITHUB_CLIENT_ID,
         clientSecret:process.env.GITHUB_CLIENT_SECRET,
-        callbackURL:"http://localhost:5000/auth/github/callback"
+        callbackURL:SERVER_URL+"/auth/github/callback"
         },
         async (accessToken, refreshToken, profile, done) => {
         // console.log(profile);
@@ -73,12 +82,19 @@ passport.use(new GithubStrategy({
             let user =await User.findOne({githubid});
             if(!user)
             {
-                const result=await cloudinary.uploader.upload(profile.photos[0].value, {folder: "profile_pictures",});
+                const result=await cloudinary.uploader.upload(profile.photos[0].value, {folder: "profile",});
                 const photo =result.url;
                 const displayName=profile.username;
                 const username=await UniqueUsername(displayName);
-                user=await User.create({githubid,photo,displayName,username});
-                // console.log("we reach herer",{githubid,photo,displayName,username});
+                const [newUser, newProfile] = await Promise.all([
+                  User.create({ googleid, email, photo, displayName, verifiedEmail: true, username }),
+                  Profile.create({})
+              ]);
+              await Promise.all([ 
+                User.updateOne({ _id: newUser._id }, { profile: newProfile._id }),
+                Profile.updateOne({ _id: newProfile._id }, { user: newUser._id }),
+              ]);
+              user=newUser;
             }
             // console.log(profile);
             // console.log(user);

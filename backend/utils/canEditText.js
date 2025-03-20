@@ -24,4 +24,4 @@ function canEditText(oldText, newText) {
     return percentageChange <= 30;  // Allow edit if change is ≤ 30%
 }
 
-modules.exports=canEditText;
+module.exports=canEditText;

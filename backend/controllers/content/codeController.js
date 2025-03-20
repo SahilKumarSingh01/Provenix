@@ -1,18 +1,19 @@
 const ContentSection = require("../../models/ContentSection");
-const canEditText = require("./canEditText");
+const canEditText = require("../../utils/canEditText");
 const Enrollment = require("../../models/Enrollment");
+const Course = require("../../models/Course");
 
 // Create a new code block inside items[]
 const create = async (req, res) => {
   try {
-    const { contentSectionId } = req.params;
+    const { contentSectionId ,courseId} = req.params;
     const creatorId = req.user.id;
 
     const newItem = { type: "code", data: [{ lang: "lang", code: "Start writing code here..." }] };
 
     // Find and update while returning the updated document
     const updatedSection = await ContentSection.findOneAndUpdate(
-      { _id: contentSectionId, creatorId, status: "active" },
+      { _id: contentSectionId,courseId, creatorId, status: "active" },
       { $push: { items: newItem } },
       { new: true, projection: { "items": { $slice: -1 } } } // Return only the last added item
     );
@@ -20,6 +21,7 @@ const create = async (req, res) => {
     if (!updatedSection) {
       return res.status(404).json({ message: "Content section not found or unauthorized" });
     }
+    await Course.updateOne({ _id: courseId }, { $inc: { codeCount: +1 } }) // Decrement video count
 
     res.status(201).json({ success: true, message: "Code block added successfully", newItem: updatedSection.items[0] });
 
@@ -36,21 +38,27 @@ const remove = async (req, res) => {
     const { itemId } = req.body;
     const creatorId = req.user.id;
 
-    // Check active enrollment first to avoid unnecessary DB operations
+    // Check if active enrollments exist before modifying content
     const activeEnrollment = await Enrollment.exists({ course: courseId, status: "active" });
     if (activeEnrollment) {
       return res.status(403).json({ message: "Cannot remove code block. Active enrollments exist." });
     }
 
-    // Attempt to remove the code block directly
-    const result = await ContentSection.updateOne(
-      { _id: contentSectionId, creatorId, status: "active" },
-      { $pull: { items: { _id: itemId, type: "code" } } }
+    // Find and remove the item, returning the original document
+    const contentSection = await ContentSection.findOneAndUpdate(
+      { _id: contentSectionId, creatorId, status: "active", "items._id": itemId, "items.type": "code" },
+      { $pull: { items: { _id: itemId } } },
+      { projection: { "items.$": 1 } } // Only return the matched item before deletion
     );
 
-    if (result.modifiedCount === 0) {
+    if (!contentSection || !contentSection.items.length) {
       return res.status(404).json({ message: "Content section not found, unauthorized, or code block doesn't exist" });
     }
+
+    const decrementValue = contentSection.items[0].data.length || 0;
+
+    // Update the `codeCount` in the course schema
+    await Course.updateOne({ _id: courseId }, { $inc: { codeCount: -decrementValue } });
 
     res.status(200).json({ success: true, message: "Code block removed successfully" });
 
@@ -62,24 +70,26 @@ const remove = async (req, res) => {
 
 
 
+
 // Push a new language entry inside a code block
 const push = async (req, res) => {
   try {
-    const { contentSectionId } = req.params;
+    const { contentSectionId,courseId } = req.params;
     const { itemId, } = req.body;
     const creatorId = req.user.id;
     const lang ="lang here...";
     const code ="code here...";
     // Push new language code to the specified code block in a single query
     const { modifiedCount } = await ContentSection.updateOne(
-      { _id: contentSectionId, creatorId, status: "active", "items._id": itemId, "items.type": "code" },
+      { _id: contentSectionId, courseId,creatorId, status: "active", "items._id": itemId, "items.type": "code" },
       { $push: { "items.$.data": { lang, code } } }
     );
 
     if (!modifiedCount) {
       return res.status(404).json({ message: "Content section or code block not found or unauthorized" });
     }
-
+    await Course.updateOne({ _id: courseId }, { $inc: { codeCount: +1 } }) // Decrement video count
+    
     res.status(200).json({ success: true, message: "New language added successfully", newItem: { lang, code } });
 
   } catch (error) {
@@ -228,7 +238,7 @@ const pull = async (req, res) => {
     if (result.modifiedCount === 0) {
       return res.status(500).json({ message: "Failed to delete code entry" });
     }
-
+    await Course.updateOne({ _id: courseId }, { $inc: { codeCount: -1 } }) // Decrement video count
     res.json({ success: true, message: "Code language deleted successfully" });
 
   } catch (error) {

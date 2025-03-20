@@ -12,8 +12,8 @@ const itemSchema = new mongoose.Schema({
 const contentSectionSchema = new mongoose.Schema({
   pageId: { type: mongoose.Schema.Types.ObjectId, required: true }, // Links to Lesson or Practice
   section: { type: String, required: true }, 
-  courseId: { type: String, required: true },
-  creatorId: { type: String, required: true },
+  courseId: { type: mongoose.Schema.Types.ObjectId, required: true },
+  creatorId: { type: mongoose.Schema.Types.ObjectId, required: true },
   items: [itemSchema], 
   parentContent: { type: mongoose.Schema.Types.ObjectId, ref: "ContentSection", default: null }, // For nesting
   status: { type: String, enum: ["active", "deleted"], default: "active" }, // Soft delete status

@@ -2,6 +2,7 @@ const Page = require("../../models/Page");
 const ContentSection = require("../../models/ContentSection");
 const Comment = require("../../models/Comment");
 const Enrollment = require("../../models/Enrollment");
+const Course = require("../../models/Course");
 
 const remove = async (req, res) => {
   try {
@@ -30,7 +31,9 @@ const remove = async (req, res) => {
     ContentSection.updateMany({ pageId }, { status: "deleted" }), // Soft delete ContentSection
     Comment.deleteMany({ pageId }), // Delete Comments
     Page.deleteOne({ _id: pageId }), // Delete Page
-    Page.updateMany({ courseId, section, order: { $gt: order } }, { $inc: { order: -1 } }) // Adjust order
+    Page.updateMany({ courseId, section, order: { $gt: order } }, { $inc: { order: -1 } }), // Adjust order
+    Course.updateOne({ _id: courseId }, { $inc: { pageCount: -1 } }) // Decrement pageCount in Course
+
   ]);
 
   res.json({ 

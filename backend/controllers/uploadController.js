@@ -31,7 +31,7 @@ const uploadProfile = async (req, res) => {
             uploadStream.end(req.file.buffer);
         });
         await OrphanResource.create({
-            publicId,
+            publicId:cloudUpload.public_id,
             type: "image",
             category: "profile" 
         });
