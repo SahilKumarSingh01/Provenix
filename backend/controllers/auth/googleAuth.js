@@ -7,14 +7,13 @@ const googleAuth = passport.authenticate("google", { scope: ["email", "profile"]
 const googleAuthCallback = (req, res, next) => {
   passport.authenticate("google", (err, user, info) => {
     if (err) return next(err);
-
     // Log the user in
     req.logIn(user, (err) => {
       if (err) return next(err);
-      return res.send(`
-        <script>
-          window.opener.location.href = "${process.env.CLIENT_URL}";
-            window.close();
+      return res.send(
+        `<script>
+          window.opener.postMessage(${JSON.stringify({ success: true, user: user.getInfo() })}, "${process.env.CLIENT_URL}");
+          window.close();
         </script>`
       );
     });

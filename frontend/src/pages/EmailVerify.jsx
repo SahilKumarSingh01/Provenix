@@ -1,17 +1,17 @@
 import React, { useState, useRef } from "react";
-import { useNavigate ,useLocation} from "react-router-dom";
-
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "../api/axios";
-import "../styles/form.css";
+import styles from "../styles/form.module.css"; // Import CSS module
 
 const EmailVerification = () => {
-  const location=useLocation();
-  const [email, setEmail] = useState(location?.state?.email);
+  const location = useLocation();
+  const [email, setEmail] = useState(location?.state?.email || "");
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const inputRefs = useRef([]);
   const navigate = useNavigate();
+
   // Send OTP to email
   const sendOtp = async () => {
     if (!email) {
@@ -61,15 +61,14 @@ const EmailVerification = () => {
 
     try {
       await axios.post("/auth/verify-otp", { email, otp: otpCode });
-      navigate("/");
-      // navigate("/reset-password"); // Redirect to password reset page
+      navigate("/"); // Redirect to home after successful verification
     } catch (e) {
       setError(e.response?.data?.message || "Invalid OTP");
     }
   };
 
   return (
-    <div className="form-container">
+    <div className={styles.formContainer}>
       <h2>Email Verification</h2>
 
       <input
@@ -79,12 +78,12 @@ const EmailVerification = () => {
         placeholder="Enter your email"
         required
       />
-      <button onClick={sendOtp} className="submit-button">
+      <button onClick={sendOtp} className={styles.submitButton}>
         Send OTP
       </button>
 
-      <form onSubmit={handleVerifyOtp} className="otp-form">
-        <div className="otp-container">
+      <form onSubmit={handleVerifyOtp}>
+        <div className={styles.otpContainer}>
           {otp.map((digit, index) => (
             <input
               key={index}
@@ -94,13 +93,13 @@ const EmailVerification = () => {
               value={digit}
               onChange={(e) => handleChange(index, e)}
               onKeyDown={(e) => handleKeyDown(index, e)}
-              className="otp-box"
+              className={styles.otpBox}
             />
           ))}
         </div>
-        {error && <p className="error-message">{error}</p>}
-        {message && <p className="success-message">{message}</p>}
-        <button type="submit" className="submit-button">
+        {error && <p className={styles.errorMessage}>{error}</p>}
+        {message && <p className={styles.successMessage}>{message}</p>}
+        <button type="submit" className={styles.submitButton}>
           Verify OTP
         </button>
       </form>

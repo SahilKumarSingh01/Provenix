@@ -44,7 +44,7 @@ passport.use(new GoogleStrategy({
               const email=profile.emails[0].value;
               let user =await User.findOne({$or:[{googleid},{email}]});
               const username=await UniqueUsername(profile.displayName);
-              // console.log(username);
+              
               if(!user)
               {
                   const result=await cloudinary.uploader.upload(profile.photos[0].value, {folder: "profile",});
@@ -61,7 +61,6 @@ passport.use(new GoogleStrategy({
                 ]);
                 user=newUser;
               }
-              console.log(user);
               return done(null,user);
             }catch(e){
               return done(e);
@@ -76,7 +75,6 @@ passport.use(new GithubStrategy({
         callbackURL:process.env.SERVER_URL+"/auth/github/callback"
         },
         async (accessToken, refreshToken, profile, done) => {
-        // console.log(profile);
         try{
             const githubid=profile.id;
             let user =await User.findOne({githubid});
@@ -96,8 +94,6 @@ passport.use(new GithubStrategy({
               ]);
               user=newUser;
             }
-            // console.log(profile);
-            // console.log(user);
             return done(null, user);
         }catch(e){
             return done(e);

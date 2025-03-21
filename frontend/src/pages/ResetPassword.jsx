@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "../api/axios";
-import "../styles/form.css";
+import styles from "../styles/form.module.css"; // Import CSS module
 
 const ResetPassword = () => {
   const [password, setPassword] = useState("");
@@ -25,7 +25,7 @@ const ResetPassword = () => {
     }
 
     try {
-      const response = await axios.post("/auth/reset-password", { token, newPassword:password });
+      const response = await axios.post("/auth/reset-password", { token, newPassword: password });
       setMessage(response.data.message);
       setError("");
 
@@ -38,7 +38,7 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="form-container">
+    <div className={styles["form-container"]}>
       <h2>Reset Password</h2>
       <form onSubmit={handleResetPassword}>
         <input
@@ -57,9 +57,9 @@ const ResetPassword = () => {
           placeholder="Confirm new password"
           required
         />
-        {error && <p className="error-message">{error}</p>}
-        {message && <p className="success-message">{message}</p>}
-        <button type="submit" className="submit-button">
+        {error && <p className={styles["error-message"]}>{error}</p>}
+        {message && <p className={styles["success-message"]}>{message}</p>}
+        <button type="submit" className={styles["submit-button"]}>
           Reset Password
         </button>
       </form>

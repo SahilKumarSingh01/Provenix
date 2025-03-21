@@ -12,10 +12,10 @@ const githubAuthCallback = (req, res, next) => {
     // Log the user in
     req.logIn(user, (err) => {
       if (err) return next(err);
-      return res.send(`
-        <script>
-          window.opener.location.href = "${process.env.CLIENT_URL}";
-            window.close();
+      return res.send(
+        `<script>
+          window.opener.postMessage(${JSON.stringify({ success: true, user: user.getInfo() })}, "${process.env.CLIENT_URL}");
+          window.close();
         </script>`
       );
     });

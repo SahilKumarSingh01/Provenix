@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "../api/axios";
-import "../styles/form.css";
+import styles from "../styles/form.module.css";
 import GoogleLogo from "../assets/google.svg";
 import GitHubLogo from "../assets/github.svg";
 import { AuthContext } from "../context/AuthContext.jsx";
@@ -27,74 +27,64 @@ const Login = () => {
 
   // Function to open OAuth login in a popup
   const handlePopupLogin = (provider) => {
-    const authUrl = `http://localhost:5000/auth/${provider}`;
+    const authUrl = `https://provenix.onrender.com/auth/${provider}`;
     const width = 600, height = 600;
     const left = (window.innerWidth - width) / 2;
     const top = (window.innerHeight - height) / 2;
-
-    const popup = window.open(authUrl, "_blank", `width=${width},height=${height},top=${top},left=${left}`);
-
-    const checkPopupClosed = setInterval(() => {
-      if (!popup || popup.closed) {
-        clearInterval(checkPopupClosed);
-        window.removeEventListener("message", receiveMessage);
-      }
-    }, 500);
-
-    const receiveMessage = (event) => {
-      if (event.origin !== "https://provenix.onrender.com") return;
-
-      if (event.data?.user) {
+    window.open(authUrl, "_blank", `width=${width},height=${height},top=${top},left=${left}`);
+    const handleMessage = (event) => {
+      if (event.origin !== "https://provenix.onrender.com") return; // Ensure it's from backend
+      if (event.data.success) {
         setUser(event.data.user);
         navigate("/", { state: { user: event.data.user } });
       }
+      window.removeEventListener("message", handleMessage);
     };
-
-    window.addEventListener("message", receiveMessage);
+  
+    window.addEventListener("message", handleMessage);
   };
-
-  // Google & GitHub login handlers
-  const handleGoogleSignIn = () => handlePopupLogin("google");
-  const handleGitHubSignIn = () => handlePopupLogin("github");
-
+  
   return (
-    <div className="form-container">
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <input
-          type="text"
-          id="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="Username or email"
-        />
-        <input
-          type="password"
-          id="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Enter your password"
-        />
-        {error && <p className="error-message">{error}</p>}
-        <button type="submit" className="submit-button">
-          Login
-        </button>
-      </form>
+    <div className={styles.formContainer}>
+  <h2>Login</h2>
+  <form onSubmit={handleLogin}>
+    <input
+      type="text"
+      id="username"
+      value={username}
+      onChange={(e) => setUsername(e.target.value)}
+      placeholder="Username or email"
+      className={styles.inputField}
+    />
+    <input
+      type="password"
+      id="password"
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+      placeholder="Enter your password"
+      className={styles.inputField}
+    />
+    {error && <p className={styles.errorMessage}>{error}</p>}
+    <button type="submit" className={styles.submitButton}>
+      Login
+    </button>
+  </form>
 
-      <button onClick={handleGoogleSignIn} className="google-button">
-        <img src={GoogleLogo} alt="Google" className="social-icon" />
-        Sign in with Google
-      </button>
-      <button onClick={handleGitHubSignIn} className="github-button">
-        <img src={GitHubLogo} alt="GitHub" className="social-icon" />
-        Sign in with GitHub
-      </button>
+  <button onClick={() => handlePopupLogin("google")} className={styles.googleButton}>
+    <img src={GoogleLogo} alt="Google" className={styles.socialIcon} />
+    Sign in with Google
+  </button>
+  <button onClick={() => handlePopupLogin("github")} className={styles.githubButton}>
+    <img src={GitHubLogo} alt="GitHub" className={styles.socialIcon} />
+    Sign in with GitHub
+  </button>
 
-      <div className="form-links">
-        <Link to="/signup">Don't have an account? Sign Up</Link>
-        <Link to="/forgot-password">Forgot Password?</Link>
-      </div>
-    </div>
+  <div className={styles.formLinks}>
+    <Link to="/signup">Don't have an account? Sign Up</Link>
+    <Link to="/forgot-password">Forgot Password?</Link>
+  </div>
+</div>
+
   );
 };
 

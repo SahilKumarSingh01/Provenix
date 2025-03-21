@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "../api/axios"; // Your API setup
-import '../styles/form.css'
+import styles from "../styles/form.module.css"; // Import CSS module
+
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
@@ -10,17 +11,17 @@ const ForgotPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("/auth/forgot-password", { email });
-      setMessage("Link send to your email");
+      await axios.post("/auth/forgot-password", { email });
+      setMessage("Link sent to your email");
       setError("");
     } catch (error) {
-      setError(error?.response?.data?.message);
+      setError(error?.response?.data?.message || "Something went wrong");
       setMessage("");
     }
   };
 
   return (
-    <div className="form-container">
+    <div className={styles["form-container"]}>
       <h2>Forgot Password</h2>
       <form onSubmit={handleSubmit}>
         <input
@@ -30,13 +31,15 @@ const ForgotPassword = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        {error && <p className="error-message">{error}</p>}
-        {message && <p className="success-message">{message}</p>}
-        <button type="submit" className="submit-button">Send Reset Link</button>
+        {error && <p className={styles["error-message"]}>{error}</p>}
+        {message && <p className={styles["success-message"]}>{message}</p>}
+        <button type="submit" className={styles["submit-button"]}>
+          Send Reset Link
+        </button>
       </form>
-      
-      <div className='form-links'>
-      <Link to="/email-verify">Email not verified? verify Email</Link>
+
+      <div className={styles["form-links"]}>
+        <Link to="/email-verify">Email not verified? Verify Email</Link>
       </div>
     </div>
   );

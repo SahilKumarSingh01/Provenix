@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios"; // For API requests
+import axios from "../api/axios.js"; // For API requests
 import { AuthContext } from "../context/AuthContext"; // Import AuthContext
 import styles from "../styles/UserMenu.module.css";
 
@@ -18,15 +18,16 @@ const UserMenu = ({ children }) => {
   // Logout Function (Send request to backend & clear user state)
   const handleLogout = async () => {
     try {
-      await axios.get("/auth/logout"); // Send logout request
+      const response = await axios.get("/auth/logout"); // Send logout request
       setUser(null); // Clear user from context
       navigate("/"); // Redirect to home page
     } catch (error) {
-      console.error("Logout failed:", error);
+      console.error("Logout failed:", error.response?.data || error.message);
     } finally {
       setIsOpen(false);
     }
   };
+  
 
   return (
     <div className={styles.userMenu}>
