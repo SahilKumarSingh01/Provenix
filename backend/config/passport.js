@@ -87,7 +87,7 @@ passport.use(new GithubStrategy({
                 const displayName=profile.username;
                 const username=await UniqueUsername(displayName);
                 const [newUser, newProfile] = await Promise.all([
-                  User.create({ googleid, email, photo, displayName, verifiedEmail: true, username }),
+                  User.create({ githubid, photo, displayName, verifiedEmail: false, username }),
                   Profile.create({})
               ]);
               await Promise.all([ 

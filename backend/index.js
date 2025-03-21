@@ -43,7 +43,7 @@ app.use(session({
     secure: process.env.NODE_ENV === 'PROD',
     httpOnly: true,
     maxAge: 30*60*1000,  // 30 minutes 
-    sameSite:'none'
+    sameSite:process.env.NODE_ENV === 'PROD'?'none':'lax',
   }
 }));
 
