@@ -4,6 +4,7 @@ import {AuthProvider,AuthContext} from'../context/AuthContext.jsx';
 // import axios from '../api/axios'
 import defaultPicture from '../assets/defaultPicture.png';
 import "../styles/navbar.css";
+import UserMenu from './UserMenu.jsx';
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,11 +27,13 @@ function Navbar() {
         <Link to="/about" className="nav-link" onClick={() => setIsOpen(false)}>About</Link>
         {user ? (
           <>
+          <UserMenu>
             <img 
               src={user.photo || defaultPicture} 
               alt="Profile" 
               className="profile-pic"
             />
+          </UserMenu>
             
             {/* <button className="logout-btn" >Logout</button> */}
           </>

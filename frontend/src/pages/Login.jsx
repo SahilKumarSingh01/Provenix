@@ -27,12 +27,12 @@ const Login = () => {
 
   // Handle Google Sign-In
   const handleGoogleSignIn = async() => {
-    window.location.href = "http://localhost:5000/auth/google";
+    window.location.href = "https://provenix.onrender.com/auth/google";
   };
 
   // Handle GitHub Sign-In
   const handleGitHubSignIn = async() => {
-    window.location.href = "http://localhost:5000/auth/github";
+    window.location.href = "https://provenix.onrender.com/auth/github";
   }
 
   return (

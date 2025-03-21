@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get("/auth/me");
+        const response = await axios.get("/auth/me",{withCredentials:true});
         console.log(response.data.user);
         setUser(response.data.user);
       } catch (error) {
