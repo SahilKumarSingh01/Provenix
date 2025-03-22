@@ -1,37 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import styles from "../styles/CourseView.module.css"; // Import CSS module
-
+import defaultThumbnail from '../assets/DefaultThumbnail.png'
 const CourseView = () => {
-    const [course, setCourse] = useState(null);
-    const defaultThumbnail =
-        "https://res.cloudinary.com/dcn6jh9qs/image/upload/v1741167827/DefaultThumbnail_aaa4rm.png";
-
-    useEffect(() => {
-        const fetchCourseDetails = async () => {
-            const data = {
-                id: 1,
-                name: "Course on Co-ordination Compounds for JEE 2022",
-                instructor: "Akanksha",
-                description:
-                    "In this course, Akanksha will provide in-depth knowledge of Co-ordination Compounds...",
-                category: "Chemistry",
-                image: "",
-                lessons: 29,
-                practices: 0,
-                startDate: "Apr 13, 2021",
-                endDate: "Jun 12, 2021",
-                isFree: true,
-            };
-
-            setCourse(data);
-        };
-
-        fetchCourseDetails();
-    }, []);
-
-    if (!course) {
-        return <p className={styles.loading}>Loading course details...</p>;
-    }
+    const location = useLocation();
+    const course = location.state?.course || {};
 
     return (
         <div className={styles.courseCard}>
@@ -41,25 +14,34 @@ const CourseView = () => {
             </div>
 
             <div className={styles.courseInfo}>
-                <span className={styles.category}>{course.category.toUpperCase()}</span>
-                <h2 className={styles.courseTitle}>{course.name}</h2>
-                <p className={styles.instructor}>{course.instructor}</p>
-                <p className={styles.description}>{course.description}</p>
+                <span className={styles.category}>
+                    {course.category?.toUpperCase() || "UNKNOWN"}
+                </span>
+                <h2 className={styles.courseTitle}>{course.title || "Course Title"}</h2>
+                <p className={styles.description}>
+                    {course.description || "No description available."}
+                </p>
 
                 <div className={styles.courseStats}>
-                    <span>📅 {course.startDate} - {course.endDate}</span>
-                    <span>▶ {course.lessons} lessons</span>
-                    <span>⚡ {course.practices} practices</span>
+                    <span>📅 Created: {new Date(course.createdAt).toDateString()}</span>
+                    <span>🎓 {course.totalEnrollment || 0} Enrolled</span>
+                    <span>⭐ {course.totalRating || "No Ratings Yet"}</span>
+                    <span>📚 {course.pageCount} Pages | 🎥 {course.videoCount} Videos</span>
                 </div>
 
-                {course.isFree ? (
-                    <button className={styles.studyBtn}>Study Panel</button>
+                {course.price === 0 ? (
+                    <button className={styles.studyBtn}>Start Learning for Free</button>
                 ) : (
-                    <button className={styles.subscribeBtn}>Get Subscription</button>
+                    <button className={styles.subscribeBtn}>Enroll Now - ${course.price}</button>
+                )}
+
+                {course.status === "draft" && (
+                    <p className={styles.draftNotice}>This course is still in draft mode.</p>
                 )}
             </div>
         </div>
     );
 };
+
 
 export default CourseView;

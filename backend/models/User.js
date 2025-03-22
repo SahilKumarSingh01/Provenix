@@ -38,6 +38,7 @@ const userSchema = new mongoose.Schema({
 
 userSchema.methods.getInfo = function () {
   return {
+    _id:this._id,
     username: this.username,
     photo: this.photo,
     displayName: this.displayName || this.username, 

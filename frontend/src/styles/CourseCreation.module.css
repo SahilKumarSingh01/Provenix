@@ -1,74 +1,87 @@
 /* CreateCourse.module.css */
 
-/* Container for the whole page */
+/* Page background */
 .createCourseContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #0F172A; /* Dark background for contrast */
-    color: #E2E8F0; /* Light text color for readability */
+    background-color: #0F172A;
+    color: #E2E8F0;
     padding: 20px;
 }
 
-/* Card that holds the form */
+/* Form card */
 .createCourseCard {
-    width: 100%;
     max-width: 420px;
-    background: #1E293B; /* Darker card background */
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Soft shadow for depth */
-    text-align: center;
+    background: #1E293B;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    margin: 100px auto;
 }
 
-/* Heading inside the card */
+/* Heading */
 .createCourseCard h2 {
-    color: #4F46E5; /* Highlighted heading color */
-    font-size: 24px;
-    margin-bottom: 20px;
+    color: #4F46E5;
+    font-size: 22px;
+    margin-bottom: 15px;
 }
 
 /* Form container */
 .createCourseForm {
-    display: flex;
-    flex-direction: column;
-    gap: 12px; /* Spacing between form fields */
+    display: block;
 }
 
-/* Common styling for input, textarea, and select */
+/* Labels */
+.createCourseForm label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Inputs, textarea, and select */
 .createCourseForm input,
 .createCourseForm textarea,
 .createCourseForm select {
     width: 100%;
-    padding: 12px;
+    padding: 10px;
     border: 1px solid #334155;
-    border-radius: 8px;
+    border-radius: 6px;
     background: #0F172A;
     color: #E2E8F0;
     font-size: 14px;
-    transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    margin-bottom: 10px;
 }
 
-/* Focus effect for input fields */
+/* Autofill styling */
+.createCourseForm input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 50px #2A3B5F inset; /* Background color */
+    -webkit-text-fill-color: #A8B2D1; /* Text color */
+}
+
+/* Focus effect */
 .createCourseForm input:focus,
 .createCourseForm textarea:focus,
 .createCourseForm select:focus {
     border-color: #4F46E5;
-    box-shadow: 0 0 8px rgba(79, 70, 229, 0.5);
+    box-shadow: 0 0 5px rgba(79, 70, 229, 0.5);
     outline: none;
 }
 
-/* Submit button styling */
+.createCourseForm textarea {
+    min-height: 150px; /* Adjust height as needed */
+    resize: none; /* Removes bottom-right resize handle */
+}
+
+/* Submit button */
 .createCourseForm button {
     background-color: #4F46E5;
     color: white;
-    padding: 12px;
-    font-size: 16px;
+    padding: 10px;
+    font-size: 15px;
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     cursor: pointer;
-    transition: background 0.3s ease-in-out;
+    transition: background 0.2s;
+    width: 100%;
+    margin-top: 10px;
 }
 
 /* Button click effect */
