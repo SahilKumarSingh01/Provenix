@@ -1,24 +1,33 @@
-/* CourseCard.module.css */
+.ccLink{
+  text-decoration: none;
+}
+/* Course Card */
 .ccContainer {
-  display: flex;
-  width: 100%; /* ✅ Full screen width */
-  max-width: 326px; /* ✅ Maximum width */
-  /* height: 200px; ✅ Increased height */
-  background: black;
-  border-radius: 8px;
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  margin: 10px auto;
-  flex-direction: column;
-
+  display:inline-block;
+  width: 344px;
+  height:350px;
+  vertical-align: top;
+  background: #112240;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 12px;
+  margin:10px;
+  cursor: pointer;
+  border: 1px solid #233554;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
-/* Thumbnail Wrapper */
+.ccContainer:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+}
+
+/* Thumbnail */
 .ccThumbnailWrapper {
-  width: 350px; /* ✅ Increased width */
-  height: 240px;
+  width: 100%;
+  height: 200px;
   overflow: hidden;
-  flex-shrink: 0;
+  border-radius: 8px;
 }
 
 .ccThumbnailImage {
@@ -27,33 +36,118 @@
   object-fit: cover;
 }
 
-/* Course Details */
+/* Course Info */
 .ccInfo {
-  flex-grow: 1;
-  padding: 20px;
+  padding: 6px 0;
+}
+
+/* Profile & Title */
+.ccProfileWrapper {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.ccProfileImage {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+/* Remove underline from the username link */
+.ccUsername {
+  text-decoration: none;
+  color: #A8B2D1; /* Keep original color */
+  font-size: 0.875rem;
+  margin-top: 3px;
+}
+
+/* Add hover effect if needed */
+.ccUsername:hover {
+  color: #64FFDA; /* Change color on hover */
 }
 
 .ccCourseTitle {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 5px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #E6F1FF;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
+/* Metadata */
 .ccCourseMeta {
-  font-size: 14px;
-  color: gray;
+  font-size: 0.8rem;
+  opacity: 0.85;
+  color: #A8B2D1;
+  margin: 4px 0;
+}
+
+/* Level & Status */
+.ccLevelStatus {
+  margin:10px 0px;
+  display: flex;
+  gap: 6px;
+  font-size: 0.8rem;
+}
+
+.ccLevel, .ccStatus {
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.ccLevel {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.ccStatus {
+  background: #1b5e20;
+  color: white;
+}
+
+/* Price & Rating */
+.ccPriceRatingWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 6px;
 }
 
 .ccCoursePrice {
-  font-size: 18px;
   font-weight: bold;
-  margin-top: 10px;
+  color: #64FFDA;
 }
 
 .ccCourseRating {
+  font-weight: bold;
+  color: #71c9f8;
+}
+.ccRatingWrapper {
+  margin-right:10px;
+  display: flex;
+  align-items: center;
+  gap: 6px; /* Adjust spacing */
+}
+
+.ccRatingCircles {
+  font-size: 14px; /* Make circles smaller */
+}
+
+.ccRatingNumber {
+  font-weight: bold;
   font-size: 14px;
-  color: #f39c12;
+  color: #a8b2d1; /* Softer muted blue */
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .ccContainer {
+    display:block;
+    margin :10px auto;
+  }
 }

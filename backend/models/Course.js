@@ -15,7 +15,7 @@ const courseSchema = new mongoose.Schema({
   category: { type: String, required: true },
   tags: [{ type: String }],
   level: { type: String, enum: ["Beginner", "Intermediate", "Advanced"], default: "Beginner" },
-  creator: { type: mongoose.Schema.Types.ObjectId, required: true },
+  creator: { type: mongoose.Schema.Types.ObjectId, required: true ,ref:"User"},
 
   totalEnrollment: { type: Number, default: 0 }, // Keeps track of enrolled users count but not active user
 

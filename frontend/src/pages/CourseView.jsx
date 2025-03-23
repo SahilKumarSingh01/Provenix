@@ -1,16 +1,30 @@
-import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import styles from "../styles/CourseView.module.css"; // Import CSS module
-import defaultThumbnail from '../assets/DefaultThumbnail.png'
+import React, { useContext } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext"; // Import Auth Context
+import styles from "../styles/CourseView.module.css";
+import defaultThumbnail from '../assets/DefaultThumbnail.png';
+
 const CourseView = () => {
     const location = useLocation();
+    const navigate = useNavigate();
+    const { user } = useContext(AuthContext); // Get authenticated user
     const course = location.state?.course || {};
+
+    // Check if the logged-in user is the creator of the course
+    const isCreator = user?._id === course.creator;
+
+    // Check if user can access content
+    const canAccessContent = course.status !== "draft" && (isCreator || course.price === 0);
+
+    // Calculate average rating (handle division by zero)
+    const avgRating = course.numberOfRatings > 0 
+        ? (course.totalRating / course.numberOfRatings).toFixed(1) 
+        : "No Ratings Yet";
 
     return (
         <div className={styles.courseCard}>
             <div className={styles.courseImage}>
                 <img src={course.image || defaultThumbnail} alt="Course" />
-                <button className={styles.previewBtn}>PREVIEW</button>
             </div>
 
             <div className={styles.courseInfo}>
@@ -25,14 +39,36 @@ const CourseView = () => {
                 <div className={styles.courseStats}>
                     <span>📅 Created: {new Date(course.createdAt).toDateString()}</span>
                     <span>🎓 {course.totalEnrollment || 0} Enrolled</span>
-                    <span>⭐ {course.totalRating || "No Ratings Yet"}</span>
-                    <span>📚 {course.pageCount} Pages | 🎥 {course.videoCount} Videos</span>
+                    <span>⭐ {avgRating} ({course.numberOfRatings} Ratings)</span>
+                    <span>📚 {course.pageCount} Pages</span>
+                    <span>🎥 {course.videoCount || 0} Videos</span>
+                    <span>📑 {course.sections?.length || 0} Sections</span>
+                    <span>🖥️ {course.codeCount || 0} Code Blocks</span>
                 </div>
 
-                {course.price === 0 ? (
-                    <button className={styles.studyBtn}>Start Learning for Free</button>
+                {/* Show "Edit" and "Sections" only if the user is the creator */}
+                {isCreator ? (
+                    <div className={styles.creatorOptions}>
+                        <button onClick={() => navigate("/course-edit", { state: { course } })} className={styles.secondaryBtn}>
+                            Edit Course
+                        </button>
+                        <button onClick={() => navigate("/course-sections", { state: { course } })} className={styles.secondaryBtn}>
+                            Manage Sections
+                        </button>
+                    </div>
                 ) : (
-                    <button className={styles.subscribeBtn}>Enroll Now - ${course.price}</button>
+                    <>
+                        {/* Show "Sections" if user can access content, otherwise show "Enroll" */}
+                        {canAccessContent ? (
+                            <button onClick={() => navigate("/course-sections", { state: { course } })} className={styles.secondaryBtn}>
+                                View Sections
+                            </button>
+                        ) : (
+                            <button className={styles.primaryBtn}>
+                                Enroll Now {course.price > 0 && `- $${course.price}`}
+                            </button>
+                        )}
+                    </>
                 )}
 
                 {course.status === "draft" && (
@@ -42,6 +78,5 @@ const CourseView = () => {
         </div>
     );
 };
-
 
 export default CourseView;

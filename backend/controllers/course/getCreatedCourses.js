@@ -2,18 +2,31 @@ const Course = require("../../models/Course");
 
 const getCreatedCourses = async (req, res) => {
     try {
-        let { skip = 0, limit = 6, sortBy = "createdAt", order = -1 } = req.query;
+        let { skip = 0, limit = 6, sortBy = "createdAt", order = -1, status, price, level } = req.query;
 
-        // Convert skip and limit to numbers
+        // Convert skip, limit, and order to numbers
         skip = parseInt(skip);
         limit = parseInt(limit);
-        order = parseInt(order); // Ensure order is a number (-1 for descending, 1 for ascending)
+        order = parseInt(order);
 
-        const courses = await Course.find({ creator: req.user.id })// Populate creator details
+        // Build the filter query
+        let filter = { creator: req.user.id };
+
+        if (status) filter.status = status;
+        if (level) filter.level = level;
+
+        // Handle price filtering
+        if (price === "free") {
+            filter.price = 0;
+        } else if (price === "paid") {
+            filter.price = { $gt: 0 };
+        }
+
+        const courses = await Course.find(filter)
             .sort({ [sortBy]: order })
             .skip(skip)
             .limit(limit)
-            .populate("creator", "username photo displayName") 
+            .populate("creator", "username photo displayName")
             .lean(); // Optimize query performance
 
         res.json({ success: true, courses });
@@ -21,5 +34,6 @@ const getCreatedCourses = async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 };
+
 
 module.exports = getCreatedCourses;

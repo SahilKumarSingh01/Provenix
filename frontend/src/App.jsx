@@ -5,7 +5,7 @@ import Explore from "./pages/Explore";
 import Navbar from './components/Navbar';
 import Login from "./pages/Login";
 import CourseCreation from "./pages/CourseCreation";
-
+import MyCourses from "./pages/MyCourses";
 import CourseDetailForm from "./pages/CourseDetailForm";
 
 import CourseView from "./pages/CourseView";
@@ -50,10 +50,10 @@ function App() {
         <Route path='/explore' element={<Explore/>}/>
         <Route path='/login' element={<Login/>}/>
         <Route path='/course-creation' element={<CourseCreation/>}/>
-
+        <Route path='/my-courses' element={<MyCourses/>}/>
         <Route path='/course-detailform' element={<CourseDetailForm/>}/>
 
-        <Route path='/course-view' element={<CourseView/>}/>
+        <Route path='/course-view/:courseId' element={<CourseView/>}/>
 
         <Route path='/*' element={<Error404/>}/>
 
