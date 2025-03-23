@@ -23,8 +23,6 @@ const CourseCard = ({ course }) => {
       </div>
     );
   };
-  
-
   return (
     <Link to={`/course-view/${course._id}`} className={styles.ccLink}>
     <div className={styles.ccContainer}>
@@ -47,7 +45,7 @@ const CourseCard = ({ course }) => {
           <div>
             <h3 className={styles.ccCourseTitle}>{course.title}</h3>
             <Link to={`/profile/${course.creator.username}`} className={styles.ccUsername}>
-              @{'course.creator.username'}
+              @{course.creator.username}
             </Link>
           </div>
         </div>

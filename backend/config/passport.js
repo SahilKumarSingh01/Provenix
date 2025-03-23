@@ -47,7 +47,16 @@ passport.use(new GoogleStrategy({
               
               if(!user)
               {
-                  const result=await cloudinary.uploader.upload(profile.photos[0].value, {folder: "profile",});
+                const result = await cloudinary.uploader.upload(profile.photos[0].value, {
+                  folder: "profile",
+                  type: "authenticated",  // Private upload
+                  format: "webp",         // Best compression
+                  transformation: [
+                      { width: 100, height: 100, crop: "fill" },  // Exact dimensions, crop to fit
+                      { quality: "auto:low" },                   // Lower quality for better compression
+                      { fetch_format: "auto" }                   // Use best format (WebP, JPEG)
+                  ]
+              });
                   const photo =result.url;
                   const displayName=profile.displayName;
                   const username=await UniqueUsername(displayName);
@@ -80,7 +89,16 @@ passport.use(new GithubStrategy({
             let user =await User.findOne({githubid});
             if(!user)
             {
-                const result=await cloudinary.uploader.upload(profile.photos[0].value, {folder: "profile",});
+              const result = await cloudinary.uploader.upload(profile.photos[0].value, {
+                folder: "profile",
+                type: "authenticated",  // Private upload
+                format: "webp",         // Best compression
+                transformation: [
+                    { width: 100, height: 100, crop: "fill" },  // Exact dimensions, crop to fit
+                    { quality: "auto:low" },                   // Lower quality for better compression
+                    { fetch_format: "auto" }                   // Use best format (WebP, JPEG)
+                ]
+            });
                 const photo =result.url;
                 const displayName=profile.username;
                 const username=await UniqueUsername(displayName);

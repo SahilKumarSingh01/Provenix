@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
   profile: {type:mongoose.Schema.Types.ObjectId,ref:"Profile"},
   accountId: { type: String ,default:""},
   password: String,
-  email: { type: String, unique: true },
+  email: { type: String, unique: true ,sparse:true},
   googleid: { type: String, unique: true, sparse: true },
   githubid: { type: String, unique: true, sparse: true },
   verifiedEmail: { type: Boolean, default: false },

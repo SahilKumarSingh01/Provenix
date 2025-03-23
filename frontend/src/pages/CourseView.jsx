@@ -1,15 +1,33 @@
-import React, { useContext } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { useContext ,useState,useEffect} from "react";
+import { useParams,useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext"; // Import Auth Context
+import axios from '../api/axios.js'
 import styles from "../styles/CourseView.module.css";
 import defaultThumbnail from '../assets/DefaultThumbnail.png';
 
 const CourseView = () => {
+    const {courseId}=useParams();
     const location = useLocation();
     const navigate = useNavigate();
     const { user } = useContext(AuthContext); // Get authenticated user
-    const course = location.state?.course || {};
+    const [course,setCourse] = useState({});
+    useEffect(() => {
+        const fetchCourseDetails = async () => {
+            try {
+                // setLoading(true);
+                const { data } = await axios.get(`/api/course/${courseId}`);
+                console.log(data);
+                setCourse(data);
+            } catch (err) {
+                // setError("Failed to fetch course details");
+                // console.error("Error fetching course:", err);
+            } finally {
+                // setLoading(false);
+            }
+        };
 
+        fetchCourseDetails();
+    }, [courseId]);
     // Check if the logged-in user is the creator of the course
     const isCreator = user?._id === course.creator;
 

@@ -16,6 +16,10 @@ const MyCourses = () => {
     const limit = 9;
 
     useEffect(() => {
+        setPage(1);                             
+    }, [sortBy, order, status, price, level]);
+
+    useEffect(() => {
         const fetchCourses = async () => {
             try {
                 setLoading(true);
@@ -33,7 +37,6 @@ const MyCourses = () => {
         };
         fetchCourses();
     }, [sortBy, order, page, status, price, level]);
-
     return (
         <div className={styles.courseContainer}>
             <div className={styles.courseHeader}>

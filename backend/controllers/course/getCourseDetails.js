@@ -7,7 +7,7 @@ const getCourseDetails = async (req, res) => {
                     .lean();
       if (!course) return res.status(404).json({ success: false, message: "Course not found" });
   
-      const isCreator = course.creator.equals(req.user.id);
+      const isCreator = course.creator._id.equals(req.user.id);
       const isEnrolled = await Enrollment.exists({ user: req.user.id, course: course._id, status: "active" });
   
       if (!isCreator && course.status !== "published" && !isEnrolled)
