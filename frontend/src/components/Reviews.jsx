@@ -5,17 +5,19 @@ const Reviews = ({course}) => {
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
     console.log(course);
-    useEffect(async() => {
-        try{
-            const {data}=await axios.get(`api/course/${course._id}/review/all`);
-            setReviews(data.reviews);
-            setLoading(false);
-        }catch(error)
-        {
-            console.log("Review Loading error",error);
+    useEffect(() => {
+        const fetchReviews=async()=>{
+            try{
+                const {data}=await axios.get(`api/course/${course._id}/review/all`);
+                setReviews(data.reviews);
+                setLoading(false);
+            }catch(error)
+            {
+                console.log("Review Loading error",error);
+            }
         }
+        fetchReviews();
     }, []);
-
     return (
         <div className={styles.reviewsContainer}>
             <h2 className={styles.reviewsTitle}>Student Reviews</h2>

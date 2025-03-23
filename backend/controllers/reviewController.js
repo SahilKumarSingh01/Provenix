@@ -7,23 +7,21 @@ const create = async (req, res) => {
     const user = req.user.id;
     const { rating, text } = req.body;
 
-    // Ensure the user has enrolled in the course before allowing a review
-    const enrollment = await Enrollment.findOne({ course:courseId, user });//review is allowed even if inactive
-    if (!enrollment) {
-      return res.status(403).json({ message: "You must be enrolled to leave a review" });
-    }
+      const [enrollment, existingReview] = await Promise.all([
+        Enrollment.findOne({ course: courseId, user }),
+        Review.findOne({ courseId, user })
+      ]);
 
-    const existingReview = await Review.findOne({ courseId, user });
-    if (existingReview) {
-      return res.status(400).json({ message: "You have already reviewed this course",existingReview });
-    }
+      if (!enrollment) {
+        return res.status(403).json({ message: "You must be enrolled to leave a review" });
+      }
 
+      if (existingReview) {
+        return res.status(400).json({ message: "You have already reviewed this course", existingReview });
+      }
     // Create new review
-    const review = new Review({ courseId, user, rating, text });
-    await review.save();
-
+    const review = await Review.create({ courseId, user, rating, text });
     res.status(201).json({ message: "Review added successfully", review });
-
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -35,7 +33,7 @@ const myReview = async (req, res) => {
     const userId = req.user.id;
 
     // Find the user's review for the given course
-    const review = await Review.findOne({ courseId, userId }).populate("userId", "username photo displayName");
+    const review = await Review.findOne({ courseId, user }).populate("user", "username photo displayName");
 
     res.json({ success: true, review });
 
@@ -54,7 +52,7 @@ const getAll = async (req, res) => {
                           .sort('-updatedAt')
                           .skip(skip)
                           .limit(limit)
-                          .populate("userId", "username photo displayName");
+                          .populate("user", "username photo displayName");
     res.json({ reviews});
 
   } catch (error) {
@@ -67,19 +65,13 @@ const remove = async (req, res) => {
     const { reviewId } = req.params;
     const user = req.user.id;
 
-    // Find the review
-    const review = await Review.findById(reviewId);
-    if (!review) return res.status(404).json({ message: "Review not found" });
+    const result = await Review.deleteOne({ _id: reviewId, user });
 
-    // Ensure only the creator can delete the review
-    if (!review.user.equals(user)) {
-      return res.status(403).json({ message: "Unauthorized" });
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: "Review not found or Unauthorized" });
     }
 
-    // Delete the review
-    await Review.deleteOne({ _id: reviewId });
-
-    res.json({ message: "Review deleted successfully" });
+    return res.status(200).json({ message: "Review deleted successfully" });
 
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -92,22 +84,19 @@ const update = async (req, res) => {
     const user = req.user.id;
     const { rating, text } = req.body;
 
-    // Find the review
-    const review = await Review.findById(reviewId);
-    if (!review) return res.status(404).json({ message: "Review not found" });
+    // Update review directly using reviewId and user both together
+    const review = await Review.findOneAndUpdate(
+      { _id: reviewId, user },
+      { rating, text },
+      { new: true } // This will return the updated review
+    ).populate('user'); // Optionally populate the user field if needed
 
-    // Ensure only the creator can update the review
-    if (!review.user.equals(user)) {
-      return res.status(403).json({ message: "Unauthorized" });
+    if (!review) {
+      return res.status(404).json({ message: "Review not found or Unauthorized" });
     }
 
-    // Update the review fields
-    if (rating !== undefined) review.rating = rating;
-    if (text !== undefined) review.text = text;
+    return res.status(200).json({ message: "Review updated successfully", review });
 
-    await review.save();
-
-    res.json({ message: "Review updated successfully", review });
 
   } catch (error) {
     res.status(500).json({ message: error.message });
