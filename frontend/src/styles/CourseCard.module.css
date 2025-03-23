@@ -1,5 +1,6 @@
 .ccLink{
   text-decoration: none;
+  cursor: pointer;
 }
 /* Course Card */
 .ccContainer {
@@ -12,7 +13,7 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   padding: 12px;
   margin:10px;
-  cursor: pointer;
+  
   border: 1px solid #233554;
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
@@ -142,12 +143,4 @@
   font-weight: bold;
   font-size: 14px;
   color: #a8b2d1; /* Softer muted blue */
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .ccContainer {
-    display:block;
-    margin :10px auto;
-  }
 }

@@ -55,7 +55,7 @@ const getAll = async (req, res) => {
                           .skip(skip)
                           .limit(limit)
                           .populate("userId", "username photo displayName");
-    res.json({ reviews ,canReview});
+    res.json({ reviews});
 
   } catch (error) {
     res.status(500).json({ message: error.message });

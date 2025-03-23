@@ -24,8 +24,8 @@ const CourseCard = ({ course }) => {
     );
   };
   return (
-    <Link to={`/course-view/${course._id}`} className={styles.ccLink}>
     <div className={styles.ccContainer}>
+      <Link to={`/course-view/${course._id}`} className={styles.ccLink}>
       <div className={styles.ccThumbnailWrapper}>
         <img
           src={course.thumbnail || defaultThumbnail}
@@ -33,7 +33,7 @@ const CourseCard = ({ course }) => {
           className={styles.ccThumbnailImage}
         />
       </div>
-
+      </Link>
       <div className={styles.ccInfo}>
          {/* Profile + Title Wrapper */}
         <div className={styles.ccProfileWrapper}>
@@ -68,7 +68,7 @@ const CourseCard = ({ course }) => {
         </div>
       </div>
     </div>
-    </Link>
+   
   );
 };
 

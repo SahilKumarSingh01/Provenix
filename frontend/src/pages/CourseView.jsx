@@ -1,99 +1,112 @@
-import React, { useContext ,useState,useEffect} from "react";
-import { useParams,useLocation, useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext"; // Import Auth Context
-import axios from '../api/axios.js'
+import React, { useContext, useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+import axios from '../api/axios.js';
+import UserInfo from '../components/UserInfo';
+import Reviews from '../components/Reviews';
 import styles from "../styles/CourseView.module.css";
 import defaultThumbnail from '../assets/DefaultThumbnail.png';
 
 const CourseView = () => {
-    const {courseId}=useParams();
-    const location = useLocation();
+    const { courseId } = useParams();
     const navigate = useNavigate();
-    const { user } = useContext(AuthContext); // Get authenticated user
-    const [course,setCourse] = useState({});
+    const { user } = useContext(AuthContext);
+    const [course, setCourse] = useState(null);
+    const [showReview,setShowReview]=useState(false);
+
     useEffect(() => {
         const fetchCourseDetails = async () => {
             try {
-                // setLoading(true);
                 const { data } = await axios.get(`/api/course/${courseId}`);
-                console.log(data);
-                setCourse(data);
+                setCourse(data.course);
             } catch (err) {
-                // setError("Failed to fetch course details");
-                // console.error("Error fetching course:", err);
-            } finally {
-                // setLoading(false);
+                console.error("Error fetching course details:", err);
             }
         };
 
         fetchCourseDetails();
     }, [courseId]);
-    // Check if the logged-in user is the creator of the course
-    const isCreator = user?._id === course.creator;
-
-    // Check if user can access content
-    const canAccessContent = course.status !== "draft" && (isCreator || course.price === 0);
-
-    // Calculate average rating (handle division by zero)
-    const avgRating = course.numberOfRatings > 0 
-        ? (course.totalRating / course.numberOfRatings).toFixed(1) 
-        : "No Ratings Yet";
-
+    if (!course) {
+        return <div className={styles.loading}>Loading...</div>;
+    }
     return (
-        <div className={styles.courseCard}>
-            <div className={styles.courseImage}>
-                <img src={course.image || defaultThumbnail} alt="Course" />
+        <>
+        <div className={styles.courseContainer}>
+            {/* Left Panel - Thumbnail */}
+            <div className={styles.leftPanel}>
+                <img
+                    src={course.thumbnail || defaultThumbnail}
+                    alt="Course Thumbnail"
+                    className={styles.thumbnail}
+                />
             </div>
 
-            <div className={styles.courseInfo}>
-                <span className={styles.category}>
-                    {course.category?.toUpperCase() || "UNKNOWN"}
-                </span>
-                <h2 className={styles.courseTitle}>{course.title || "Course Title"}</h2>
-                <p className={styles.description}>
-                    {course.description || "No description available."}
-                </p>
+            {/* Right Panel - Course Details */}
+            <div className={styles.rightPanel}>
+                <h1 className={styles.title}>{course.title}</h1>
+                <p className={styles.description}>{course.description}</p>
 
-                <div className={styles.courseStats}>
-                    <span>📅 Created: {new Date(course.createdAt).toDateString()}</span>
-                    <span>🎓 {course.totalEnrollment || 0} Enrolled</span>
-                    <span>⭐ {avgRating} ({course.numberOfRatings} Ratings)</span>
-                    <span>📚 {course.pageCount} Pages</span>
+                {/* Course Stats */}
+                <div className={styles.stats}>
+                    <span>📚 {course.pageCount || 0} Pages</span>
                     <span>🎥 {course.videoCount || 0} Videos</span>
-                    <span>📑 {course.sections?.length || 0} Sections</span>
                     <span>🖥️ {course.codeCount || 0} Code Blocks</span>
+                    <span>📑 {course.sections?.length || 0} Sections</span>
+                    <span>🎓 {course.totalEnrollment || 0} Enrolled</span>
                 </div>
 
-                {/* Show "Edit" and "Sections" only if the user is the creator */}
-                {isCreator ? (
-                    <div className={styles.creatorOptions}>
-                        <button onClick={() => navigate("/course-edit", { state: { course } })} className={styles.secondaryBtn}>
-                            Edit Course
-                        </button>
-                        <button onClick={() => navigate("/course-sections", { state: { course } })} className={styles.secondaryBtn}>
-                            Manage Sections
-                        </button>
-                    </div>
-                ) : (
-                    <>
-                        {/* Show "Sections" if user can access content, otherwise show "Enroll" */}
-                        {canAccessContent ? (
-                            <button onClick={() => navigate("/course-sections", { state: { course } })} className={styles.secondaryBtn}>
-                                View Sections
-                            </button>
-                        ) : (
-                            <button className={styles.primaryBtn}>
-                                Enroll Now {course.price > 0 && `- $${course.price}`}
-                            </button>
-                        )}
-                    </>
-                )}
+                {/* Course Level */}
+                {/* Course Meta - Category, Level, and Status */}
+                <div className={styles.courseMeta}>
+                    <span className={styles.category}> {course.category}</span>
+                    <span className={styles.level}> {course.level}</span>
+                    <span className={`${styles.status} ${styles[course.status.toLowerCase()]}`}> {course.status}</span>
+                </div>
 
-                {course.status === "draft" && (
-                    <p className={styles.draftNotice}>This course is still in draft mode.</p>
-                )}
+
+                {/* Course Dates */}
+                <div className={styles.dates}>
+                    <span>📅 Created: {course.createdAt ? new Date(course.createdAt).toDateString() : "N/A"}</span>
+                    <span>📅 Updated: {course.updatedAt ? new Date(course.updatedAt).toDateString() : "N/A"}</span>
+                </div>
+
+                {/* Creator Info */}
+                <span className={styles.creatorLabel}>Created by:</span>
+                <div className={styles.creatorDetails}>
+                    <UserInfo user={course.creator} />
+                    <div className={styles.priceTag}>
+                        {course.price ? `₹${course.price}` : "Free"}
+                    </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className={styles.actions}>
+                    {!course.canAccessContent ? (
+                        <button className={styles.actionBtn} onClick={() => navigate(`/enroll/${course._id}`)}>
+                            Enroll
+                        </button>
+                    ) : (
+                        <button className={styles.actionBtn} onClick={() => navigate(`/sections/${course._id}`)}>
+                            Sections
+                        </button>
+                    )}
+
+                    {course.creator._id === user._id && (
+                        <button className={styles.actionBtn} onClick={() => navigate(`/course-edit/${course._id}`)}>
+                            Edit
+                        </button>
+                    )}
+
+                    <button className={styles.actionBtn} onClick={() => setShowReview(!showReview)}>
+                        Review & Rating
+                    </button>
+                </div>
+
+
             </div>
         </div>
+        {showReview?<Reviews course={course}/>:''}
+        </>
     );
 };
 
