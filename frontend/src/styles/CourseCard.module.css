@@ -124,10 +124,7 @@
   color: #64FFDA;
 }
 
-.ccCourseRating {
-  font-weight: bold;
-  color: #71c9f8;
-}
+
 .ccRatingWrapper {
   margin-right:10px;
   display: flex;
@@ -135,12 +132,3 @@
   gap: 6px; /* Adjust spacing */
 }
 
-.ccRatingCircles {
-  font-size: 14px; /* Make circles smaller */
-}
-
-.ccRatingNumber {
-  font-weight: bold;
-  font-size: 14px;
-  color: #a8b2d1; /* Softer muted blue */
-}

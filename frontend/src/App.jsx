@@ -7,7 +7,7 @@ import Login from "./pages/Login";
 import CourseCreation from "./pages/CourseCreation";
 import MyCourses from "./pages/MyCourses";
 import CourseDetailForm from "./pages/CourseDetailForm";
-
+import {ToastContainer} from 'react-toastify'
 import CourseView from "./pages/CourseView";
 
 import UpdateProfile from "./pages/UpdateProfile";
@@ -40,6 +40,18 @@ function App() {
     <AuthProvider>
     <Router>
       <Navbar/>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000} // Close after 3 seconds
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark" // Options: "light", "dark", "colored"
+      />
       <Routes>
         {/* public routes */}
         <Route path='/' element={<Home/>}/>

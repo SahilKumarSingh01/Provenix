@@ -5,6 +5,7 @@ const reviewSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref:"User", required: true },
   rating: { type: Number, required: true, min: 1, max: 5 },
   text: { type: String, default: "" },
+  reportedBy: [{ type: mongoose.Schema.Types.ObjectId,ref:'User' }], // Array of user IDs who reported the review
 }, { timestamps: true });
 
 module.exports = mongoose.model("Review", reviewSchema);

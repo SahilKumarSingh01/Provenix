@@ -8,6 +8,8 @@ const commentSchema = new mongoose.Schema({
   section: { type: String, required: true }, 
   parentComment: { type: mongoose.Schema.Types.ObjectId, ref: "Comment", default: null }, // For replies
   repliesCount: { type: Number, default: 0 }, // Number of replies
+  reportedBy: [{ type: mongoose.Schema.Types.ObjectId,ref:'User' }], // Array of user IDs who reported the review
+  
 }, { timestamps: true });
 
 commentSchema.index({ courseId: 1, pageId: 1 });

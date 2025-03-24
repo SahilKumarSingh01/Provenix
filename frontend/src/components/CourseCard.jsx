@@ -2,27 +2,13 @@ import React from "react";
 import { Link } from "react-router-dom"; // Import React Router Link
 
 import styles from "../styles/CourseCard.module.css";
+import AvgRating from '../components/AvgRating'
 import defaultThumbnail from "../assets/DefaultThumbnail.png";
 import defaultProfile from '../assets/defaultPicture.png';
 
 const CourseCard = ({ course }) => {
-  const renderRating = () => {
-    if (course.numberOfRatings === 0) {
-      return <span className={styles.ccRatingNumber}>Not Rated</span>;
-    }
-  
-    const rating = Math.min(5, Math.max(0, course.totalRating / (course.numberOfRatings)));
-    console.log("rating "+rating)
-    const filled = "🟢".repeat(Math.floor(rating));
-    const empty = "⚫".repeat(5 - Math.floor(rating));
-  
-    return (
-      <div className={styles.ccRatingWrapper}>
-        <span className={styles.ccRatingCircles}>{filled}{empty}</span>
-        <span className={styles.ccRatingNumber}>({course.numberOfRatings})</span>
-      </div>
-    );
-  };
+  course.totalRating=60;
+  course.numberOfRatings=13;
   return (
     <div className={styles.ccContainer}>
       <Link to={`/course-view/${course._id}`} className={styles.ccLink}>
@@ -60,7 +46,7 @@ const CourseCard = ({ course }) => {
         <p className={styles.ccCourseMeta}>{course.totalEnrollment} students • {course.pageCount} pages • {course.videoCount} videos • {course.codeCount} codes</p>
 
         <div className={styles.ccPriceRatingWrapper}>
-        <div className={styles.ccCourseRating}>{renderRating()}</div>
+        <div className={styles.ccCourseRating}><AvgRating course={course}/></div>
         <p className={styles.ccCoursePrice}>
           {course.price > 0 ? `$${course.price.toFixed(2)}` : "Free"}
         </p>

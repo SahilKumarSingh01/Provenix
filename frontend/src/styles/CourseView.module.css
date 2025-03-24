@@ -172,4 +172,7 @@
     .rightPanel {
         width: 100%;
     }
+    .courseMeta{
+        flex-direction:column;
+    }
 }

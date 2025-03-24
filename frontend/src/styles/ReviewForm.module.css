@@ -1,0 +1,117 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.reviewForm {
+  background: #112240;
+  padding: 20px;
+  border-radius: 10px;
+  width:80%;
+  max-width: 400px;
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.6);
+  text-align: center;
+  border: 1px solid #233554;
+  color: #E6F1FF;
+}
+
+.reviewForm h3 {
+  color: #4FD1C5; /* Bright golden-yellow for better contrast */
+  font-size: 22px;
+  margin-bottom: 8px;  /* Reduced gap between heading and stars */
+  font-weight: 700;
+}
+
+.starRating {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 8px auto; /* Balanced spacing */
+  gap: 5px; /* Tighter spacing */
+}
+
+.starRating span {
+  font-size: 20px; /* Smaller and neater */
+  cursor: pointer;
+  transition: color 0.2s ease-in-out, transform 0.1s ease;
+}
+
+.activeStar {
+  color: gold;
+}
+
+.inactiveStar {
+  color: grey;
+}
+
+
+.reviewInput {
+  margin-top: 12px; /* Better spacing between stars and input */
+  width: 100%;
+  height: 80px;
+  padding: 10px;
+  /* border: 1px solid #3FB8AF; */
+  border-radius: 6px;
+  font-size: 16px;
+  resize: none;
+  background: #233554;
+  color: #E6F1FF;
+}
+
+.actions {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* Common Button Styles */
+.submitButton,
+.cancelButton {
+  color: #E6F1FF;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  border: none;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+  min-width: 90px;
+}
+
+/* Submit Button - Muted Purple */
+.submitButton {
+  background-color: #553C9A; /* Softer, less intense */
+}
+
+.submitButton:hover {
+  background-color: #4A2F85; /* Darker on hover */
+}
+
+.submitButton:active {
+  transform: scale(0.95);
+  background-color: #3B2566; /* Deepest shade on click */
+}
+
+/* Cancel Button - Muted Red */
+.cancelButton {
+  background-color: #A93232; /* Softer red */
+}
+
+.cancelButton:hover {
+  background-color: #8E2525; /* Darker red on hover */
+}
+
+.cancelButton:active {
+  transform: scale(0.95);
+  background-color: #731A1A; /* Deepest shade on click */
+}

@@ -1,0 +1,13 @@
+.CourseRating {
+    font-weight: bold;
+    color: #71c9f8;
+  }
+  .RatingCircles {
+    font-size: 14px; /* Make circles smaller */
+  }
+  
+  .RatingNumber {
+    font-weight: bold;
+    font-size: 14px;
+    color: #a8b2d1; /* Softer muted blue */
+  }

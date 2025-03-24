@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect } from "react";
 import axios from "../api/axios";
-
+import {toast} from 'react-toastify'
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -9,12 +9,11 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get("/auth/me",{withCredentials:true});
-        console.log(response.data.user);
+        const response = await axios.get("/auth/me");
         setUser(response.data.user);
       } catch (error) {
         console.log(error);
-        console.log('User session is not in backend');
+        toast.error('User session is not in backend');
         setUser(null);
       }
     };

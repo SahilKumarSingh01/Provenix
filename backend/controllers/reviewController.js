@@ -1,6 +1,8 @@
 const Review = require("../models/Review.js");
 const Enrollment = require("../models/Enrollment");
 
+const  MAX_REPORT=3;
+
 const create = async (req, res) => {
   try {
     const { courseId } = req.params;
@@ -30,7 +32,7 @@ const create = async (req, res) => {
 const myReview = async (req, res) => {
   try {
     const { courseId } = req.params;
-    const userId = req.user.id;
+    const user = req.user.id;
 
     // Find the user's review for the given course
     const review = await Review.findOne({ courseId, user }).populate("user", "username photo displayName");
@@ -78,6 +80,35 @@ const remove = async (req, res) => {
   }
 };
 
+const report=async(req,res)=>{
+  try {
+    const { reviewId } = req.params;
+    const user = req.user.id;
+
+    // Update review directly using reviewId and user both together
+    const review = await Review.findOneAndUpdate(
+      { _id: reviewId },
+      { $addToSet:{reportedBy:user} },
+      { new: true } // This will return the updated review
+    )
+    if (!review) {
+      return res.status(404).json({ message: "Review not found or Unauthorized" });
+    }
+    if(review.reportedBy.length>=MAX_REPORT)
+    {
+        await Review.deleteOne({_id:reviewId});
+        return res.status(200).json({ message: "Review has been deleted after exceeding report limit" });
+
+    }
+
+    return res.status(200).json({ message: "Review reported successfully", review });
+
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
 const update = async (req, res) => {
   try {
     const { reviewId } = req.params;
@@ -103,9 +134,12 @@ const update = async (req, res) => {
   }
 };
 
+
+
 module.exports = {
   create,
   getAll,
+  report,
   remove,
   update,
   myReview,

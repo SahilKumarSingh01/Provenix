@@ -1,6 +1,7 @@
 const Comment = require("../models/Comment");
 const Page = require("../models/Page");
 
+const MAX_REPORT=3;
 
 const notifyAllMentions = async (content, comment) => {
   // Extract mentions from content (assumes mentions are in "@username" format)
@@ -109,7 +110,34 @@ const getComment = async (req, res) => {
   }
 };
 
+const report=async(req,res)=>{
+  try {
+    const { commentId } = req.params;
+    const user = req.user.id;
 
+    // Update review directly using reviewId and user both together
+    const comment = await Comment.findOneAndUpdate(
+      { _id: commentId },
+      { $addToSet:{reportedBy:user} },
+      { new: true } // This will return the updated review
+    )
+    if (!comment) {
+      return res.status(404).json({ message: "Review not found or Unauthorized" });
+    }
+    if(Comment.reportedBy.length>=MAX_REPORT)
+    {
+        await Comment.deleteOne({_id:commentId});
+        return res.status(200).json({ message: "Review has been deleted after exceeding report limit" });
+
+    }
+
+    return res.status(200).json({ message: "Review reported successfully", review });
+
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
 
 const remove = async (req, res) => {
   try {
@@ -182,6 +210,7 @@ const update = async (req, res) => {
 module.exports = {
   create,
   remove,
+  report,
   getAll,
   getComment,
   update,
