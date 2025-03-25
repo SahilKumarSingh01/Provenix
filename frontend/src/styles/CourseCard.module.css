@@ -1,19 +1,21 @@
-.ccLink{
+.ccLink {
   text-decoration: none;
   cursor: pointer;
 }
+
 /* Course Card */
 .ccContainer {
-  display:inline-block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 344px;
-  height:350px;
-  vertical-align: top;
+  max-width: 350px;
+  height: 350px;
   background: #112240;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   padding: 12px;
-  margin:10px;
-  
+  margin: 10px auto;
   border: 1px solid #233554;
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
@@ -26,7 +28,7 @@
 /* Thumbnail */
 .ccThumbnailWrapper {
   width: 100%;
-  height: 200px;
+  height: 220px;
   overflow: hidden;
   border-radius: 8px;
 }
@@ -37,37 +39,43 @@
   object-fit: cover;
 }
 
-/* Course Info */
-.ccInfo {
-  padding: 6px 0;
-}
-
-/* Profile & Title */
-.ccProfileWrapper {
+/* Educator Profile */
+.ccEducatorContainer {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  padding: 10px;
 }
 
-.ccProfileImage {
-  width: 32px;
-  height: 32px;
+.ccEducatorLink {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.ccEducatorPhoto {
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   object-fit: cover;
-}
-/* Remove underline from the username link */
-.ccUsername {
-  text-decoration: none;
-  color: #A8B2D1; /* Keep original color */
-  font-size: 0.875rem;
-  margin-top: 3px;
+  border: 2px solid white;
+  transition: transform 0.2s ease-in-out;
 }
 
-/* Add hover effect if needed */
-.ccUsername:hover {
-  color: #64FFDA; /* Change color on hover */
+.ccEducatorPhoto:hover {
+  transform: scale(1.1);
 }
 
+/* Course Info */
+.ccInfo {
+  text-align: center;
+  padding: 10px;
+}
+
+/* Course Title */
 .ccCourseTitle {
   font-size: 1rem;
   font-weight: 600;
@@ -77,58 +85,3 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-
-/* Metadata */
-.ccCourseMeta {
-  font-size: 0.8rem;
-  opacity: 0.85;
-  color: #A8B2D1;
-  margin: 4px 0;
-}
-
-/* Level & Status */
-.ccLevelStatus {
-  margin:10px 0px;
-  display: flex;
-  gap: 6px;
-  font-size: 0.8rem;
-}
-
-.ccLevel, .ccStatus {
-  padding: 4px 8px;
-  border-radius: 5px;
-  font-weight: 600;
-  text-transform: capitalize;
-}
-
-.ccLevel {
-  background: #e3f2fd;
-  color: #1565c0;
-}
-
-.ccStatus {
-  background: #1b5e20;
-  color: white;
-}
-
-/* Price & Rating */
-.ccPriceRatingWrapper {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 6px;
-}
-
-.ccCoursePrice {
-  font-weight: bold;
-  color: #64FFDA;
-}
-
-
-.ccRatingWrapper {
-  margin-right:10px;
-  display: flex;
-  align-items: center;
-  gap: 6px; /* Adjust spacing */
-}
-
