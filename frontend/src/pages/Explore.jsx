@@ -1,5 +1,5 @@
 import React from "react";
-import VideoUpload from "../components/VideoUpload";
+// import VideoUpload from "../components/VideoUpload";
 
 import MCQCard from "../components/MCQCard"; // Make sure path sahi ho
 
@@ -11,6 +11,12 @@ import CodeToggle from "../components/CodeToggle";
 import CodeBox from "../components/CodeBox"; 
 
 import CourseCard from "../components/CourseCard"; 
+
+import ListSection from "../pages/ListSection"; // Adjust path if needed
+
+import CoursesList from "../pages/CourseList"; // Adjust path if needed
+
+
 
 
 
@@ -48,12 +54,15 @@ const courseData = {
   return (
     <div>
       <h1>Explore Page</h1>
-      <VideoUpload />
+      {/* <VideoUpload /> */}
       <Reviews />
       <MCQCard {...sampleMCQ} />
       <CodeToggle codeSnippet={sampleCode} language="javascript" />
       <CodeBox codeData={codeData} />
       <CourseCard course={courseData} />
+      <ListSection />
+      <CoursesList />
+
 
 
 
