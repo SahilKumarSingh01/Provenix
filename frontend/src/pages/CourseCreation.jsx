@@ -19,7 +19,7 @@ const CreateCourse = () => {
             });
             alert("Course created successfully!");
             console.log(response.data.course);
-            navigate("/course-view", { state: { course: response.data.course } });
+            navigate(`/course-view/${response.data.course._id}`, { state: { course: response.data.course } });
 
         } catch (error) {
             console.error("Error creating course:", error.response?.data || error.message);

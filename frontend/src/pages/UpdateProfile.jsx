@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import ImageUploader from '../components/ImageUpload';
+import ImageUploader from '../components/ImageUploader';
 import styles from '../styles/UpdateProfile.module.css';
 
 const UpdateProfile = () => {

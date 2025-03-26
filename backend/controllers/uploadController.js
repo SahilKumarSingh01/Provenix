@@ -1,5 +1,7 @@
 const cloudinary = require("../config/cloudinary");
 const OrphanResource = require("../models/OrphanResource");
+const IMAGE_EXPIRY_TIME = 5 * 60 * 60;
+const VIDEO_EXPIRY_TIME = 5 * 60 * 60; // 5 hours
 
 const uploadProfile = async (req, res) => {
     try {
@@ -36,7 +38,7 @@ const uploadProfile = async (req, res) => {
             category: "profile" 
         });
         // await 
-        res.status(201).json({ success: true, publicId });
+        res.status(201).json({ success: true, publicId: cloudUpload.public_id ,url:cloudUpload.secure_url });
     } catch (error) {
         console.log(error.message);
         res.status(500).json({ success: false, message: error.message });
@@ -79,8 +81,7 @@ const uploadThumbnail = async (req, res) => {
             type: "image",
             category: "thumbnail" 
         });
-
-        res.status(201).json({ success: true, publicId: cloudUpload.public_id });
+        res.status(201).json({ success: true, publicId: cloudUpload.public_id ,url:cloudUpload.secure_url});
     } catch (error) {
         console.log(error.message);
         res.status(500).json({ success: false, message: error.message });
@@ -123,8 +124,13 @@ const pagePhoto = async (req, res) => {
             type: "image",
             category: "pagePhoto"   // **Updated category**
         });
-
-        res.status(201).json({ success: true, publicId: cloudUpload.public_id });
+         const url = cloudinary.utils.signed_url(publicId, {
+              type: "authenticated",
+              resource_type: "image",
+              format: "webp",
+              expires_at: Math.floor(Date.now() / 1000) + IMAGE_EXPIRY_TIME,
+            });
+        res.status(201).json({ success: true, publicId: cloudUpload.public_id ,url});
     } catch (error) {
         console.log(error.message);
         res.status(500).json({ success: false, message: error.message });
@@ -172,8 +178,13 @@ const pageVideo = async (req, res) => {
             type: "video",
             category: "pageVideo"
         });
-        console.log(cloudUpload);
-        res.status(201).json({ success: true, publicId: cloudUpload.public_id });
+        const url = cloudinary.utils.signed_url(publicId, {
+              type: "authenticated",
+              resource_type: "video",
+              format: "mp4",
+              expires_at: Math.floor(Date.now() / 1000) + VIDEO_EXPIRY_TIME,
+            });
+        res.status(201).json({ success: true, publicId: cloudUpload.public_id ,url});
     } catch (error) {
         console.log(error.message);
         res.status(500).json({ success: false, message: error.message });

@@ -4,7 +4,7 @@
     max-width: 1200px;
     min-height: 60vh;
     margin: 40px auto;
-    background: #112240;
+    background: var(--bg-secondary);
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6); /* Darker shadow */
 }
@@ -34,36 +34,38 @@
 .title {
     font-size: 1.8rem;
     font-weight: bold;
-    color: #64C8FF;
+    color: var(--text-highlight);
 }
 
 .description {
     font-size: 0.9rem;
-    color: #AFCDE7;
+    color: var(--text-primary);
     line-height: 1.6;
     max-width: 95%; /* Avoid text stretching too wide */
 }
 
-.stats span{
-    display:block;
-    margin :5px;
+.stats span {
+    display: block;
+    margin: 5px;
     font-size: 0.9rem;
-    color: #A5C9FF; /* Softer light blue */
+    color: var(--text-secondary);
 }
 
 .courseMeta {
     display: flex;
+    flex-wrap: wrap;  /* Enables wrapping */
     gap: 12px;
     font-size: 1rem;
     font-weight: bold;
     margin: 12px 0;
-
 }
-.courseMeta span{
+
+.courseMeta span {
     padding: 6px 12px;
     border-radius: 8px;
 }
 
+/* Keeping these unchanged */
 .category {
     color: #F4C430; /* Soft Gold */
     background: rgba(244, 196, 48, 0.15);
@@ -98,7 +100,7 @@
     flex-direction: row;
     gap: 15px;
     font-size: 0.9rem;
-    color: #b0b8d4; /* Muted blue-gray for readability */
+    color: var(--text-muted);
     background: rgba(255, 255, 255, 0.1); /* Subtle dark transparency */
     padding: 8px 14px;
     border-radius: 8px;
@@ -109,7 +111,7 @@
 .creatorLabel {
     font-size: 0.9rem;
     font-weight: bold;
-    color: #E0F2FF; /* Light blue */
+    color: var(--text-primary);
 }
 
 .creatorDetails {
@@ -121,13 +123,12 @@
 .priceTag {
     font-size: 1rem;
     font-weight: bold;
-    color: #21E6C1; /* Teal */
-    background: rgba(33, 230, 193, 0.25); /* Slightly brighter */ /* Light teal background */
+    color: var(--text-success);
+    background: rgba(33, 230, 193, 0.25);
     padding: 6px 12px;
     border-radius: 8px;
-    margin:0px 10px;
+    margin: 0px 10px;
 }
-
 
 .actions {
     display: flex;
@@ -138,31 +139,26 @@
 
 /* General Button Styling */
 .actionBtn {
-    background-color: #1A73E8; /* Google Blue */
-    color: white;
+    background-color: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
     padding: 10px 16px;
     border-radius: 8px;
     cursor: pointer;
     font-size: 14px;
     font-weight: 500;
     transition: all 0.2s ease-in-out;
-    box-shadow: 0 3px 6px rgba(26, 115, 232, 0.3); /* Soft shadow */
     border: none;
 }
 
 .actionBtn:hover {
-    background-color: #1669C1; /* Slightly darker */
-    box-shadow: 0 5px 10px rgba(22, 105, 193, 0.4);
+    background-color: var(--btn-primary-hover);
 }
 
 .actionBtn:active {
-    background-color: #1257A0;
-    box-shadow: 0 2px 4px rgba(18, 87, 160, 0.5);
     transform: scale(0.95);
 }
 
-
-@media(max-width:768px) {
+@media (max-width: 768px) {
     .courseContainer {
         flex-direction: column;
     }
@@ -171,8 +167,5 @@
     }
     .rightPanel {
         width: 100%;
-    }
-    .courseMeta{
-        flex-direction:column;
     }
 }

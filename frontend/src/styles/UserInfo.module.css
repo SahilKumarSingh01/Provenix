@@ -9,6 +9,7 @@
     height: 32px;
     border-radius: 50%;
     object-fit: cover;
+    border:2px solid var(--border-primary);
   }
   
   .displayName {
@@ -19,10 +20,10 @@
   .username {
     font-size: 0.8rem;
     text-decoration: none;
-    color: gray;
+    color: var(--text-muted);
   }
   /* Add hover effect if needed */
 .username:hover {
-  color: #64FFDA; /* Change color on hover */
+  color: var(--text-highlight); /* Change color on hover */
 }
   

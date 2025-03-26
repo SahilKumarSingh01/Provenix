@@ -11,68 +11,49 @@
   z-index: 1000;
 }
 
-.reviewForm {
+.uploaderForm {
   background: var(--bg-primary);
   padding: 20px;
   border-radius: 10px;
   width: 80%;
-  max-width: 400px;
+  max-width: 600px;
   box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.6);
-  text-align: center;
   border: 1px solid var(--border-primary);
 }
 
-.reviewForm h3 {
-  color: var(--text-highlight); /* Bright cyan for emphasis */
-  font-size: 22px;
-  margin-bottom: 8px;
-  font-weight: 700;
+.uploaderForm h2 {
+  color: var(--text-heading);
+  text-align: center;
 }
 
-.starRating {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 8px auto;
-  gap: 5px;
-}
-
-.starRating span {
-  font-size: 20px;
-  cursor: pointer;
-  transition: color 0.2s ease-in-out, transform 0.1s ease;
-}
-
-.activeStar {
-  color: gold;
-}
-
-.inactiveStar {
-  color: grey;
-}
-
-.reviewInput {
-  margin-top: 12px;
+/* Styling for the cropper container */
+.imageContainer {
   width: 100%;
-  height: 170px;
-  padding: 10px;
-  border-radius: 6px;
-  font-size: 16px;
-  resize: none;
+  aspect-ratio: 1;
   background: var(--bg-tertiary);
-  color: var(--text-primary);
+  border-radius: 6px;
+  border: 1px solid var(--border-primary);
+  margin: 12px 0;
+  object-fit: contain;
+  position: relative;
 }
 
+
+
+
+
+
+/* Action buttons */
 .actions {
   margin-top: 15px;
   display: flex;
-  justify-content: center;
+  justify-content: end;
   gap: 10px;
 }
 
-/* Common Button Styles */
-.submitButton,
-.cancelButton {
+.actionButton,
+.cancelButton,
+.fileInput::file-selector-button {
   color: var(--btn-primary-text);
   padding: 10px 20px;
   border-radius: 6px;
@@ -84,21 +65,29 @@
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
   min-width: 90px;
 }
+/* File input button styling */
+.fileInput::file-selector-button{
+  background: var(--bg-tertiary);
+}
 
-/* Submit Button */
-.submitButton {
+.fileInput::file-selector-button:hover {
+  background-color: var(--bg-highlight);
+}
+
+.actionButton {
   background-color: var(--btn-primary-bg);
 }
 
-.submitButton:hover {
+.actionButton:not(:disabled):hover {
   background-color: var(--btn-primary-hover);
 }
 
-.submitButton:active {
+.actionButton:not(:disabled):active,
+.cancelButton:active 
+.fileInput::file-selector-button:active{
   transform: scale(0.95);
 }
 
-/* Cancel Button */
 .cancelButton {
   background-color: var(--btn-danger-bg);
 }
@@ -107,6 +96,3 @@
   background-color: var(--btn-danger-hover);
 }
 
-.cancelButton:active {
-  transform: scale(0.95);
-}

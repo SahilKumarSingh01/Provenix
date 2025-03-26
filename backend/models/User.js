@@ -43,6 +43,7 @@ userSchema.methods.getInfo = function () {
     photo: this.photo,
     displayName: this.displayName || this.username, 
     verifiedEmail: this.verifiedEmail,
+    accountId:this.accountId,
   };
 };
 

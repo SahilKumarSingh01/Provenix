@@ -1,0 +1,126 @@
+/* Reviews Container */
+.reviewsContainer {
+    max-width: 1200px;
+    width: 80%;
+    margin: 20px auto;
+    background: var(--bg-secondary);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6); /* Darker shadow */
+}
+
+/* Title */
+.reviewsTitle {
+    color: var(--text-highlight);
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+/* Review Header */
+.reviewHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ratingWrapper {
+    margin: 8px 0; /* Adds spacing above and below */
+    padding: 6px 10px; /* Light padding for breathing space */
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Review Actions Wrapper */
+.reviewActionsWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 8px;
+    gap: 10px;
+}
+
+/* General Button Styles */
+.addReviewButton,
+.editReviewButton,
+.deleteReviewButton {
+    color: var(--btn-primary-text);
+    border: none;
+    padding: 8px 14px; /* Keeping a slightly compact size */
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background 0.2s ease-in-out, transform 0.1s ease-in-out;
+}
+
+/* Same Blue for Add & Edit */
+.addReviewButton,
+.editReviewButton {
+    background-color: var(--btn-primary-bg);
+}
+
+/* Warm Red for Delete */
+.deleteReviewButton {
+    background-color: var(--btn-danger-bg);
+}
+
+/* Disabled State */
+.addReviewButton:disabled,
+.editReviewButton:disabled {
+    background-color: var(--btn-disabled-bg);
+    cursor: not-allowed;
+    color: var(--btn-disabled-text);
+}
+
+/* Hover Effects */
+.addReviewButton:hover:not(:disabled),
+.editReviewButton:hover {
+    background-color: var(--btn-primary-hover);
+}
+
+.deleteReviewButton:hover {
+    background-color: var(--btn-danger-hover);
+}
+
+/* Active (Click) Effect */
+.addReviewButton:active:not(:disabled),
+.editReviewButton:active {
+    /* background-color: var(--btn-primary-active); */
+    transform: scale(0.95);
+}
+
+.deleteReviewButton:active {
+    /* background-color: var(--btn-danger-active); */
+    transform: scale(0.93);
+}
+
+/* Loading Text */
+.loading {
+    color: var(--text-muted);
+    text-align: center;
+}
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .pagination button {
+    padding: 10px 14px;
+    border: none;
+    background: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
+    cursor: pointer;
+    margin: 0 6px;
+    border-radius: 6px;
+    transition: background 0.3s ease-in-out;
+  }
+  
+  .pagination button:hover {
+    background: var(--btn-primary-hover);
+  }
+  
+  .pagination button:disabled {
+    background: var(--text-muted);
+    cursor: not-allowed;
+  }
