@@ -1,11 +1,12 @@
 import React, { useContext, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import {toast} from 'react-toastify'
 import axios from '../api/axios.js';
 import UserInfo from '../components/UserInfo';
-import Reviews from '../components/Reviews';
+import ReviewSection from '../components/ReviewSection';
 import styles from "../styles/CourseView.module.css";
-import defaultThumbnail from '../assets/DefaultThumbnail.png';
+import defaultThumbnail from '../assets/DefaultThumbnail.webp';
 
 const CourseView = () => {
     const { courseId } = useParams();
@@ -13,21 +14,27 @@ const CourseView = () => {
     const { user } = useContext(AuthContext);
     const [course, setCourse] = useState(null);
     const [showReview,setShowReview]=useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchCourseDetails = async () => {
             try {
+                setLoading(true);
                 const { data } = await axios.get(`/api/course/${courseId}`);
                 setCourse(data.course);
             } catch (err) {
-                console.error("Error fetching course details:", err);
+                toast.error(err?.response?.data?.message||"fail to load course");
+            } finally {
+                setLoading(false);
             }
         };
-
         fetchCourseDetails();
     }, [courseId]);
-    if (!course) {
+    if (loading) {
         return <div className={styles.loading}>Loading...</div>;
+    }
+    if(!course){
+        navigate('/');
     }
     return (
         <>
@@ -92,7 +99,7 @@ const CourseView = () => {
                     )}
 
                     {course.creator._id === user._id && (
-                        <button className={styles.actionBtn} onClick={() => navigate(`/course-edit/${course._id}`)}>
+                        <button className={styles.actionBtn} onClick={() => navigate(`/course-detail-form`,{state:{course}})}>
                             Edit
                         </button>
                     )}
@@ -105,7 +112,7 @@ const CourseView = () => {
 
             </div>
         </div>
-        {showReview?<Reviews course={course}/>:''}
+        {showReview?<ReviewSection course={course}/>:''}
         </>
     );
 };

@@ -21,7 +21,7 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className={styles["form-container"]}>
+    <div className={styles.formContainer}>
       <h2>Forgot Password</h2>
       <form onSubmit={handleSubmit}>
         <input
@@ -31,14 +31,14 @@ const ForgotPassword = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        {error && <p className={styles["error-message"]}>{error}</p>}
-        {message && <p className={styles["success-message"]}>{message}</p>}
-        <button type="submit" className={styles["submit-button"]}>
+        {error && <p className={styles.errorMessage}>{error}</p>}
+        {message && <p className={styles.successMessage}>{message}</p>}
+        <button type="submit" className={styles.submitButton}>
           Send Reset Link
         </button>
       </form>
 
-      <div className={styles["form-links"]}>
+      <div className={styles.formLinks}>
         <Link to="/email-verify">Email not verified? Verify Email</Link>
       </div>
     </div>

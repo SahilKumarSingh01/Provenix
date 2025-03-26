@@ -1,17 +1,20 @@
 import React from "react";
-import { Link } from "react-router-dom"; // Import React Router Link
+import { Link ,useNavigate} from "react-router-dom"; // Import React Router Link
 
 import styles from "../styles/CourseCard.module.css";
 import AvgRating from '../components/AvgRating'
-import defaultThumbnail from "../assets/DefaultThumbnail.png";
+import defaultThumbnail from "../assets/DefaultThumbnail.webp";
 import defaultProfile from '../assets/defaultPicture.png';
 
 const CourseCard = ({ course }) => {
-  course.totalRating=60;
-  course.numberOfRatings=13;
+
+  const navigate = useNavigate(); // Initialize navigate function
+  const handleCardClick = () => {
+    navigate(`/course-view/${course._id}`);
+  };
   return (
-    <div className={styles.ccContainer}>
-      <Link to={`/course-view/${course._id}`} className={styles.ccLink}>
+    <div className={styles.ccContainer} onClick={handleCardClick}>
+      {/* <Link to={`/course-view/${course._id}`} className={styles.ccLink}> */}
       <div className={styles.ccThumbnailWrapper}>
         <img
           src={course.thumbnail || defaultThumbnail}
@@ -19,7 +22,7 @@ const CourseCard = ({ course }) => {
           className={styles.ccThumbnailImage}
         />
       </div>
-      </Link>
+      {/* </Link> */}
       <div className={styles.ccInfo}>
          {/* Profile + Title Wrapper */}
         <div className={styles.ccProfileWrapper}>
@@ -30,7 +33,7 @@ const CourseCard = ({ course }) => {
           />
           <div>
             <h3 className={styles.ccCourseTitle}>{course.title}</h3>
-            <Link to={`/profile/${course.creator.username}`} className={styles.ccUsername}>
+            <Link to={`/profile/${course.creator.username}` } onClick={(e)=>e.stopPropagation()} className={styles.ccUsername}>
               @{course.creator.username}
             </Link>
           </div>
@@ -48,7 +51,7 @@ const CourseCard = ({ course }) => {
         <div className={styles.ccPriceRatingWrapper}>
         <div className={styles.ccCourseRating}><AvgRating course={course}/></div>
         <p className={styles.ccCoursePrice}>
-          {course.price > 0 ? `$${course.price.toFixed(2)}` : "Free"}
+          {course.price > 0 ? `₹${course.price.toFixed(2)}` : "Free"}
         </p>
         
         </div>

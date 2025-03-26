@@ -8,35 +8,55 @@ const MyCourses = () => {
     const [loading, setLoading] = useState(true);
     const [sortBy, setSortBy] = useState("createdAt");
     const [order, setOrder] = useState(-1);
-    const [page, setPage] = useState(1);
     const [hasNext, setHasNext] = useState(false);
-    const [status, setStatus] = useState(""); // draft or published
-    const [price, setPrice] = useState(""); // free or paid
-    const [level, setLevel] = useState(""); // Beginner, Intermediate, Advanced
-    const limit = 9;
+    const [status, setStatus] = useState(""); 
+    const [price, setPrice] = useState("");  
+    const [level, setLevel] = useState("");  
+    const [skip, setSkip] = useState(0);  
+    const limit = 3;  
 
+    // Fetch fresh courses when filters or sorting change
+    const fetchCourses = async () => {
+        try {
+            setLoading(true);
+            const { data } = await axios.get("/api/course/created-courses", {
+                params: { sortBy, order, skip: 0, limit: limit + 1, status, price, level }
+            });
+
+            setCourses(data.courses.slice(0, limit));
+            setSkip(limit);
+            setHasNext(data.courses.length > limit);
+        } catch (error) {
+            console.error("Error fetching courses:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Load more courses on click
+    const extendCourses = async () => {
+        console.log('extend this is call');
+        try {
+            setLoading(true);
+            const { data } = await axios.get("/api/course/created-courses", {
+                params: { sortBy, order, skip, limit: limit + 1, status, price, level }
+            });
+
+            setCourses((prevCourses) => [...prevCourses, ...data.courses.slice(0, limit)]);
+            setSkip(skip + limit);
+            setHasNext(data.courses.length > limit);
+        } catch (error) {
+            console.error("Error loading more courses:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Fetch fresh courses when filters change
     useEffect(() => {
-        setPage(1);                             
+        fetchCourses();
     }, [sortBy, order, status, price, level]);
 
-    useEffect(() => {
-        const fetchCourses = async () => {
-            try {
-                setLoading(true);
-                const { data } = await axios.get("/api/course/created-courses", {
-                    params: { sortBy, order, page,skip: (page - 1) * limit, limit: limit + 1, status, price, level }
-                });
-
-                setCourses(data.courses.slice(0, limit));
-                setHasNext(data.courses.length > limit);
-            } catch (error) {
-                console.error("Error fetching courses:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchCourses();
-    }, [sortBy, order, page, status, price, level]);
     return (
         <div className={styles.courseContainer}>
             <div className={styles.courseHeader}>
@@ -77,7 +97,7 @@ const MyCourses = () => {
             </div>
 
             {/* Course List */}
-            {loading ? (
+            {loading && courses.length === 0 ? (
                 <p>Loading courses...</p>
             ) : (
                 <div className={styles.courseList}>
@@ -89,15 +109,13 @@ const MyCourses = () => {
                 </div>
             )}
 
-            {/* Pagination */}
+            {/* Load More Button */}
             <div className={styles.pagination}>
-                <button onClick={() => setPage(page - 1)} disabled={page === 1}>
-                    Prev
-                </button>
-                <span>Page {page}</span>
-                <button onClick={() => setPage(page + 1)} disabled={!hasNext}>
-                    Next
-                </button>
+                {hasNext && (
+                    <button onClick={extendCourses} disabled={loading}>
+                        {loading ? "Loading..." : "Load More"}
+                    </button>
+                )}
             </div>
         </div>
     );

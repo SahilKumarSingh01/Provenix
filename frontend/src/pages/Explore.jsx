@@ -1,21 +1,21 @@
 import React from "react";
-import VideoUpload from "../components/VideoUpload";
+// import VideoUpload from "../components/VideoUpload";
 
-import MCQCard from "../components/MCQCard"; // Make sure path sahi ho
-
-
-import Reviews from "../components/Reviews"; 
-
-import CodeToggle from "../components/CodeToggle";
-
-import CodeBox from "../components/CodeBox"; 
-
-import CourseCard from "../components/CourseCard"; 
+// import MCQCard from "../components/MCQCard"; // Make sure path sahi ho
 
 
+// import Reviews from "../components/Reviews"; 
+
+// import CodeToggle from "../components/CodeToggle";
+
+// import CodeBox from "../components/CodeBox"; 
+
+// import CourseCard from "../components/CourseCard"; 
 
 
-import ImageUpload from "../components/ImageUpload";
+
+
+// import ImageUpload from "../components/ImageUpload";
 
 const Explore = () => {
   const sampleMCQ = {
@@ -48,7 +48,7 @@ const courseData = {
   return (
     <div>
       <h1>Explore Page</h1>
-      <VideoUpload />
+      {/* <VideoUpload />
       <Reviews />
       <MCQCard {...sampleMCQ} />
       <CodeToggle codeSnippet={sampleCode} language="javascript" />
@@ -58,7 +58,7 @@ const courseData = {
 
 
 
-      <ImageUpload />
+      <ImageUpload /> */}
     </div>
   );
 };

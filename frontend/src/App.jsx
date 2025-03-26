@@ -61,7 +61,7 @@ function App() {
         <Route path='/login' element={<Login/>}/>
         <Route path='/course-creation' element={<CourseCreation/>}/>
         <Route path='/my-courses' element={<MyCourses/>}/>
-        <Route path='/course-detailform' element={<CourseDetailForm/>}/>
+        <Route path='/course-detail-form' element={<CourseDetailForm/>}/>
 
         <Route path='/course-view/:courseId' element={<CourseView/>}/>
 

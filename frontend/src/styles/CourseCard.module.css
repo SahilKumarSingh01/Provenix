@@ -1,26 +1,22 @@
-.ccLink{
-  text-decoration: none;
-  cursor: pointer;
-}
+
 /* Course Card */
 .ccContainer {
   display:inline-block;
   width: 344px;
   height:350px;
   vertical-align: top;
-  background: #112240;
+  background: var(--bg-secondary); /* Using theme variable */
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   padding: 12px;
   margin:10px;
-  
-  border: 1px solid #233554;
+  cursor:pointer;
+  border: 1px solid var(--border-primary);
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 .ccContainer:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
 }
 
 /* Thumbnail */
@@ -52,26 +48,28 @@
 .ccProfileImage {
   width: 32px;
   height: 32px;
+  border-style: solid;
+  border-color:var(--border-primary);
   border-radius: 50%;
   object-fit: cover;
 }
 /* Remove underline from the username link */
 .ccUsername {
   text-decoration: none;
-  color: #A8B2D1; /* Keep original color */
+  color: var(--text-primary); /* Brighter version */
   font-size: 0.875rem;
   margin-top: 3px;
 }
 
 /* Add hover effect if needed */
 .ccUsername:hover {
-  color: #64FFDA; /* Change color on hover */
+  color: var(--text-highlight); /* Highlighted on hover */
 }
 
 .ccCourseTitle {
   font-size: 1rem;
   font-weight: 600;
-  color: #E6F1FF;
+  color: var(--text-primary);
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
@@ -82,7 +80,7 @@
 .ccCourseMeta {
   font-size: 0.8rem;
   opacity: 0.85;
-  color: #A8B2D1;
+  color: var(--text-secondary);
   margin: 4px 0;
 }
 
@@ -102,12 +100,12 @@
 }
 
 .ccLevel {
-  background: #e3f2fd;
-  color: #1565c0;
+  background: var(--bg-highlight);
+  color: var(--btn-primary-text);
 }
 
 .ccStatus {
-  background: #1b5e20;
+  background: #145a32; /* Slightly darker green */
   color: white;
 }
 
@@ -121,7 +119,7 @@
 
 .ccCoursePrice {
   font-weight: bold;
-  color: #64FFDA;
+  color: var(--text-success);
 }
 
 

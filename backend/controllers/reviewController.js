@@ -92,7 +92,7 @@ const report=async(req,res)=>{
       { new: true } // This will return the updated review
     )
     if (!review) {
-      return res.status(404).json({ message: "Review not found or Unauthorized" });
+      return res.status(404).json({ message: "Review not found " });
     }
     if(review.reportedBy.length>=MAX_REPORT)
     {

@@ -38,7 +38,7 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className={styles["form-container"]}>
+    <div className={styles.formContainer}>
       <h2>Reset Password</h2>
       <form onSubmit={handleResetPassword}>
         <input
@@ -57,9 +57,9 @@ const ResetPassword = () => {
           placeholder="Confirm new password"
           required
         />
-        {error && <p className={styles["error-message"]}>{error}</p>}
-        {message && <p className={styles["success-message"]}>{message}</p>}
-        <button type="submit" className={styles["submit-button"]}>
+        {error && <p className={styles.errorMessage}>{error}</p>}
+        {message && <p className={styles.successMessage}>{message}</p>}
+        <button type="submit" className={styles.submitButton}>
           Reset Password
         </button>
       </form>

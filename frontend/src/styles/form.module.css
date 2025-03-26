@@ -2,13 +2,14 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  width:80%;
   max-width: 400px; /* restrict form size */
   margin: 25px auto;
   padding: 30px;
-  border: 1px solid #334155;  
+  border: 1px solid var(--border-primary);  
   border-radius: 12px;
-  background: #1E293B;
-  color: #A8B2D1;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
   box-shadow: 0 0px 6px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
@@ -20,7 +21,7 @@
 .formContainer h2 {
   text-align: center;
   margin-bottom: 20px;
-  color: #4F46E5;
+  color: var(--text-heading);
   font-size: 24px;
 }
 
@@ -36,43 +37,43 @@
   height: 50px;
   text-align: center;
   font-size: 20px;
-  border: 1px solid #4F46E5;
+  border: 1px solid var(--btn-primary-bg);
   border-radius: 5px;
-  background: #0F172A;
-  color: #E2E8F0;
+  background: var(--bg-primary);
+  color: var(--text-primary);
 }
 
 .otpBox:focus {
-  border-color: #A855F7;
+  border-color: var(--text-highlight);
   outline: none;
-  box-shadow: 0 0 8px rgba(168, 85, 247, 0.5);
+  box-shadow: 0 0 8px rgba(100, 255, 218, 0.5);
 }
 
 .formContainer input {
   width: 100%;
   margin-bottom: 20px;
   padding: 10px;
-  border: 1px solid #334155;
+  border: 1px solid var(--border-primary);
   border-radius: 6px;
-  background: #0F172A;
-  color: #A8B2D1;
+  background: var(--bg-primary);
+  color: var(--text-primary);
   font-size: 14px;
   transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
 .formContainer input:focus {
-  border-color: #4F46E5;
+  border-color: var(--btn-primary-bg);
   outline: none;
   box-shadow: 0 0 8px rgba(79, 70, 229, 0.3);
 }
 
 .formContainer input:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0 50px #2A3B5F inset; /* Change the color to your own background color */
-  -webkit-text-fill-color: #A8B2D1;
+  -webkit-box-shadow: 0 0 0 50px var(--bg-tertiary) inset;
+  -webkit-text-fill-color: var(--text-primary);
 }
 
 .errorMessage {
-  color: #EF4444;
+  color: var(--text-error);
   font-size: 14px;
   margin-bottom: 15px;
   text-align: center;
@@ -91,18 +92,13 @@
 
 .submitButton {
   margin-top: 20px;
-  background: #4F46E5;
-  color: #FFFFFF;
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
 }
 
 .submitButton:hover {
-  background: #4338CA;
-  transform: translateY(-2px);
-}
-
-.submitButton:active {
-  background: #3730A3; /* Darker shade on click */
-  transform: translateY(1px); /* Slight push-down effect */
+  background: var(--btn-primary-hover);
+  /* transform: translateY(-2px); */
 }
 
 .socialIcon {
@@ -113,34 +109,28 @@
 
 .googleButton {
   background: #DB4437;
-  color: #FFFFFF;
+  color: var(--btn-primary-text);
 }
 
 .googleButton:hover {
   background: #C1351A;
-  transform: translateY(-2px);
-}
-
-.googleButton:active {
-  background: #A62A14;
-  transform: translateY(1px);
 }
 
 .githubButton {
   background: #333333;
-  color: #FFFFFF;
+  color: var(--btn-primary-text);
 }
 
 .githubButton:hover {
   background: #24292E;
-  transform: translateY(-2px);
+  /* transform: translateY(-2px); */
 }
 
+.submitButton:active, 
+.googleButton:active, 
 .githubButton:active {
-  background: #1B1F23;
-  transform: translateY(1px);
+  transform: scale(0.95);
 }
-
 .formLinks {
   display: flex;
   flex-direction: column;
@@ -150,13 +140,13 @@
 }
 
 .formLinks a {
-  color: #4F46E5;
+  color: var(--btn-primary-bg);
   text-decoration: none;
   font-size: 14px;
   transition: color 0.3s ease-in-out;
 }
 
 .formLinks a:hover {
-  color: #4338CA;
+  color: var(--btn-primary-hover);
   text-decoration: underline;
 }

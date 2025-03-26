@@ -7,7 +7,89 @@
 }
 
 /* Body */
+
+/* :root{
+   --primary-color:red; 
+} */
+
+/* Default Light Theme */
+/* Dark Theme (Root Theme) */
+:root {
+  --bg-primary: #0A192F;   /* Deep Navy Blue - Background */
+    --bg-secondary: #112240; /* Dark Blue-Grey - Boxes */
+    --bg-tertiary: #1B2735;  /* Darker Blue-Grey
+    --bg-card: #222; /* Dark Card Background */
+    --bg-highlight: #4DD7B5; /* Softer Teal Blue */
+  
+    --text-primary: #C0D0E8; /* Brighter Muted Blue-Grey */
+    --text-secondary: #b0b0b0;
+    --text-heading: #3A9CB1;
+    --text-muted: #777;
+    --text-error: #ff6b6b;
+    --text-success: #28d07b;
+    --text-warning: #ffcc00;
+    --text-highlight: #3A9CB1; /* Bright Cyan for emphasis */
+
+  
+    --btn-primary-bg: #1565c0;
+    --btn-primary-hover: #0d47a1;
+    --btn-primary-text: #ffffff;
+  
+    --btn-secondary-bg: #17c3b2;
+    --btn-secondary-hover: #139e90;
+    --btn-secondary-text: #ffffff;
+  
+    --btn-danger-bg: #ff4d4d;
+    --btn-danger-hover: #cc0000;
+    --btn-danger-text: #ffffff;
+    --btn-disabled-bg: #9CA3AF; /* Neutral gray */
+    --btn-disabled-text: #E5E7EB; /* Light text for contrast */
+  
+    --border-primary: #444;
+  }
+  
+  /* Light Theme */
+  [data-theme="light"] {
+    --bg-primary: #f5f7fa; /* Light background */
+    --bg-secondary: #e3e7ed; /* Slightly darker section */
+    --bg-tertiary: #d1d5db; /* Darker section for contrast */
+    --bg-card: #fff; /* Course cards */
+    --bg-highlight: #1565c0; /* Blue accent instead of cyan */
+  
+    --text-primary: #333; /* Default text */
+    --text-secondary: #666; /* Muted text */
+    --text-heading: #111; /* Bold headings */
+    --text-muted: #999; /* Less emphasized text */
+    --text-error: #d9534f; /* Error messages */
+    --text-success: #28a745; /* Success messages */
+    --text-warning: #f0ad4e; /* Warnings */
+  
+    --btn-primary-bg: #1565c0;
+    --btn-primary-hover: #0d47a1;
+    --btn-primary-text: #fff;
+  
+    --btn-secondary-bg: #50e3c2;
+    --btn-secondary-hover: #3ac5a8;
+    --btn-secondary-text: #fff;
+  
+    --btn-danger-bg: #e74c3c;
+    --btn-danger-hover: #c0392b;
+    --btn-danger-text: #fff;
+  
+    --border-primary: #d1d5db;
+  }
+  
+  input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+  
 body {
-    background: #0A192F; /* Deep Navy Blue */
-    color: #A8B2D1; /*Muted Dark Blue-Grey*/
-}
+    background: var(--bg-primary);
+    color: var(--text-primary);
+  }
+button:disabled{
+    background-color: var(--btn-disabled-bg);
+    color:var(--btn-disabled-text);
+    cursor: not-allowed;
+  
+  }
