@@ -1,9 +1,4 @@
 const Course = require("../../models/Course");
-const Enrollment = require("../../models/Enrollment");
-const Page = require("../../models/Page");
-const Comment = require("../../models/Comment");
-const Review = require("../../models/Review");
-const ContentSection = require("../../models/ContentSection");
 
 const removeCourse = async (req, res) => {
     try {

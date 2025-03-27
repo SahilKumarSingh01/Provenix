@@ -88,8 +88,7 @@
   gap: 10px; /* Adds space between preview and buttons */
 }
 
-
-.thumbnailButtons {
+.thumbnailGroup {
   padding:10px;
   display: flex;
   justify-content: flex-end;
@@ -98,19 +97,38 @@
 
 .buttonGroup {
   display: flex;
-  justify-content: flex-end;
-  gap: 12px;
+  justify-content: space-between; /* Align delete left, actions right */
   margin-top: 10px;
+  align-items: center;
 }
 
-.actionButton,
+.actionGroup {
+  display: flex;
+  gap:10px;
+}
+
+
+
+
+/* COMMON BUTTON STYLES WITHIN .buttonGroup */
+.actionButton ,
+.deleteBtn ,
 .publishBtn {
   padding: 10px 14px;
   border: none;
   border-radius: 6px;
   font-weight: bold;
   cursor: pointer;
-  transition: background 0.3s ease-in-out;
+  transition: background 0.3s ease-in-out, transform 0.2s;
+}
+
+.deleteBtn {
+  background: var(--btn-danger-bg);
+  color: var(--btn-danger-text);
+}
+
+.deleteBtn:hover {
+  background: var(--btn-danger-hover);
 }
 
 .actionButton {
@@ -118,7 +136,8 @@
   color: var(--btn-primary-text);
 }
 
-.actionButton:hover {
+.actionButton ,
+.publishBtn:not(:disabled):hover {
   background: var(--btn-primary-hover);
 }
 
@@ -130,9 +149,14 @@
 .publishBtn:not(:disabled):hover {
   background: var(--btn-secondary-hover);
 }
-.actionButton:active,.publishBtn:not(:disabled):active{
-  transform :scale(0.95);
+
+.actionButton:active, 
+.publishBtn:not(:disabled):active,
+.deleteBtn:active{
+  transform: scale(0.95);
 }
+
+
 @media (max-width: 768px) {
   .metaInfoWrapper{
     flex-direction: column;

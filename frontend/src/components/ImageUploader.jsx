@@ -3,7 +3,7 @@ import Cropper from "react-easy-crop";
 import styles from "../styles/ImageUploader.module.css";
 import { toast } from "react-toastify";
 
-const ImageUploader = ({ setOpenUploader, onUpload, aspect }) => {
+const ImageUploader = ({ onCancel, onUpload, aspect }) => {
   const [preview, setPreview] = useState(null);
   const [croppedPreview, setCroppedPreview] = useState(null);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
@@ -72,7 +72,7 @@ const ImageUploader = ({ setOpenUploader, onUpload, aspect }) => {
     const response = await fetch(croppedPreview);
     const blob = await response.blob();
     onUpload(blob);
-    setOpenUploader(false);
+    onClose();
   };
 
   return (
@@ -109,7 +109,7 @@ const ImageUploader = ({ setOpenUploader, onUpload, aspect }) => {
             Upload
           </button>
 
-          <button className={styles.cancelButton} onClick={() => setOpenUploader(false)}>
+          <button className={styles.cancelButton} onClick={onCancel}>
             Cancel
           </button>
         </div>

@@ -33,6 +33,21 @@ const removeDeletedCourses = async () => {
       },
     ]);
 
+
+
+      //complete this you lazy developer
+
+
+     // **Delete all related data in parallel, including the course itself**
+        // await Promise.all([
+        //     Page.deleteMany({ courseId: req.params.courseId }),       // Delete all pages of the course
+        //     Comment.deleteMany({ courseId: req.params.courseId }),    // Delete all comments
+        //     Review.deleteMany({ courseId: req.params.courseId }),     // Delete all reviews
+        //     ContentSection.updateMany({ courseId: req.params.courseId }, { status: "deleted" }), // Soft delete ContentSection
+        //     Course.deleteOne({ _id: req.params.courseId }) // Finally, delete the course itself
+        // ]);
+
+
     if (deletedCourses.length > 0) {
       const courseIds = deletedCourses.map((course) => course._id);
       await Course.deleteMany({ _id: { $in: courseIds } });

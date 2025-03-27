@@ -80,6 +80,7 @@ const MyCourses = () => {
                     <option value="">All</option>
                     <option value="draft">Draft</option>
                     <option value="published">Published</option>
+                    <option value="deleted">Deleted</option>
                 </select>
 
                 <select value={price} onChange={(e) => setPrice(e.target.value)}>

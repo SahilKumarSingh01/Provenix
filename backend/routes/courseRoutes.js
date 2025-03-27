@@ -8,6 +8,8 @@ routes.post('/create',courseController.createCourse);
 routes.get('/created-courses',courseController.getCreatedCourses);
 routes.get('/search',courseController.searchCourses);//use skip and limit for dynamic searching 
 routes.put('/:courseId/publish',courseController.publishCourse);
+routes.put('/:courseId/recover',courseController.recoverCourse);
+
 routes.post('/:courseId/create-section',courseController.createSection);
 routes.put('/:courseId/update-section',courseController.updateSection);
 routes.put('/:courseId/reorder-section',courseController.reorderSection);

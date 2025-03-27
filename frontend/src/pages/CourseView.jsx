@@ -16,18 +16,21 @@ const CourseView = () => {
     const [showReview,setShowReview]=useState(false);
     const [loading, setLoading] = useState(true);
 
+
+    const fetchCourseDetails = async () => {
+        try {
+            setLoading(true);
+            const { data } = await axios.get(`/api/course/${courseId}`);
+            setCourse(data.course);
+        } catch (err) {
+            toast.error(err?.response?.data?.message||"fail to load course");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const fetchCourseDetails = async () => {
-            try {
-                setLoading(true);
-                const { data } = await axios.get(`/api/course/${courseId}`);
-                setCourse(data.course);
-            } catch (err) {
-                toast.error(err?.response?.data?.message||"fail to load course");
-            } finally {
-                setLoading(false);
-            }
-        };
+       
         fetchCourseDetails();
     }, [courseId]);
     if (loading) {
@@ -35,6 +38,15 @@ const CourseView = () => {
     }
     if(!course){
         navigate('/');
+    }
+    const handleRecovery=async()=>{
+        try {
+            const response = await axios.put(`api/course/${course._id}/recover`);
+            toast.success(response.data.message);
+            fetchCourseDetails();
+        } catch (error) {
+            toast.error(error.response?.data?.message || "Something went wrong!");
+        }
     }
     return (
         <>
@@ -98,14 +110,18 @@ const CourseView = () => {
                         </button>
                     )}
 
-                    {course.creator._id === user._id && (
-                        <button className={styles.actionBtn} onClick={() => navigate(`/course-detail-form`,{state:{course}})}>
-                            Edit
-                        </button>
-                    )}
+                    {course.creator._id === user._id && 
+                        course.status!=="deleted"?
+                            (<button className={styles.actionBtn} onClick={() => navigate(`/course-detail-form`,{state:{course}})}>
+                                Edit
+                            </button>)
+                        :(<button className={styles.actionBtn} onClick={handleRecovery}>
+                            Recover
+                        </button>)
+                    }
 
                     <button className={styles.actionBtn} onClick={() => setShowReview(!showReview)}>
-                        Review & Rating
+                        Reviews
                     </button>
                 </div>
 
