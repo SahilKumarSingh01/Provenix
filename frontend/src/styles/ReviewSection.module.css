@@ -11,7 +11,7 @@
 
 /* Title */
 .reviewsTitle {
-    color: var(--text-highlight);
+    color: var(--text-heading);
     text-align: center;
     margin-bottom: 15px;
 }

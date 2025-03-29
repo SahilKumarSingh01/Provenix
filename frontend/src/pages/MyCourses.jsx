@@ -6,14 +6,14 @@ import styles from "../styles/CourseListing.module.css";
 const MyCourses = () => {
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [sortBy, setSortBy] = useState("createdAt");
+    const [sortBy, setSortBy] = useState("updatedAt");
     const [order, setOrder] = useState(-1);
     const [hasNext, setHasNext] = useState(false);
     const [status, setStatus] = useState(""); 
     const [price, setPrice] = useState("");  
     const [level, setLevel] = useState("");  
     const [skip, setSkip] = useState(0);  
-    const limit = 3;  
+    const limit = 9;  
 
     // Fetch fresh courses when filters or sorting change
     const fetchCourses = async () => {
@@ -64,9 +64,10 @@ const MyCourses = () => {
                 <div className={styles.sortOptions}>
                     <label>Sort by: </label>
                     <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-                        <option value="createdAt">Date Created</option>
                         <option value="title">Title</option>
                         <option value="price">Price</option>
+                        <option value="updatedAt">Date Modified</option>
+                        <option value="createdAt">Date Created</option>
                     </select>
                     <button onClick={() => setOrder(order * -1)}>
                         {order === 1 ? "Ascending" : "Descending"}
@@ -77,14 +78,14 @@ const MyCourses = () => {
             {/* Filters */}
             <div className={styles.filters}>
                 <select value={status} onChange={(e) => setStatus(e.target.value)}>
-                    <option value="">All</option>
+                    <option value="">All Status</option>
                     <option value="draft">Draft</option>
                     <option value="published">Published</option>
                     <option value="deleted">Deleted</option>
                 </select>
 
                 <select value={price} onChange={(e) => setPrice(e.target.value)}>
-                    <option value="">All</option>
+                    <option value="">All Types</option>
                     <option value="free">Free</option>
                     <option value="paid">Paid</option>
                 </select>

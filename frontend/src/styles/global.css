@@ -17,18 +17,18 @@
 :root {
   --bg-primary: #0A192F;   /* Deep Navy Blue - Background */
     --bg-secondary: #112240; /* Dark Blue-Grey - Boxes */
-    --bg-tertiary: #1B2735;  /* Darker Blue-Grey
+    --bg-tertiary: #192A3A;  /* Darker Blue-Grey
     --bg-card: #222; /* Dark Card Background */
-    --bg-highlight: #4DD7B5; /* Softer Teal Blue */
+    --bg-highlight: #20C997; /* Softer Teal Blue */
   
     --text-primary: #C0D0E8; /* Brighter Muted Blue-Grey */
-    --text-secondary: #b0b0b0;
+    --text-secondary: #8F9AA5;
     --text-heading: #3A9CB1;
     --text-muted: #777;
     --text-error: #ff6b6b;
     --text-success: #28d07b;
     --text-warning: #ffcc00;
-    --text-highlight: #3A9CB1; /* Bright Cyan for emphasis */
+    --text-highlight: #4DD7B5; /* Bright Cyan for emphasis */
 
   
     --btn-primary-bg: #1565c0;
@@ -92,4 +92,8 @@ button:disabled{
     color:var(--btn-disabled-text);
     cursor: not-allowed;
   
+  }
+  input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 50px var(--bg-tertiary) inset;
+    -webkit-text-fill-color: var(--text-primary);
   }

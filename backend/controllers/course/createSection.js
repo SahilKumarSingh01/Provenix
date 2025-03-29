@@ -5,20 +5,16 @@ const createSection = async (req, res) => {
         const { title } = req.body;
         const { courseId } = req.params;
 
-        const course = await Course.findById(courseId);
-        if (!course) return res.status(404).json({ success: false, message: "Course not found" });
-
-        if (!course.creator.equals(req.user.id))
-            return res.status(403).json({ success: false, message: "Unauthorized to update this course" });
-
-        // **Fix: Store the updated course and await the update**
         const updatedCourse = await Course.findOneAndUpdate(
-            { _id: courseId },
-            { $addToSet: { sections: title } },
-            { new: true } // Return updated course
+            { _id: courseId, creator: req.user.id }, // Ensures only the creator can update
+            { $push: { sections: { title } } }, // Pushes the new section with 'title'
+            { new: true } // Returns the updated course
         );
 
-        res.status(201).json({ success: true, message: "Section created!", course: updatedCourse });
+        if (!updatedCourse)
+            return res.status(404).json({ success: false, message: "Course not found or unauthorized" });
+
+        res.status(201).json({ success: true, message: "Section created!", sections: updatedCourse.sections });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }

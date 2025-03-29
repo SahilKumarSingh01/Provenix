@@ -16,7 +16,7 @@ import Search from "./pages/Search";
 
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 
-
+import SectionList from './pages/SectionList.jsx'
 
 
 import Error404 from "./pages/Error404";
@@ -62,6 +62,7 @@ function App() {
         <Route path='/course-creation' element={<CourseCreation/>}/>
         <Route path='/my-courses' element={<MyCourses/>}/>
         <Route path='/course-detail-form' element={<CourseDetailForm/>}/>
+        <Route path='/course-sections/:courseId' element={<SectionList/>}/> 
 
         <Route path='/course-view/:courseId' element={<CourseView/>}/>
 

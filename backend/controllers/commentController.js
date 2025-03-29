@@ -37,7 +37,7 @@ const create = async (req, res) => {
       return res.status(404).json({ success: false, message: "Page not found" });
     }
 
-    const { courseId, section } = page;
+    const { courseId, sectionId } = page;
 
     // Verify if parent comment exists (if it's a reply)
     let parent = null;
@@ -54,7 +54,7 @@ const create = async (req, res) => {
       userId,
       courseId,
       pageId,
-      section,
+      sectionId,
       parentComment: parentComment || null,
     });
 

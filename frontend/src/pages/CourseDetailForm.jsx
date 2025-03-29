@@ -64,6 +64,8 @@ const CourseDetailForm = () => {
                    the course content. Ensure everything is finalized before proceeding.`}
         />));
   }
+
+
   const handleDelete=async()=>{
     const onConfirm=async()=>{
         try {
@@ -102,6 +104,7 @@ const CourseDetailForm = () => {
         "content-type": "multipart/form-data",
       }});
       setThumbnail(data.url);
+      setOverlay(null);
       toast.success("Image uploaded successfully");
     }catch(e){
       toast.error(e?.response?.data?.message||"Failed to upload image");

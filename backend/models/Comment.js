@@ -5,7 +5,7 @@ const commentSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // Added ref to "User"
   courseId: { type: String, required: true },
   pageId: { type: mongoose.Schema.Types.ObjectId, required: true }, // Links to Lesson or Practice
-  section: { type: String, required: true }, 
+  sectionId: {type: mongoose.Schema.Types.ObjectId, required: true  },
   parentComment: { type: mongoose.Schema.Types.ObjectId, ref: "Comment", default: null }, // For replies
   repliesCount: { type: Number, default: 0 }, // Number of replies
   reportedBy: [{ type: mongoose.Schema.Types.ObjectId,ref:'User' }], // Array of user IDs who reported the review

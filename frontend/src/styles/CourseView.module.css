@@ -34,7 +34,7 @@
 .title {
     font-size: 1.8rem;
     font-weight: bold;
-    color: var(--text-highlight);
+    color: var(--text-heading);
 }
 
 .description {

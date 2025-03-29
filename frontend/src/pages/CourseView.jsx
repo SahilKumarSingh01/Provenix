@@ -39,6 +39,7 @@ const CourseView = () => {
     if(!course){
         navigate('/');
     }
+    
     const handleRecovery=async()=>{
         try {
             const response = await axios.put(`api/course/${course._id}/recover`);
@@ -105,12 +106,12 @@ const CourseView = () => {
                             Enroll
                         </button>
                     ) : (
-                        <button className={styles.actionBtn} onClick={() => navigate(`/sections/${course._id}`)}>
+                        <button className={styles.actionBtn} onClick={() => navigate(`/course-sections/${course._id}`)}>
                             Sections
                         </button>
                     )}
 
-                    {course.creator._id === user._id && 
+                    {course.creator._id === user._id ?
                         course.status!=="deleted"?
                             (<button className={styles.actionBtn} onClick={() => navigate(`/course-detail-form`,{state:{course}})}>
                                 Edit
@@ -118,6 +119,7 @@ const CourseView = () => {
                         :(<button className={styles.actionBtn} onClick={handleRecovery}>
                             Recover
                         </button>)
+                        :""
                     }
 
                     <button className={styles.actionBtn} onClick={() => setShowReview(!showReview)}>

@@ -5,7 +5,7 @@ const Course = require("../../models/Course");
 const create = async (req, res) => {
   try {
     const { courseId } = req.params;
-    const { title, section } = req.body;
+    const { title, sectionId } = req.body;
     const creatorId = req.user.id;
 
     // Check if the course exists and if the user is the creator
@@ -22,14 +22,14 @@ const create = async (req, res) => {
       title,
       courseId,
       creatorId,
-      section,
+      sectionId,
       order: course.pageCount, // Using course.pageCount for order
     });
 
     // Create the content section with correct sourceType (the section from body)
     const contentSection = await ContentSection.create({
       pageId: page._id, // Linking content to the page
-      section, // Using the provided section as sourceType
+      sectionId, // Using the provided section as sourceType
       courseId,
       creatorId,
       items: [],

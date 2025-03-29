@@ -1,91 +1,109 @@
-/* CreateCourse.module.css */
-
-/* Page background */
 .createCourseContainer {
-    background-color: #0F172A;
-    color: #E2E8F0;
-    padding: 20px;
-}
-
-/* Form card */
-.createCourseCard {
-    max-width: 420px;
-    background: #1E293B;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    margin: 100px auto;
-}
-
-/* Heading */
-.createCourseCard h2 {
-    color: #4F46E5;
-    font-size: 22px;
-    margin-bottom: 15px;
-}
-
-/* Form container */
-.createCourseForm {
-    display: block;
-}
-
-/* Labels */
-.createCourseForm label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-/* Inputs, textarea, and select */
-.createCourseForm input,
-.createCourseForm textarea,
-.createCourseForm select {
-    width: 100%;
+    display: flex;
+    max-width:1200px;
+    width:80%;
+    margin: 30px auto;
+    border-radius: 8px;
+    background: var(--bg-secondary);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .leftPane {
+    border-radius: 8px 0px 0px 8px;
+    width: 60%;
+    padding: 25px;
+  }
+  .leftPane h2{
+    color:var(--text-heading);
+  }
+  .createCourseForm {
+    display: flex;
+    flex-direction: column;
+    gap:20px;
+  }
+  
+  .formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .formGroup label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+  }
+  
+  .formGroup input,
+  .formGroup textarea {
     padding: 10px;
-    border: 1px solid #334155;
+    border: 1px solid var(--border-primary);
     border-radius: 6px;
-    background: #0F172A;
-    color: #E2E8F0;
-    font-size: 14px;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    margin-bottom: 10px;
-}
-
-/* Autofill styling */
-.createCourseForm input:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0 50px #2A3B5F inset; /* Background color */
-    -webkit-text-fill-color: #A8B2D1; /* Text color */
-}
-
-/* Focus effect */
-.createCourseForm input:focus,
-.createCourseForm textarea:focus,
-.createCourseForm select:focus {
-    border-color: #4F46E5;
-    box-shadow: 0 0 5px rgba(79, 70, 229, 0.5);
+    background: var(--bg-primary);
+    color: var(--text-primary);
     outline: none;
-}
-
-.createCourseForm textarea {
-    min-height: 150px; /* Adjust height as needed */
-    resize: none; /* Removes bottom-right resize handle */
-}
-
-/* Submit button */
-.createCourseForm button {
-    background-color: #4F46E5;
-    color: white;
-    padding: 10px;
-    font-size: 15px;
+    transition: border 0.3s ease-in-out;
+  }
+  
+  .formGroup input:focus,
+  .formGroup textarea:focus {
+    border-color: var(--btn-primary-bg);
+  }
+  
+  .formGroup textarea {
+    resize: none;
+    height: 250px;
+  }
+  
+  .buttonGroup {
+    display: flex;
+    justify-content: end;
+    margin-top: 10px;
+  }
+  
+  .actionButton {
+    padding: 10px 14px;
     border: none;
     border-radius: 6px;
+    font-weight: bold;
     cursor: pointer;
-    transition: background 0.2s;
-    width: 100%;
-    margin-top: 10px;
+    background: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
+    transition: background 0.3s ease-in-out, transform 0.2s;
+  }
+  
+  .actionButton:hover {
+    background: var(--btn-primary-hover);
+  }
+  
+  .actionButton:active {
+    transform: scale(0.95);
+  }
+  .rightPane {
+    width: 40%;
+    background: linear-gradient(to right, var(--bg-primary), var(--bg-secondary));
+    display: flex; /* Allows for flexible content placement */
+    flex-direction: column; /* Ensures content stacks vertically */
+    justify-content: center;/* Centers content vertically
+    color: var(--text-primary); /* Ensures text is readable */
+    text-align: center;
+    padding:30px;
+    border-radius: 0px 8px 8px 0px;
+    box-shadow: -3px 0px 5px rgba(0, 0, 0, 0.2); 
+}
+.rightPane h3 {
+  color: var(--text-highlight); /* Ensures heading color matches the theme */
+  font-size: 1.8rem; /* Adjusts size for readability */
+  font-weight: bold; /* Makes the heading stand out */
+  margin-bottom: 15px; /* Adds spacing below */
 }
 
-/* Button click effect */
-.createCourseForm button:active {
-    background: #3730A3;
-    transform: translateY(1px);
-}
+  @media (max-width: 768px) {
+    .leftPane {
+      width: 100%;
+    }
+    .rightPane{
+      display:none;
+    }
+  }
+  

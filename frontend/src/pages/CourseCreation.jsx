@@ -29,39 +29,49 @@ const CreateCourse = () => {
 
     return (
         <div className={styles.createCourseContainer}>
-            <div className={styles.createCourseCard}>
-                <h2>Create Course</h2>
+            <div className={styles.leftPane}>
+                <h2 className={styles.formHeading}>Create Course</h2>
                 <form onSubmit={handleSubmit} className={styles.createCourseForm}>
-                    <label>Title:</label>
-                    <input
-                        type="text"
-                        value={title}
-                        placeholder="Enter course title..."
-                        onChange={(e) => setTitle(e.target.value)}
-                        required
-                    />
+                    <div className={styles.formGroup}>
+                        <label>Title</label>
+                        <input
+                            type="text"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            required
+                        />
+                    </div>
 
-                    <label>Description:</label>
-                    <textarea
-                        value={description}
-                        placeholder="Write a brief description..."
-                        onChange={(e) => setDescription(e.target.value)}
-                        required
-                    ></textarea>
+                    <div className={styles.formGroup}>
+                        <label>Description</label>
+                        <textarea
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            required
+                        ></textarea>
+                    </div>
 
-                    <label>Category:</label>
-                    <input
-                        type="text"
-                        value={category}
-                        onChange={(e) => setCategory(e.target.value)}
-                        placeholder="Specify course category..."
-                        required
-                    />
+                    <div className={styles.formGroup}>
+                        <label>Category</label>
+                        <input
+                            type="text"
+                            value={category}
+                            onChange={(e) => setCategory(e.target.value)}
+                            required
+                        />
+                    </div>
 
-                    <button type="submit">Create Course</button>
+                    <div className={styles.buttonGroup}>
+                        <button type="submit" className={styles.actionButton}>Create</button>
+                    </div>
                 </form>
             </div>
+            <div className={styles.rightPane}>
+                <h3>Provenix</h3>
+                <p>Turn your knowledge into impact! Share your expertise with the world by creating an engaging course today.</p>
+            </div>
         </div>
+
     );
 };
 

@@ -72,7 +72,6 @@ const ImageUploader = ({ onCancel, onUpload, aspect }) => {
     const response = await fetch(croppedPreview);
     const blob = await response.blob();
     onUpload(blob);
-    onClose();
   };
 
   return (

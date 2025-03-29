@@ -1,5 +1,9 @@
 const mongoose = require("mongoose");
 
+const sectionSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+});
+
 const courseSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
@@ -26,7 +30,7 @@ const courseSchema = new mongoose.Schema({
   totalRating: { type: Number, default: 0 },
   numberOfRatings: { type: Number, default: 0 },
 
-  sections: [{ type: String }], // Array storing section names
+  sections: [sectionSchema],
 
 }, { timestamps: true });
 

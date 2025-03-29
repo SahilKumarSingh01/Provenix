@@ -1,0 +1,155 @@
+.container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px; /* Maintains spacing consistency */
+}
+
+.courseTitle {
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  color: var(--text-heading);
+  margin-bottom: 20px;
+  transition: color 0.3s ease;
+}
+.courseTitle:hover{
+  transform:scale(1.05);
+  color:var(--text-highlight);
+}
+
+.optionsGrid {
+  display: flex; /* Changed from grid */
+  flex-wrap: wrap; /* Allows responsive wrapping */
+  gap: 15px;
+  justify-content: center;
+  margin-top: 20px;
+  padding: 15px; /* Consistent padding */
+}
+
+.optionCard, .addSectionCard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 150px;
+  width: 150px;
+  padding: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  transition: background 0.3s ease, transform 0.2s ease;
+  user-select: none;
+  
+}
+.optionCard p,.addSectionCard p{
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  overflow: hidden;
+  width: 100%;
+  line-height: 1.4rem;
+  max-height: 4.2rem;
+  -webkit-line-clamp: 3;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+
+}
+
+.editingHighlight {
+  background-color: var(--bg-highlight);
+  color:var(--text-primary);
+  border-color: var(--border-highlight);
+}
+
+.optionCard:hover, .addSectionCard:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6); /* Darker shadow */
+
+}
+
+.optionCard:focus {
+  background-color: var(--bg-primary);
+  transform: scale(1.05);
+}
+
+.addSectionCard {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--text-heading);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.editBox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 800px;
+  background: var(--bg-secondary);
+  padding: 15px;
+  border-radius: 8px;
+  border:1px solid var(--border-primary);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.container input {
+  padding: 8px;
+  border: 1px solid var(--border-primary);
+  border-radius: 5px;
+  font-size: 16px;
+  outline: none;
+  width: 60%;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+.container input:focus{
+  border-color: var(--btn-primary-hover);
+}
+.saveButton, .removeButton, .shiftButton {
+  padding: 8px 12px;
+  margin: 5px;
+  font-size: 14px;
+  border: none;
+  white-space: nowrap;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.saveButton {
+  background-color: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+}
+
+.saveButton:hover {
+  background-color: var(--btn-primary-hover);
+}
+
+.removeButton {
+  background-color: var(--btn-danger-bg);
+  color: var(--btn-danger-text);
+}
+
+.removeButton:hover {
+  background-color: var(--btn-danger-hover);
+}
+
+.shiftButton {
+  background-color: var(--btn-secondary-bg);
+  color: var(--btn-secondary-text);
+}
+
+.shiftButton:hover {
+  background-color: var(--btn-secondary-hover);
+}
+.saveButton:active,
+.removeButton:active,
+.shiftButton:active{
+  transform: scale(0.95);
+}

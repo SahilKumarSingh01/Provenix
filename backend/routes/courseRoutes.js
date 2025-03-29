@@ -14,6 +14,7 @@ routes.post('/:courseId/create-section',courseController.createSection);
 routes.put('/:courseId/update-section',courseController.updateSection);
 routes.put('/:courseId/reorder-section',courseController.reorderSection);
 routes.delete('/:courseId/remove-section',courseController.removeSection);
+
 routes.use('/:courseId/review',reviewRoutes);
 routes.use('/:courseId/page',pageRoutes);//check if authorize then pass
 routes.delete('/:courseId',courseController.removeCourse);
