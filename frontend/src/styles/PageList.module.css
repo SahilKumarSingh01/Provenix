@@ -1,0 +1,177 @@
+.container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px; /* Maintains spacing consistency */
+}
+
+.courseTitle {
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  color: var(--text-heading);
+  margin-bottom: 20px;
+  transition: color 0.3s ease;
+}
+
+.courseTitle:hover{
+  transform:scale(1.05);
+  color:var(--text-selected);
+}
+
+.editBox {
+  position: fixed;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 800px;
+  background: var(--bg-secondary);
+  padding: 10px;
+  border-radius: 8px;
+  border:1px solid var(--border-primary);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.pagesGrid {
+  display: flex;
+  width:80%;
+  flex-direction:column;
+  gap: 1rem;
+  padding: 15px;
+}
+
+.pageCard{
+  display:flex;
+  justify-content: space-between;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out, transform 0.2s ease-in-out;
+  user-select: none;
+}
+
+.pageCard:hover {
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.6); /* Darker shadow */
+}
+
+.pageCard input[type="checkbox"] {
+  appearance: none; /* Remove default checkbox style */
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--gray-color); /* Default border color */
+  border-radius: 4px;
+  background-color:var(--primary-color); /* Default background */
+  display: inline-block;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.pageCard input[type="checkbox"]:hover {
+  border-color: var(--primary-color); /* Highlight border on hover */
+}
+
+.pageCard input[type="checkbox"]:checked {
+  background-color: var(--success-color); /* Change color when checked */
+  border-color: var(--success-color);
+  position: relative;
+}
+
+.pageCard input[type="checkbox"]:checked::after {
+  content: "✔"; /* Tick mark */
+  color: var(--text-selected);
+  font-size: 12px;
+  font-weight: bold;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+.completed {
+  background: var(--completed-bg);
+  color: var(--completed-text);
+}
+
+.selected {
+  background-color: var(--bg-selected);
+  color:var(--text-selected);
+  border-color: var(--border-highlight);
+}
+
+.addPageCard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  border: 2px dashed var(--border-primary);
+  border-radius: 8px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.addPageCard:hover {
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.6); /* Darker shadow */
+}
+
+.container input {
+  padding: 8px;
+  border: 1px solid var(--border-primary);
+  border-radius: 5px;
+  font-size: 16px;
+  outline: none;
+  width: 60%;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.container input:focus{
+  border-color: var(--btn-primary-hover);
+}
+.saveButton, .removeButton, .shiftButton {
+  padding: 8px 12px;
+  margin: 5px;
+  font-size: 14px;
+  border: none;
+  white-space: nowrap;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.saveButton {
+  background-color: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+}
+
+.saveButton:hover {
+  background-color: var(--btn-primary-hover);
+}
+
+.removeButton {
+  background-color: var(--btn-danger-bg);
+  color: var(--btn-danger-text);
+}
+
+.removeButton:hover {
+  background-color: var(--btn-danger-hover);
+}
+
+.shiftButton {
+  background-color: var(--btn-secondary-bg);
+  color: var(--btn-secondary-text);
+}
+
+.shiftButton:hover {
+  background-color: var(--btn-secondary-hover);
+}
+.saveButton:active,
+.removeButton:active,
+.shiftButton:active{
+  transform: scale(0.95);
+}

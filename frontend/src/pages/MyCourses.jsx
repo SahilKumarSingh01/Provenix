@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "../api/axios";
 import CourseCard from "../components/CourseCard";
 import styles from "../styles/CourseListing.module.css";
-
+import {toast} from 'react-toastify'
 const MyCourses = () => {
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -13,7 +13,7 @@ const MyCourses = () => {
     const [price, setPrice] = useState("");  
     const [level, setLevel] = useState("");  
     const [skip, setSkip] = useState(0);  
-    const limit = 9;  
+    const limit = 3;  
 
     // Fetch fresh courses when filters or sorting change
     const fetchCourses = async () => {
@@ -27,7 +27,7 @@ const MyCourses = () => {
             setSkip(limit);
             setHasNext(data.courses.length > limit);
         } catch (error) {
-            console.error("Error fetching courses:", error);
+            toast.error("Error fetching courses:", error);
         } finally {
             setLoading(false);
         }
@@ -46,7 +46,7 @@ const MyCourses = () => {
             setSkip(skip + limit);
             setHasNext(data.courses.length > limit);
         } catch (error) {
-            console.error("Error loading more courses:", error);
+            toast.error("Error loading more courses:", error);
         } finally {
             setLoading(false);
         }

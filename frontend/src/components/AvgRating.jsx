@@ -4,7 +4,6 @@ const AvgRating = ({course}) => {
     if (course.numberOfRatings === 0) {
       return <span className={styles.RatingNumber}>Not Rated</span>;
     }
-  
     const rating = Math.min(5, Math.max(0, course.totalRating / (course.numberOfRatings)));
     const filled = "★".repeat(Math.floor(rating));
     const empty = "★".repeat(5 - Math.floor(rating));

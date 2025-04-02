@@ -17,10 +17,10 @@
 :root {
   --bg-primary: #0A192F;   /* Deep Navy Blue - Background */
     --bg-secondary: #112240; /* Dark Blue-Grey - Boxes */
-    --bg-tertiary: #192A3A;  /* Darker Blue-Grey
-    --bg-card: #222; /* Dark Card Background */
+    --bg-tertiary: #192A3A;  /* Darker Blue-Grey*/
     --bg-highlight: #20C997; /* Softer Teal Blue */
-  
+    --bg-selected:#256F6A;
+
     --text-primary: #C0D0E8; /* Brighter Muted Blue-Grey */
     --text-secondary: #8F9AA5;
     --text-heading: #3A9CB1;
@@ -29,6 +29,7 @@
     --text-success: #28d07b;
     --text-warning: #ffcc00;
     --text-highlight: #4DD7B5; /* Bright Cyan for emphasis */
+    --text-selected:#B2F7EF;
 
   
     --btn-primary-bg: #1565c0;

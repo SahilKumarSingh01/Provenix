@@ -1,51 +1,43 @@
 import React, { useContext, useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthContext";
 import {toast} from 'react-toastify'
+import {useCourse} from "../context/CourseContext"; // Import CourseContext
 import axios from '../api/axios.js';
 import UserInfo from '../components/UserInfo';
 import ReviewSection from '../components/ReviewSection';
 import styles from "../styles/CourseView.module.css";
 import defaultThumbnail from '../assets/DefaultThumbnail.webp';
+import { useCache } from "../context/CacheContext.jsx";
 
 const CourseView = () => {
-    const { courseId } = useParams();
     const navigate = useNavigate();
-    const { user } = useContext(AuthContext);
-    const [course, setCourse] = useState(null);
+    const { courseId } = useParams();
+    const { setCache}=useCache();
+    const {fetchCourse}=useCourse();
+    const [course,setCourse]=useState();
     const [showReview,setShowReview]=useState(false);
-    const [loading, setLoading] = useState(true);
-
-
-    const fetchCourseDetails = async () => {
-        try {
-            setLoading(true);
-            const { data } = await axios.get(`/api/course/${courseId}`);
-            setCourse(data.course);
-        } catch (err) {
-            toast.error(err?.response?.data?.message||"fail to load course");
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-       
-        fetchCourseDetails();
-    }, [courseId]);
-    if (loading) {
-        return <div className={styles.loading}>Loading...</div>;
-    }
-    if(!course){
-        navigate('/');
-    }
     
+    useEffect(() => {
+        fetchCourse()
+        .then((fetchedCourse)=>{
+            if(fetchedCourse)
+                setCourse(fetchedCourse);
+            else navigate('/');
+        }
+        )
+    }, [courseId]);
+    
+    if(!course){
+        return <p>Loading....</p>
+    }
     const handleRecovery=async()=>{
         try {
             const response = await axios.put(`api/course/${course._id}/recover`);
             toast.success(response.data.message);
-            fetchCourseDetails();
+            setCache(courseId,response.data.course);
+            setCourse(response.data.course);
         } catch (error) {
+            console.log(error);
             toast.error(error.response?.data?.message || "Something went wrong!");
         }
     }
@@ -71,8 +63,8 @@ const CourseView = () => {
                     <span>📚 {course.pageCount || 0} Pages</span>
                     <span>🎥 {course.videoCount || 0} Videos</span>
                     <span>🖥️ {course.codeCount || 0} Code Blocks</span>
-                    <span>📑 {course.sections?.length || 0} Sections</span>
                     <span>🎓 {course.totalEnrollment || 0} Enrolled</span>
+                    <span>📝 {course.numberOfRatings || 0} Reviews </span>                    
                 </div>
 
                 {/* Course Level */}
@@ -101,19 +93,19 @@ const CourseView = () => {
 
                 {/* Action Buttons */}
                 <div className={styles.actions}>
-                    {!course.canAccessContent ? (
-                        <button className={styles.actionBtn} onClick={() => navigate(`/enroll/${course._id}`)}>
+                    {!course.isEnrolled&&!course.isCreator ? (
+                        <button className={styles.actionBtn} onClick={() => navigate(`/course/${course._id}/enroll`)}>
                             Enroll
                         </button>
-                    ) : (
-                        <button className={styles.actionBtn} onClick={() => navigate(`/course-sections/${course._id}`)}>
-                            Sections
-                        </button>
-                    )}
+                    ) : ""}
 
-                    {course.creator._id === user._id ?
+                    <button className={styles.actionBtn} onClick={() => navigate(`/course/${course._id}/modules`)}>
+                        Modules
+                    </button>
+
+                    {course.isCreator ?
                         course.status!=="deleted"?
-                            (<button className={styles.actionBtn} onClick={() => navigate(`/course-detail-form`,{state:{course}})}>
+                            (<button className={styles.actionBtn} onClick={() => navigate(`/course/${course._id}/detail-form`,{state:{course}})}>
                                 Edit
                             </button>)
                         :(<button className={styles.actionBtn} onClick={handleRecovery}>

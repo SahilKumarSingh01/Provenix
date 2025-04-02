@@ -45,6 +45,7 @@ const removeDeletedCourses = async () => {
         //     Review.deleteMany({ courseId: req.params.courseId }),     // Delete all reviews
         //     ContentSection.updateMany({ courseId: req.params.courseId }, { status: "deleted" }), // Soft delete ContentSection
         //     Course.deleteOne({ _id: req.params.courseId }) // Finally, delete the course itself
+        //     delete ModuleCollections as well 
         // ]);
 
 

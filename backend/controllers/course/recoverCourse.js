@@ -26,13 +26,16 @@ const recoverCourse = async (req, res) => {
         const newStatus = isActiveEnrollment ? "published" : "draft";
 
         // Update course status
-        await Course.updateOne({ _id: courseId }, { status: newStatus });
+        const updatedCourse=await Course.findOneAndUpdate({ _id: courseId }, { status: newStatus },{new:true})
+                                        .populate("creator", "username photo displayName")
+                                        .lean();
 
-        return res.status(200).json({ message: "Course recovered successfully", status: newStatus });
+        return res.status(200).json({ message: "Course recovered successfully",
+            course: { ...updatedCourse, isCreator:true, isEnrolled:false }
+            });
 
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: "Internal server error" });
+        return res.status(500).json({ message: error.message });
     }
 };
 

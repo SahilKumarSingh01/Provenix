@@ -10,7 +10,7 @@ const CourseCard = ({ course }) => {
 
   const navigate = useNavigate(); // Initialize navigate function
   const handleCardClick = () => {
-    navigate(`/course-view/${course._id}`);
+    navigate(`/course/${course._id}/view`);
   };
   return (
     <div className={styles.ccContainer} onClick={handleCardClick}>

@@ -42,9 +42,11 @@ const updateDetails = async (req, res) => {
         }
 
         // Update the course
-        await Course.updateOne({ _id: courseId }, { $set: updateFields });
+        const updatedCourse =await Course.findOneAndUpdate({ _id: courseId }, { $set: updateFields },{new:true})
+                                         .populate("creator", "username photo displayName")
+                                         .lean();
 
-        // Handle orphan resource cleanup
+        // Handle  orphan resource cleanup
         if (thumbnail !== prevThumbnail) {
             await Promise.all([
                 prevThumbnail ? OrphanResource.create({ publicId: extractPublicId(prevThumbnail), type: "image", category: "thumbnail" }) : null,
@@ -52,7 +54,9 @@ const updateDetails = async (req, res) => {
             ]);
         }
 
-        return res.status(200).json({ message: "Course updated successfully." });
+        return res.status(200).json({ message: "Course updated successfully.",
+            course: { ...updatedCourse, isCreator:true, isEnrolled:false }
+        });
 
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });

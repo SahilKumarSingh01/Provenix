@@ -1,8 +1,5 @@
 const mongoose = require("mongoose");
 
-const sectionSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-});
 
 const courseSchema = new mongoose.Schema({
   title: { type: String, required: true },
@@ -30,7 +27,7 @@ const courseSchema = new mongoose.Schema({
   totalRating: { type: Number, default: 0 },
   numberOfRatings: { type: Number, default: 0 },
 
-  sections: [sectionSchema],
+  moduleCollection: { type: mongoose.Schema.Types.ObjectId, ref: "ModuleCollection" }, // Reference to ModuleCollection
 
 }, { timestamps: true });
 

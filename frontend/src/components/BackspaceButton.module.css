@@ -1,0 +1,20 @@
+.backspaceButton {
+    position: fixed;
+    top: 80px; /* Adjust this to fit below your navbar */
+    left: 16px;
+    background-color: var(--bg-secondary); /* Using your selected background */
+    color: var(--text-tertiary); /* Using selected text color */
+    padding: 3px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 20px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    border: none;
+}
+
+.backspaceButton:hover {
+    color: var(--text-selected); /* Bright cyan for better contrast */
+}

@@ -1,5 +1,5 @@
 const Comment = require("../models/Comment");
-const Page = require("../models/Page");
+const PageCollection = require("../models/PageCollection");
 
 const MAX_REPORT=3;
 
@@ -28,16 +28,16 @@ const notifyAllMentions = async (content, comment) => {
 const create = async (req, res) => {
   try {
     const { content, parentComment } = req.body;
-    const { pageId } = req.params;
+    const { pageCollectionId,pageId } = req.params;
     const userId = req.user.id;
 
     // Fetch the Page first (trusted source)
-    const page = await Page.findById(pageId);
-    if (!page) {
+    const PageCollection = await PageCollection.findOne({_id:pageCollectionId,"pages._id":pageId});
+    if (!PageCollection) {
       return res.status(404).json({ success: false, message: "Page not found" });
     }
 
-    const { courseId, sectionId } = page;
+    const { courseId, moduleId } = PageCollection;
 
     // Verify if parent comment exists (if it's a reply)
     let parent = null;
@@ -54,7 +54,7 @@ const create = async (req, res) => {
       userId,
       courseId,
       pageId,
-      sectionId,
+      moduleId,
       parentComment: parentComment || null,
     });
 

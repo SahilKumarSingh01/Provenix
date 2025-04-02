@@ -16,7 +16,7 @@
 }
 .courseTitle:hover{
   transform:scale(1.05);
-  color:var(--text-highlight);
+  color:var(--text-selected);
 }
 
 .optionsGrid {
@@ -28,7 +28,7 @@
   padding: 15px; /* Consistent padding */
 }
 
-.optionCard, .addSectionCard {
+.optionCard, .addModuleCard {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -38,13 +38,17 @@
   padding: 15px;
   border-radius: 10px;
   cursor: pointer;
-  background-color: var(--bg-secondary);
-  border: 1px solid var(--border-primary);
   transition: background 0.3s ease, transform 0.2s ease;
   user-select: none;
   
 }
-.optionCard p,.addSectionCard p{
+
+.optionCard{
+  border: 1px solid var(--border-primary);
+  background-color: var(--bg-secondary);
+}
+
+.optionCard p,.addModuleCard p{
   text-align: center;
   font-size: 18px;
   font-weight: bold;
@@ -60,12 +64,12 @@
 }
 
 .editingHighlight {
-  background-color: var(--bg-highlight);
-  color:var(--text-primary);
+  background-color: var(--bg-selected);
+  color:var(--text-selected);
   border-color: var(--border-highlight);
 }
 
-.optionCard:hover, .addSectionCard:hover {
+.optionCard:hover, .addModuleCard:hover {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.6); /* Darker shadow */
 
 }
@@ -75,17 +79,19 @@
   transform: scale(1.05);
 }
 
-.addSectionCard {
+.addModuleCard {
   font-size: 18px;
   font-weight: bold;
   color: var(--text-heading);
   text-align: center;
   display: flex;
+  border: 2px dashed var(--border-primary);
   align-items: center;
   justify-content: center;
 }
 
 .editBox {
+  position: fixed;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -108,6 +114,7 @@
   background-color: var(--bg-primary);
   color: var(--text-primary);
 }
+
 .container input:focus{
   border-color: var(--btn-primary-hover);
 }

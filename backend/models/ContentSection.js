@@ -11,7 +11,7 @@ const itemSchema = new mongoose.Schema({
 
 const contentSectionSchema = new mongoose.Schema({
   pageId: { type: mongoose.Schema.Types.ObjectId, required: true }, // Links to Lesson or Practice
-  sectionId: {type: mongoose.Schema.Types.ObjectId, required: true  },
+  moduleId: {type: mongoose.Schema.Types.ObjectId, required: true  },
   courseId: { type: mongoose.Schema.Types.ObjectId, required: true },
   creatorId: { type: mongoose.Schema.Types.ObjectId, required: true },
   items: [itemSchema], 

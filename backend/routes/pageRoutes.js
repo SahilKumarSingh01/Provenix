@@ -7,16 +7,13 @@ const insightRoutes  = require('./insightRoutes');
 const routes = express.Router({ mergeParams: true });
 
 routes.post('/create', pageController.create);
-routes.get('/all', pageController.getAll);
-routes.delete('/all', pageController.removeAll);
+routes.get('/collection', pageController.getCollection);
 routes.put('/reorder', pageController.reorder);
-routes.use('/:pageId/comment',commentRoutes);
-routes.use('/:pageId/content',contentRoutes);
-routes.use('/:pageId/comment',commentRoutes);
-routes.use('/:pageId/insight',insightRoutes);
-routes.delete('/:pageId', pageController.remove);
-routes.get('/:pageId', pageController.getPage);
-routes.put('/:pageId', pageController.update);
+routes.use('/comment/:pageId',commentRoutes);
+routes.use('/content/:pageId',contentRoutes);
+routes.use('/insight/:pageId',insightRoutes);
+routes.delete('/remove', pageController.remove);
+routes.put('/update', pageController.update);
 // routes.use('/:pageId/content',contentRoutes);
 module.exports = routes;
 

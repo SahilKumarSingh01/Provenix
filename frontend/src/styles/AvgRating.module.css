@@ -2,6 +2,9 @@
     font-weight: bold;
     color: #71c9f8;
   }
+  .RatingWrapper{
+    display: flex;
+  }
   .RatingCircles {
     font-size: 14px; /* Make circles smaller */
   }

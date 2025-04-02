@@ -1,5 +1,5 @@
-import React, { useState ,useContext} from "react";
-import { useLocation ,useNavigate} from "react-router-dom";
+import React, { useState ,useContext,useEffect} from "react";
+import { useNavigate,useParams} from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import {toast}  from 'react-toastify'
 import axios from '../api/axios.js'
@@ -7,23 +7,52 @@ import ImageUploader from "../components/ImageUploader";
 import styles from "../styles/CourseDetailForm.module.css";
 import defaultThumbnail from '../assets/DefaultThumbnail.webp';
 import ConfirmBox from "../components/confirmBox.jsx";
+import { useCache } from "../context/CacheContext.jsx";
+import {useCourse} from "../context/CourseContext"; // Import CourseContext
 
 const CourseDetailForm = () => {
-  const location = useLocation();
   const navigate = useNavigate();
-  const { course } = location.state;
   const { user } = useContext(AuthContext);
-  
-  // Separate state for each editable field
-  const [title,setTitle]=useState(course.title);
-  const [category,setCategory]=useState(course.category);
-  const [description, setDescription] = useState(course.description);
-  const [thumbnail, setThumbnail] = useState(course.thumbnail);
-  const [accessType, setAccessType] = useState(course.price > 0 ? "paid" : "free");
-  const [price, setPrice] = useState(course.price);
-  const [tags, setTags] = useState(course.tags.join(", "));
-  const [level, setLevel] = useState(course.level);
-  const [overlay,setOverlay]=useState(null);
+  const { courseId } = useParams();
+  const {getCache, setCache}=useCache();
+  const {fetchCourse}=useCourse();
+  const [course,setCourse]=useState();
+
+  // Initialize state as empty/default values
+  const [title, setTitle] = useState("");
+  const [category, setCategory] = useState("");
+  const [description, setDescription] = useState("");
+  const [thumbnail, setThumbnail] = useState("");
+  const [accessType, setAccessType] = useState("free");
+  const [price, setPrice] = useState(0);
+  const [tags, setTags] = useState("");
+  const [level, setLevel] = useState("");
+  const [overlay, setOverlay] = useState(null);
+
+  useEffect(() => {
+    const cachedCourse = getCache(courseId);
+    if (cachedCourse) {
+        setCourse(cachedCourse);
+    } else {
+        fetchCourse().then((fetchedCourse) => {
+            if (fetchedCourse) setCourse(fetchedCourse);
+        });
+    }
+}, [courseId]);
+  // Update state when course is available
+  useEffect(() => {
+    if (course) {
+      setTitle(course.title || "");
+      setCategory(course.category || "");
+      setDescription(course.description || "");
+      setThumbnail(course.thumbnail || "");
+      setAccessType(course.price > 0 ? "paid" : "free");
+      setPrice(course.price || 0);
+      setTags(course.tags?.join(", ") || "");
+      setLevel(course.level || "");
+    }
+  }, [course]); // Runs when `course` changes
+
   const handleSubmit = async(e) => {
     e.preventDefault();
     try {
@@ -37,7 +66,8 @@ const CourseDetailForm = () => {
             level
         };
         const response = await axios.put(`api/course/${course._id}`, updatedCourse);
-        navigate(`/course-view/${course._id}`);
+        setCache(courseId,response.data.course);
+        navigate(`/course/${course._id}/view`);
         toast.success(response.data.message);
     } catch (error) {
         toast.error(error.response?.data?.message || "Something went wrong!");
@@ -49,9 +79,10 @@ const CourseDetailForm = () => {
               try {
                 const response = await axios.put(`api/course/${course._id}/publish`);
                 toast.success(response.data.message);
-                navigate(`/course-view/${course._id}`);
+                setCache(courseId,response.data.course);
+                navigate(`/course/${course._id}/view`);
             } catch (error) {
-              console.log
+              console.log(error);
                 toast.error(error.response?.data?.message || "Something went wrong!");
             }
           }
@@ -66,13 +97,40 @@ const CourseDetailForm = () => {
   }
 
 
+    const handleDraft=async()=>{
+      const onConfirm=async()=>{
+              try {
+                const response = await axios.put(`api/course/${course._id}/draft`);
+                toast.success(response.data.message);
+                setCache(courseId,response.data.course);
+                setCourse(response.data.course);
+                // navigate(`/course/${course._id}/view`);
+            } catch (error) {
+              console.log(error);
+                toast.error(error.response?.data?.message || "Something went wrong!");
+            }
+          }
+      setOverlay((<ConfirmBox 
+                onConfirm={onConfirm} 
+                onCancel={()=>{setOverlay(null)}}
+                message={`Are you sure you want to move this course to draft?
+                  You can only move it to draft if there are no active enrollments. 
+                  Once in draft mode, the course will be hidden from learners, and
+                   you can make changes freely. However, if the course had enrollments before,
+                    you will only be able to modify up to 30% of the content.`}
+        />));
+    }
+
+
   const handleDelete=async()=>{
     const onConfirm=async()=>{
         try {
             const response = await axios.delete(`api/course/${course._id}`);
             toast.success(response.data.message);
-            navigate(`/course-view/${course._id}`);
+            setCache(courseId,response.data.course);
+            navigate(`/course/${course._id}/view`);
         } catch (error) {
+          console.log(error);
             toast.error(error.response?.data?.message || "Something went wrong!");
         }
       }
@@ -117,6 +175,11 @@ const CourseDetailForm = () => {
           return ;
       }
       return setAccessType(e.target.value);
+  }
+  
+  if(!course || !user)
+  {
+    return (<p>loading...</p>)
   }
 
   return (
@@ -210,7 +273,12 @@ const CourseDetailForm = () => {
           {/* Update & Publish Buttons in another div */}
           <div className={styles.actionGroup}>
             <button type="submit" className={styles.actionButton}>Update</button>
-            <button type="button" className={styles.publishBtn} onClick={handlePublish} disabled={course.status === "published"}>Publish</button>
+            {course.status === "draft"?
+                (<button type="button" className={styles.publishBtn} onClick={handlePublish}>Publish</button>)
+              :
+                (<button type="button" className={styles.publishBtn} onClick={handleDraft}>draft</button>)
+            }
+            
           </div>
         </div>
 

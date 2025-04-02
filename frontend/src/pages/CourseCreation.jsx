@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import {useNavigate} from "react-router-dom"
+import {toast} from 'react-toastify'
 import axios from "../api/axios"; // Importing axios instance
+import { useCache } from "../context/CacheContext.jsx";
+
 import styles from "../styles/CourseCreation.module.css";
 
 const CreateCourse = () => {
@@ -8,6 +11,7 @@ const CreateCourse = () => {
     const [description, setDescription] = useState("");
     const [category, setCategory] = useState("");
     const navigate = useNavigate();
+    const {setCache}=useCache();
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -17,13 +21,13 @@ const CreateCourse = () => {
                 description,
                 category
             });
-            alert("Course created successfully!");
-            console.log(response.data.course);
-            navigate(`/course-view/${response.data.course._id}`, { state: { course: response.data.course } });
+            toast.success(response.data.message);
+            const course=response.data.course;
+            setCache(course._id,course);
+            navigate(`/course/${response.data.course._id}/view`);
 
         } catch (error) {
-            console.error("Error creating course:", error.response?.data || error.message);
-            alert(error.response?.data?.message || "Failed to create course.");
+            toast.error(error.response?.data?.message || "Failed to create course.");
         }
     };
 

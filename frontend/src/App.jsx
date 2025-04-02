@@ -4,11 +4,7 @@ import About from "./pages/About";
 import Explore from "./pages/Explore";
 import Navbar from './components/Navbar';
 import Login from "./pages/Login";
-import CourseCreation from "./pages/CourseCreation";
-import MyCourses from "./pages/MyCourses";
-import CourseDetailForm from "./pages/CourseDetailForm";
 import {ToastContainer} from 'react-toastify'
-import CourseView from "./pages/CourseView";
 
 import UpdateProfile from "./pages/UpdateProfile";
 
@@ -16,21 +12,19 @@ import Search from "./pages/Search";
 
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 
-import SectionList from './pages/SectionList.jsx'
-
-
 import Error404 from "./pages/Error404";
 
 
 
-
+import CourseRoutes from './routes/CourseRoutes.jsx';
 
 import Signup from "./pages/Signup";
 import EmailVerify from "./pages/EmailVerify"
 import ForgotPassword from "./pages/ForgotPassword"
 import ResetPassword from './pages/ResetPassword'
-import Editor from './pages/Editor.jsx'
 import {AuthProvider} from'./context/AuthContext.jsx';
+
+import {CacheProvider} from'./context/CacheContext.jsx';
 
 // import Signup from "../pages/Signup";
 import "./App.css";
@@ -38,6 +32,7 @@ import "./App.css";
 function App() {
   return (
     <AuthProvider>
+    <CacheProvider>
     <Router>
       <Navbar/>
       <ToastContainer
@@ -59,12 +54,22 @@ function App() {
         {/* <Route path='/explore' element={<Editor/>}/> */}
         <Route path='/explore' element={<Explore/>}/>
         <Route path='/login' element={<Login/>}/>
-        <Route path='/course-creation' element={<CourseCreation/>}/>
+        {/* <Route path='/course-creation' element={<CourseCreation/>}/>
         <Route path='/my-courses' element={<MyCourses/>}/>
         <Route path='/course-detail-form' element={<CourseDetailForm/>}/>
         <Route path='/course-sections/:courseId' element={<SectionList/>}/> 
+        <Route path='/course/:courseId/section-pages/:sectionId' element={<PageList/>}/>
+        <Route path='/course-view/:courseId' element={<CourseView/>}/> */}
 
-        <Route path='/course-view/:courseId' element={<CourseView/>}/>
+
+        <Route path="/course/*" element={<CourseRoutes />} />
+
+        {/* <Route path="/courses/:courseId/">
+            <Route index element={<CourseOverview />} />
+            <Route path="pages" element={<PageList />} />
+        </Route> */}
+
+
 
         <Route path='/*' element={<Error404/>}/>
 
@@ -83,6 +88,7 @@ function App() {
         <Route path='/reset-password' element={<ResetPassword/>}/>
       </Routes>
     </Router>
+    </CacheProvider>
     </AuthProvider>
   );
 }

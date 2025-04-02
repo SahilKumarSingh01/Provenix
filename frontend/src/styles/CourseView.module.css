@@ -44,7 +44,7 @@
     max-width: 95%; /* Avoid text stretching too wide */
 }
 
-.stats span {
+.stats span{
     display: block;
     margin: 5px;
     font-size: 0.9rem;

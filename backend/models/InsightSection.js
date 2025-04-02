@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const insightSectionSchema = new mongoose.Schema({
   pageId: { type: mongoose.Schema.Types.ObjectId, required: true }, // Links to Lesson or Practice
-  section: { type: String, required: true },
+  mouduleId: { type: mongoose.Schema.Types.ObjectId,type: String, required: true },
   courseId: { type: mongoose.Schema.Types.ObjectId, required: true }, // Direct ObjectId reference to the Course
   userId: { type: mongoose.Schema.Types.ObjectId, required: true }, // Direct ObjectId reference to the User
   contentSectionId: { type: mongoose.Schema.Types.ObjectId, required: true }, // Direct ObjectId reference to the ContentSection

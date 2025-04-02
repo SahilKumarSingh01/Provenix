@@ -1,5 +1,8 @@
 const ContentSection = require("../models/ContentSection");
+const Enrollment = require("../models/Enrollment");
 const addUrls        = require('../utils/addUrls');
+
+
 const getContent = async (req, res) => {
   try {
     const { contentSectionId } = req.params;

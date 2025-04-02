@@ -13,7 +13,7 @@ const getCourseDetails = async (req, res) => {
       if (!isCreator && course.status !== "published" && !isEnrolled)
         return res.status(403).json({ success: false, message: "Access denied!" });
   
-      res.status(200).json({ success: true, course: { ...course, canAccessContent: isCreator || isEnrolled } });
+      res.status(200).json({ success: true,message:"Course fetch successfully", course: { ...course, isCreator, isEnrolled } });
   
   
     } catch (error) {

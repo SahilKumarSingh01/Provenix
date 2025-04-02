@@ -39,8 +39,8 @@ const UserMenu = ({ children }) => {
         <ul className={styles.dropdownMenu}>
           <li onClick={() => handleNavigate("/dashboard")}>Dashboard</li>
           <li onClick={() => handleNavigate("/profile")}>Profile</li>
-          <li onClick={() => handleNavigate("/course-creation")}>Create Course</li>
-          <li onClick={() => handleNavigate("/my-courses")}>My Courses</li>
+          <li onClick={() => handleNavigate("/course/create")}>Create Course</li>
+          <li onClick={() => handleNavigate("/course/my-courses")}>My Courses</li>
           <li className={styles.logout} onClick={handleLogout}>Logout</li>
         </ul>
       )}
