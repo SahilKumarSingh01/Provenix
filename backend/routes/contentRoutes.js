@@ -13,57 +13,57 @@ const referenceController = require("../controllers/content/referenceController.
 const routes = express.Router({ mergeParams: true });
 
 //contents Routes
-routes.put('/:contentSectionId',contentController.reorder);
-
+routes.put('/reorder',contentController.reorder);
+routes.get('/collection',contentController.getContent);
 
 // Heading Routes
-routes.post('/:contentSectionId/heading', headingController.create);
-routes.put('/:contentSectionId/heading', headingController.update);
-routes.delete('/:contentSectionId/heading', headingController.remove);
+routes.post('/heading', headingController.create);
+routes.put('/heading', headingController.update);
+routes.delete('/heading', headingController.remove);
 
 // Text Routes
-routes.post('/:contentSectionId/text', textController.create);
-routes.put('/:contentSectionId/text', textController.update);
-routes.delete('/:contentSectionId/text', textController.remove);
+routes.post('/text', textController.create);
+routes.put('/text', textController.update);
+routes.delete('/text', textController.remove);
 
 // code Routes
-routes.post('/:contentSectionId/code', codeController.create);
-routes.put('/:contentSectionId/code', codeController.reorder);
-routes.put('/:contentSectionId/code/push', codeController.push);
-routes.put('/:contentSectionId/code/edit', codeController.edit);
-routes.put('/:contentSectionId/code/pull', codeController.pull);
-routes.delete('/:contentSectionId/code', codeController.remove);
+routes.post('/code', codeController.create);
+routes.put('/code', codeController.reorder);
+routes.put('/code/push', codeController.push);
+routes.put('/code/edit', codeController.edit);
+routes.put('/code/pull', codeController.pull);
+routes.delete('/code', codeController.remove);
 
 // Image Routes
-routes.post('/:contentSectionId/image', imageController.create);
-routes.get('/:contentSectionId/image', imageController.refreshUrl);
-routes.put('/:contentSectionId/image', imageController.update);
-routes.delete('/:contentSectionId/image', imageController.remove);
+routes.post('/image', imageController.create);
+routes.get('/image', imageController.refreshUrl);
+routes.put('/image', imageController.update);
+routes.delete('/image', imageController.remove);
 
 // Video Routes
-routes.post('/:contentSectionId/video', videoController.create);
-routes.get('/:contentSectionId/video', videoController.refreshUrl);
-routes.put('/:contentSectionId/video', videoController.update);
-routes.delete('/:contentSectionId/video', videoController.remove);
+routes.post('/video', videoController.create);
+routes.get('/video', videoController.refreshUrl);
+routes.put('/video', videoController.update);
+routes.delete('/video', videoController.remove);
 
 // MCQ Routes
-routes.post("/:contentSectionId/mcq", mcqController.create);
-routes.post("/:contentSectionId/mcq/option", mcqController.addOption);
-routes.delete("/:contentSectionId/mcq/option", mcqController.removeOption);
-routes.get("/:contentSectionId/mcq/ques/url", mcqController.refreshUrlQues);
-routes.put("/:contentSectionId/mcq/ques", mcqController.editQues);
-routes.put("/:contentSectionId/mcq/option", mcqController.editOption);
-routes.get("/:contentSectionId/mcq/option/url", mcqController.refreshUrlOption);
-routes.delete("/:contentSectionId/mcq", mcqController.remove);
+routes.post("/mcq", mcqController.create);
+routes.post("/mcq/option", mcqController.addOption);
+routes.delete("/mcq/option", mcqController.removeOption);
+routes.get("/mcq/ques/url", mcqController.refreshUrlQues);
+routes.put("/mcq/ques", mcqController.editQues);
+routes.put("/mcq/option", mcqController.editOption);
+routes.get("/mcq/option/url", mcqController.refreshUrlOption);
+routes.delete("/mcq", mcqController.remove);
 
 // Hidden Routes
-routes.post('/:contentSectionId/hidden', hiddenController.create);
-routes.put('/:contentSectionId/hidden', hiddenController.update);
-routes.delete('/:contentSectionId/hidden', hiddenController.remove);
+routes.post('/hidden', hiddenController.create);
+routes.put('/hidden', hiddenController.update);
+routes.delete('/hidden', hiddenController.remove);
 
 // Reference Routes
-routes.post('/:contentSectionId/reference', referenceController.create);
-routes.put('/:contentSectionId/reference', referenceController.update);
-routes.delete('/:contentSectionId/reference', referenceController.remove);
+routes.post('/reference', referenceController.create);
+routes.put('/reference', referenceController.update);
+routes.delete('/reference', referenceController.remove);
 
 module.exports = routes;

@@ -4,6 +4,7 @@ import CourseView from "../pages/CourseView";
 import ModuleList from '../pages/ModuleList.jsx'
 import PageList from '../pages/PageList.jsx'
 import MyCourses from "../pages/MyCourses";
+import PageView from '../pages/PageView.jsx';
 import CourseDetailForm from "../pages/CourseDetailForm";
 import { CourseProvider } from "../context/CourseContext";
 // Define CourseContextWrapper inside CourseRoutes
@@ -22,7 +23,8 @@ const CourseRoutes = () => {
         <Route path="/:courseId" element={<CourseContextWrapper />}>
             <Route path='detail-form' element={<CourseDetailForm/>}/>
             <Route path='modules' element={<ModuleList/>}/> 
-            <Route path='module/:moduleId' element={<PageList/>}/>
+            <Route path='module/:pageCollectionId' element={<PageList/>}/>
+            <Route path='module/:pageCollectionId/page/:contentSectionId' element={<PageView/>}/>
             <Route path='view' element={<CourseView/>}/>
         </Route>
       </Routes>

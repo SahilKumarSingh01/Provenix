@@ -1,0 +1,51 @@
+.container {
+    position: relative;
+    padding: 1rem;
+  }
+  
+  .addButton {
+    position: absolute;
+    bottom: 0px;
+    right: 10px;
+    background-color: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.2s;
+  }
+  
+  .addButton:hover {
+    background-color: var(--btn-primary-hover);
+  }
+  
+  .selectionMenu {
+    position: absolute;
+    top: 150px;
+    right: 10px;
+    background-color: var(--bg-tertiary);
+    border: 1px solid var(--border-primary);
+    border-radius: 8px;
+    padding: 0.5rem;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .selectionMenu button {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.2s;
+  }
+  
+  .selectionMenu button:hover {
+    background-color: var(--bg-secondary);
+  }
+  

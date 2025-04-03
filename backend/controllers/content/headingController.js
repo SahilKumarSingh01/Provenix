@@ -6,9 +6,8 @@ const create = async (req, res) => {
   try {
     const { contentSectionId } = req.params;
     const creatorId = req.user.id;
-
     // New heading item
-    const newItem = { type: "heading", data: "Click to edit heading..." };
+    const newItem = { type: "heading", data: "double click to edit heading..." };
 
     // Find and update the document while returning the last added item
     const updatedSection = await ContentSection.findOneAndUpdate(

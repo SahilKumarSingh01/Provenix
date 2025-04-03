@@ -30,14 +30,13 @@ const CourseDetailForm = () => {
   const [overlay, setOverlay] = useState(null);
 
   useEffect(() => {
-    const cachedCourse = getCache(courseId);
-    if (cachedCourse) {
-        setCourse(cachedCourse);
-    } else {
-        fetchCourse().then((fetchedCourse) => {
-            if (fetchedCourse) setCourse(fetchedCourse);
-        });
+    fetchCourse(courseId)
+    .then((fetchedCourse)=>{
+        if(fetchedCourse)
+            setCourse(fetchedCourse);
+        else navigate('/');
     }
+    )
 }, [courseId]);
   // Update state when course is available
   useEffect(() => {

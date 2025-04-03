@@ -96,7 +96,7 @@ const removeModule = async (req, res) => {
     const [pageDeletionResult, commentsResult, contentSectionsResult, updatedModuleCollection] = await Promise.all([
         PageCollection.findOneAndDelete({ courseId, moduleId }).select("pages"),
         Comment.deleteMany({ courseId, moduleId }),
-        ContentSection.updateMany({ courseId, moduleId }, { status: "deleted" }), // Soft delete ContentSection
+        ContentSection.updateMany({ courseId, moduleId ,status:"active"}, { status: "deleted" }), // Soft delete ContentSection
         ModuleCollection.findOneAndUpdate(
           { _id: moduleCollectionId },
           { $pull: { modules: { _id: moduleId } } },

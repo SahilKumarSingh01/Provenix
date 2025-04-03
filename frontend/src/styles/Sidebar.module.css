@@ -1,0 +1,99 @@
+/* Sidebar - Starts Below Navbar */
+.sidebar {
+  width: 260px;
+  height: 100vh; /* Full height */
+  background-color: var(--bg-secondary); /* Dark Blue-Grey */
+  color: var(--text-primary); /* Brighter Muted Blue-Grey */
+  transition: transform 0.3s ease-in-out;
+  position: fixed;
+  left: 0;
+  top: 0px; /* Adjust if needed */
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  padding-top: 80px;
+  border-right: 2px solid var(--border-primary);
+}
+
+/* Sidebar Hidden */
+.sidebar.closed {
+  transform: translateX(-260px);
+}
+
+/* Toggle Button */
+.toggleButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  top: 50%; /* Centered vertically */
+  right: -40px;
+  width: 40px;
+  height: 80px;
+  background-color: var(--bg-secondary); /* Sidebar color */
+  color: var(--text-primary);
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease-in-out;
+  border-radius: 0 10px 10px 0;
+  border: 1px solid var(--border-primary);
+}
+
+
+/* Sidebar Content */
+.sidebarContent {
+  padding: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Course Title */
+.courseTitle {
+  font-size: 18px;
+  cursor: pointer;
+  font-weight: bold;
+  color: var(--text-heading); /* Heading color */
+  margin-bottom:20px;
+}
+.moduleList{
+  margin-left: 15px;
+
+}
+/* Module List */
+.moduleTitle {
+  font-size: 16px;
+  margin-top: 10px;
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--text-primary);
+  transition: color 0.3s ease;
+}
+
+
+/* Page Links */
+.pageList {
+  margin-left: 15px;
+}
+
+.pageLink {
+  text-decoration: none;
+  color: var(--text-secondary);
+  display: block;
+  padding: 5px;
+  font-size: 14px;
+  transition: color 0.3s ease;
+}
+
+.pageLink:hover {
+  color: var(--text-highlight);
+}
+
+/* Hide Sidebar Content When Closed */
+.sidebar.closed .sidebarContent {
+  display: none;
+}

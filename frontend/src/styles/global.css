@@ -16,37 +16,38 @@
 /* Dark Theme (Root Theme) */
 :root {
   --bg-primary: #0A192F;   /* Deep Navy Blue - Background */
-    --bg-secondary: #112240; /* Dark Blue-Grey - Boxes */
-    --bg-tertiary: #192A3A;  /* Darker Blue-Grey*/
-    --bg-highlight: #20C997; /* Softer Teal Blue */
-    --bg-selected:#256F6A;
+  --bg-secondary: #112240; /* Dark Blue-Grey - Boxes */
+  --bg-tertiary: #1B3248;  /* Slightly Lighter Blue-Grey */
+  --bg-highlight: #18B892; /* Adjusted for a more refined teal */
+  --bg-selected: #1E5A55;  /* Deeper, balanced tone */
 
-    --text-primary: #C0D0E8; /* Brighter Muted Blue-Grey */
-    --text-secondary: #8F9AA5;
-    --text-heading: #3A9CB1;
-    --text-muted: #777;
-    --text-error: #ff6b6b;
-    --text-success: #28d07b;
-    --text-warning: #ffcc00;
-    --text-highlight: #4DD7B5; /* Bright Cyan for emphasis */
-    --text-selected:#B2F7EF;
+  --text-primary: #D0E0F5; /* Slightly brighter for readability */
+  --text-secondary: #98A6B5; /* Softened to maintain hierarchy */
+  --text-heading: #3FA1C3; /* Slightly adjusted for clarity */
+  --text-muted: #7A8690;
+  --text-error: #FF5C5C;
+  --text-success: #24C97A;
+  --text-warning: #FFC107; /* Adjusted for better contrast */
+  --text-highlight: #40E0D0; /* Brighter Cyan for better visibility */
+  --text-selected: #A8F5E2; /* More balanced tone */
 
-  
-    --btn-primary-bg: #1565c0;
-    --btn-primary-hover: #0d47a1;
-    --btn-primary-text: #ffffff;
-  
-    --btn-secondary-bg: #17c3b2;
-    --btn-secondary-hover: #139e90;
-    --btn-secondary-text: #ffffff;
-  
-    --btn-danger-bg: #ff4d4d;
-    --btn-danger-hover: #cc0000;
-    --btn-danger-text: #ffffff;
-    --btn-disabled-bg: #9CA3AF; /* Neutral gray */
-    --btn-disabled-text: #E5E7EB; /* Light text for contrast */
-  
-    --border-primary: #444;
+  --btn-primary-bg: #1565C0;
+  --btn-primary-hover: #0D47A1;
+  --btn-primary-text: #FFFFFF;
+
+  --btn-secondary-bg: #16B3A2; /* Adjusted for better contrast */
+  --btn-secondary-hover: #128F84;
+  --btn-secondary-text: #FFFFFF;
+
+  --btn-danger-bg: #E63946; /* Slightly deeper red */
+  --btn-danger-hover: #B71C1C;
+  --btn-danger-text: #FFFFFF;
+
+  --btn-disabled-bg: #9CA3AF;
+  --btn-disabled-text: #E5E7EB;
+
+  --border-primary: #555; /* Softer, modern grey */
+
   }
   
   /* Light Theme */

@@ -15,7 +15,7 @@ const create = async (req, res) => {
 
     const updatedPageCollection = await PageCollection.findOneAndUpdate(
       { _id: pageCollectionId, creatorId }, 
-      {$push: {pages: { _id: pageId, title, content: contentSectionId }}},
+      {$push: {pages: { _id: pageId, title, contentSection: contentSectionId }}},
       { new: true }
     ).lean();
 
@@ -61,7 +61,7 @@ const remove = async (req, res) => {
     // Fetch course and pageCollection concurrently, including page existence check in PageCollection query
     const [isCourse, pageCollection] = await Promise.all([
       Course.exists({ _id: courseId, creator: userId, status: "draft" }),
-      PageCollection.findOne({ _id: pageCollectionId,courseId: courseId,creatorId: userId,"pages._id": pageId}),
+      PageCollection.findOne({ _id: pageCollectionId,courseId,creatorId: userId,"pages._id": pageId}),
     ]);
 
     if (!isCourse) {
@@ -74,12 +74,12 @@ const remove = async (req, res) => {
     // Use Promise.all to run the operations concurrently, including course update
     const [updatedPageCollection, contentSectionUpdate, commentDeletion, updatedCourse] = await Promise.all([
       PageCollection.findOneAndUpdate(
-        { _id: pageCollectionId, "pages._id": pageId, creatorId: userId },
+        { _id: pageCollectionId },
         { $pull: { pages: { _id: pageId } } },
         { new: true }
       ),
       ContentSection.updateMany(
-        { courseId, "pages._id": pageId },
+        { courseId,pageId,status:"active" },
         { $set: { status: "deleted" } }
       ),
       Comment.deleteMany({ courseId, pageId }),

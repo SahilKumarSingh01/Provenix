@@ -18,7 +18,7 @@ const CourseView = () => {
     const [showReview,setShowReview]=useState(false);
     
     useEffect(() => {
-        fetchCourse()
+        fetchCourse(courseId)
         .then((fetchedCourse)=>{
             if(fetchedCourse)
                 setCourse(fetchedCourse);

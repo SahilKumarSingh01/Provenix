@@ -22,20 +22,23 @@ const ModuleList = () => {
 
 
   useEffect(()=>{
-    fetchCourse().then((fetchedCourse)=>{
-              if(fetchedCourse)
-                  setCourse(fetchedCourse);
-              else navigate('/');
-          })
-    fetchModuleCollection().then((fetchedMC)=>{
-          if(fetchedMC)
-          {
-              setModuleCollection(fetchedMC);
-              setModules(fetchedMC.modules);
-          }
-          else navigate('/');
-      })
-
+      const fetchAll=async()=>{
+        const fetchedCourse=await fetchCourse(courseId);
+        if(!fetchedCourse){
+          navigate('/');
+          return ;
+        }
+        const fetchedMC=await fetchModuleCollection(fetchedCourse.moduleCollection);
+        if(!fetchedMC){
+          navigate('/');
+          return ;
+        }
+        setCourse(fetchedCourse);
+        setModuleCollection(fetchedMC);
+        setModules(fetchedMC.modules);
+      }
+      fetchAll();
+      return handleSaveEdit;
   },[courseId])
 
 
@@ -49,7 +52,7 @@ const ModuleList = () => {
     }
 
     clickTimeoutRef.current = setTimeout(() => {
-      navigate(`/course/${course._id}/module/${module._id}`);
+      navigate(`/course/${course._id}/module/${module.pageCollection}`);
     }, 250);
   };
   
@@ -71,6 +74,8 @@ const ModuleList = () => {
 
   const handleSaveEdit = async() => {
     try{
+        console.log(editingModule);
+        if(!editingModule)return ;
         let promises=[];
         const index=editingModule.curIndex;
         if(!editingModule.curTitle)
@@ -93,7 +98,7 @@ const ModuleList = () => {
         setCache(moduleCollection._id,{...moduleCollection,modules})
       }catch(e){
         console.log(e);
-        toast.error(e.response?.data?.message||"failed to remove module");
+        toast.error(e.response?.data?.message||"failed to save changes");
     }
   };
 
@@ -150,12 +155,13 @@ const ModuleList = () => {
   {
     return <p>Loading...</p>
   }
+  console.log(editingModule);
 
   return (
     <>
     {overlay}
     <div className={styles.container}>
-      <h1 className={styles.courseTitle} onClick={() => navigate(`/course/${course._id}/view`)}>
+      <h1 className={styles.courseTitle} onClick={() => {console.log("navigate is trigger");navigate(`/course/${course._id}/view`)}}>
         {course.title}
       </h1>
 

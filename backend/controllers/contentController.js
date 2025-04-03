@@ -8,33 +8,35 @@ const getContent = async (req, res) => {
     const { contentSectionId } = req.params;
     const userId = req.user.id;
 
-    // Resolve content section and enrollment in parallel
-    const [contentSection, enrollment] = await Promise.all([
-      ContentSection.findOne({ _id: contentSectionId, status: "active" }),
-      Enrollment.findOne({
-        course: (await ContentSection.findById(contentSectionId)).courseId,
-        user: userId,
-        status: "active",
-      }),
-    ]);
+    // Fetch content section first
+    const contentSection = await ContentSection.findOne({ _id: contentSectionId, status: "active" }).lean();
 
     if (!contentSection) {
       return res.status(404).json({ message: "Content section not found" });
     }
 
+    // Fetch enrollment only if contentSection exists
+    const enrollment = await Enrollment.findOne({
+      course: contentSection.courseId,
+      user: userId,
+      status: "active",
+    });
+
     // Check if user is the creator or has active enrollment
-    if (!enrollment && contentSection.creatorId !== userId) {
+    if (!enrollment && contentSection.creatorId.toString() !== userId) {
       return res.status(403).json({ message: "Access denied. No active enrollment." });
     }
 
     // Modify content
     const modifiedContent = addUrls(contentSection);
-
-    res.json({ success: true, content: modifiedContent });
+    const isCreator=contentSection.creatorId.toString()==req.user.id.toString();
+    const isEnrolled=enrollment?true:false;
+    res.json({ success: true,message:"contentSection fetch successfully", contentSection: {...modifiedContent,isCreator,isEnrolled} });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 const reorder = async (req, res) => {
   try {

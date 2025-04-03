@@ -6,36 +6,43 @@ import ConfirmBox from "../components/confirmBox.jsx";
 import axios from "../api/axios";
 import styles from "../styles/PageList.module.css";
 import { useCache } from "../context/CacheContext.jsx";
-
+import SideBar from '../components/SideBar.jsx'
 const PageList = () => {
-  const { courseId, moduleId } = useParams();
+  const { courseId, pageCollectionId } = useParams();
   const navigate = useNavigate();
   const { setCache}=useCache();
-  const {fetchCourse,fetchPageCollection}=useCourse();
+  const {fetchCourse,fetchPageCollection,fetchModuleCollection}=useCourse();
   const [course,setCourse]=useState();
   const [pageCollection,setPageCollection]=useState();
   const [pages, setPages] = useState([]);
+  const [moduleTitle ,setModuleTitle]=useState('');
   const [progress, setProgress] = useState([]);
   const [editingPage, setEditingPage] = useState(null);
   const [overlay, setOverlay] = useState(null);
   const clickTimeoutRef = useRef(null);
 
-  const moduleTitle=pageCollection?.moduleTitle;
   useEffect(() => {
-      fetchCourse().then((fetchedCourse)=>{
-        if(fetchedCourse)
-            setCourse(fetchedCourse);
-        else navigate('/');
-    })
-    fetchPageCollection().then((fetchedPC)=>{
-        if(fetchedPC)
+    const fetchAll=async()=>{
+        const [fetchedCourse, fetchedPC] = await Promise.all([
+            fetchCourse(courseId),
+            fetchPageCollection(pageCollectionId)
+        ]);
+        
+        const fetchedMC = await fetchModuleCollection(fetchedCourse.moduleCollection);
+        const module = fetchedMC.modules.find(m => m.pageCollection === pageCollectionId);
+    
+        if(!fetchedCourse || !fetchedPC)
         {
-          setPageCollection(fetchedPC);
-          setPages(fetchedPC.pages);
+          navigate('/');
+          return;
         }
-        else navigate('/');
-    })
-  }, [courseId, moduleId]);
+        setCourse(fetchedCourse);
+        setPageCollection(fetchedPC);
+        setModuleTitle(module.title);
+        setPages(fetchedPC.pages);
+      }
+      fetchAll();
+  }, [courseId, pageCollectionId]);
 
   const handleClick = (page, index) => {
     if (editingPage?.curIndex === index) {
@@ -46,7 +53,8 @@ const PageList = () => {
       clearTimeout(clickTimeoutRef.current);
     }
     clickTimeoutRef.current = setTimeout(() => {
-      navigate(`/course/${courseId}/module/${moduleId}/page/${page._id}`);
+      console.log(page);
+      navigate(`/course/${courseId}/module/${pageCollectionId}/page/${page.contentSection}`);
     }, 250);
   };
 

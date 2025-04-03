@@ -1,0 +1,76 @@
+
+.pageViewContainer {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px; /* Maintains spacing consistency */
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  max-width: 1200px;
+  margin: 40px auto;
+}
+
+.pageTitle {
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  color: var(--text-heading);
+  font-size: 24px;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--border-primary);
+  transition: color 0.3s ease, transform 0.2s ease;
+}
+
+
+.contentWrapper {
+  width: 100%;
+  padding: 25px;
+  background: var(--bg-tertiary);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between; /* Aligns buttons properly */
+  width: 100%;
+  padding:10px;
+  margin-top: 15px;
+}
+
+/* Comment Button */
+.actionBtn {
+  background-color: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  border: none;
+}
+
+.actionBtn:hover {
+  background-color: var(--btn-primary-hover);
+}
+
+.actionBtn:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+
+.actionBtn:disabled {
+  background-color: var(--btn-disabled-bg);
+  cursor: not-allowed;
+}
+.navButtons {
+  display: flex;
+  gap: 10px;
+}
+

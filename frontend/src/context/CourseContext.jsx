@@ -7,10 +7,10 @@ import { useCache } from "./CacheContext";
 export const CourseContext = createContext();
 
 export const CourseProvider = ({ children }) => {
-    const { courseId, moduleId } = useParams();
+    // const { courseId, moduleId } = useParams();
     const { getCache, setCache } = useCache();
 
-    const fetchCourse = async () => {
+    const fetchCourse = async (courseId) => {
         const cachedCourse = getCache(courseId);
         if (cachedCourse) return cachedCourse; // Return from cache if available
         try {
@@ -25,10 +25,7 @@ export const CourseProvider = ({ children }) => {
     };
     
 
-    const fetchModuleCollection = async () => {
-        const course = await fetchCourse();
-        if (!course) return null;
-        const moduleCollectionId = course.moduleCollection;
+    const fetchModuleCollection = async (moduleCollectionId) => {
         const cachedMC=getCache(moduleCollectionId);
         if(cachedMC)return cachedMC;
         try {
@@ -42,20 +39,14 @@ export const CourseProvider = ({ children }) => {
         }
     };
 
-    const fetchPageCollection = async () => {
-        const moduleCollection = await fetchModuleCollection();
-        if (!moduleCollection) return null;
-        const module = moduleCollection.modules.find(m => m._id === moduleId);
-        if (!module) return null;
-        const pageCollectionId=module.pageCollection;
+    const fetchPageCollection = async (pageCollectionId) => {
         const cachedPC=getCache(pageCollectionId);
         if(cachedPC)return cachedPC;
         try {
-            const { data } = await axios.get(`/api/course/page/${module.pageCollection}/collection`);
-            const pageCollection={...data.pageCollection,moduleTitle:module.title}
-            setCache(pageCollectionId, pageCollection);
+            const { data } = await axios.get(`/api/course/page/${pageCollectionId}/collection`);
+            setCache(pageCollectionId, data.pageCollection);
             toast.success(data.message);
-            return pageCollection;
+            return data.pageCollection;
         } catch (err) {
             console.log(err);
             toast.error(err?.response?.data?.message || "Failed to load page collection");
@@ -63,8 +54,22 @@ export const CourseProvider = ({ children }) => {
         }
     };
 
+    const fetchContentSection=async (contentSectionId)=>{
+        const cachedCS=getCache(contentSectionId);
+        if(cachedCS)return cachedCS;
+        try {
+            const { data } = await axios.get(`/api/course/content/${contentSectionId}/collection`);
+            setCache(contentSectionId, data.contentSection);
+            toast.success(data.message);
+            return data.contentSection;
+        } catch (err) {
+            console.log(err);
+            toast.error(err?.response?.data?.message || "Failed to load page collection");
+            return null;
+        }
+    }
     return (
-        <CourseContext.Provider value={{ fetchCourse, fetchModuleCollection, fetchPageCollection }}>
+        <CourseContext.Provider value={{ fetchCourse, fetchModuleCollection, fetchPageCollection ,fetchContentSection}}>
             {children}
         </CourseContext.Provider>
     );
