@@ -3,16 +3,20 @@
   font-size: 1.8rem;
   font-weight: bold;
   color: var(--text-heading);
+  word-wrap: break-word; /* Ensures words wrap properly */
+  margin-bottom:1rem;
 }
 
-.editInput {
-  font-size: 1.8rem;
-  font-weight: bold;
+.textarea {
   width: 100%;
+  min-height: 40px;
+  resize: none; /* Disable manual resizing, handled automatically */
+  overflow: hidden;
+  font-size: 1.5rem;
+  font-weight: bold;
   border: none;
   outline: none;
   background: transparent;
-  color: var(--text-heading);
 }
 
 .highlighted {
@@ -23,14 +27,16 @@
 }
 
 .unhighlighted {
-  color: var(--text-primary);
+  color: inherit;
 }
 
 .deleteMenu {
   position: fixed;
   background: var(--bg-tertiary);
   border: 1px solid gray;
+  font-size: 0.8rem;
   padding: 5px;
   cursor: pointer;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
 }

@@ -1,0 +1,17 @@
+.highlighted {
+    background-color: var(--bg-highlight);
+    color: var(--text-selected);
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  
+  .deleteMenu {
+    position: fixed;
+    background: var(--bg-tertiary);
+    border: 1px solid gray;
+    padding: 5px;
+    cursor: pointer;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  

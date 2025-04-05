@@ -1,0 +1,58 @@
+.editBox {
+    position: fixed;
+    display: flex;
+    top:100px;
+    left: 50%;
+    transform: translateX(-50%);
+    flex-direction: row;
+    align-items: center;
+    background: var(--bg-secondary);
+    padding: 15px;
+    border-radius: 8px;
+    border:1px solid var(--border-primary);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .saveButton, .removeButton, .shiftButton {
+    padding: 8px 12px;
+    margin: 5px;
+    font-size: 14px;
+    border: none;
+    white-space: nowrap;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .saveButton {
+    background-color: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
+  }
+  
+  .saveButton:hover {
+    background-color: var(--btn-primary-hover);
+  }
+  
+  .removeButton {
+    background-color: var(--btn-danger-bg);
+    color: var(--btn-danger-text);
+  }
+  
+  .removeButton:hover {
+    background-color: var(--btn-danger-hover);
+  }
+  
+  .shiftButton {
+    background-color: var(--btn-secondary-bg);
+    color: var(--btn-secondary-text);
+  }
+  
+  .shiftButton:hover {
+    background-color: var(--btn-secondary-hover);
+  }
+  .saveButton:active,
+  .removeButton:active,
+  .shiftButton:active{
+    transform: scale(0.95);
+  }
+  

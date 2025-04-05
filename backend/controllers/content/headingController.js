@@ -13,7 +13,7 @@ const create = async (req, res) => {
     const updatedSection = await ContentSection.findOneAndUpdate(
       { _id: contentSectionId, creatorId, status: "active" },
       { $push: { items: newItem } },
-      { new: true, projection: { "items": { $slice: -1 } } } // Return only the last item
+      { new: true } 
     );
 
     if (!updatedSection || !updatedSection.items.length) {
@@ -23,7 +23,7 @@ const create = async (req, res) => {
     res.status(201).json({
       success: true,
       message: "Heading added successfully",
-      newItem: updatedSection.items[0], // Send only the last added item
+      items: updatedSection.items, // Send only the last added item
     });
 
   } catch (error) {
@@ -34,8 +34,8 @@ const create = async (req, res) => {
 
 const update = async (req, res) => {
   try {
-    const { contentSectionId, courseId } = req.params;
-    const { itemId, data } = req.body;
+    const { contentSectionId } = req.params;
+    const { itemId, data,courseId } = req.body;
     const creatorId = req.user.id;
 
     if (typeof data !== "string") {
@@ -45,11 +45,20 @@ const update = async (req, res) => {
     // Check content section existence, status & active enrollment
     const [contentSection, activeEnrollment] = await Promise.all([
       ContentSection.findOne(
-        { _id: contentSectionId, creatorId, status: "active", "items._id": itemId, "items.type": "heading" },
-        { "items.$": 1 }
+        {
+          _id: contentSectionId,creatorId,courseId,
+          items: {$elemMatch: {_id: itemId,type: "heading"}}
+        },
+        {
+          "items.$": 1 // this will return only the matching item from the array
+        }
       ),
-      Enrollment.exists({ course: courseId, status: "active" })
+      Enrollment.exists({
+        course: courseId,
+        status: "active"
+      })
     ]);
+    
 
     if (!contentSection) {
       return res.status(404).json({ message: "Content section not found or unauthorized" });
@@ -66,7 +75,7 @@ const update = async (req, res) => {
     const updatedSection = await ContentSection.findOneAndUpdate(
       { _id: contentSectionId, "items._id": itemId },
       { $set: { "items.$.data": data } },
-      { new: true, projection: { "items.$": 1 } } // Returning only the modified item
+      { new: true, projection: { "items": 1 } } // Returning only the modified item
     );
 
     if (!updatedSection) {
@@ -76,7 +85,7 @@ const update = async (req, res) => {
     res.json({
       success: true,
       message: "Heading updated successfully",
-      newItem: updatedSection.items[0], // Sending only the updated item
+      items: updatedSection.items, // Sending only the updated item
     });
 
   } catch (error) {
@@ -88,28 +97,29 @@ const update = async (req, res) => {
 
 const remove = async (req, res) => {
   try {
-    const { contentSectionId, courseId } = req.params;
-    const { itemId } = req.body;
+    const { contentSectionId } = req.params;
+    const { itemId ,courseId} = req.query;
     const creatorId = req.user.id;
 
     // Check active enrollments first
     const activeEnrollment = await Enrollment.exists({ course: courseId, status: "active" });
     if (activeEnrollment) {
-      return res.status(403).json({ message: "Cannot remove text. Active enrollments exist." });
+      return res.status(403).json({ message: "Cannot remove heading. Active enrollments exist." });
     }
 
     // Perform removal directly
-    const result = await ContentSection.updateOne(
-      { _id: contentSectionId, creatorId, status: "active" },
-      { $pull: { items: { _id: itemId, type: "heading" } } }
+    const updatedSection = await ContentSection.findOneAndUpdate(
+      { _id: contentSectionId, creatorId, status: "active", items: { $elemMatch: { _id: itemId, type: "heading" } } },
+      { $pull: { items: { _id: itemId, type: "heading" } } },
+      { new: true }
     );
+    
+    
 
-    if (result.modifiedCount === 0) {
+    if (!updatedSection) {
       return res.status(404).json({ message: "Content section or item not found" });
     }
-
-    res.json({ success: true, message: "Heading removed successfully" });
-
+    res.status(200).json({ success: true, message: "Heading removed successfully",items:updatedSection.items });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

@@ -1,42 +1,38 @@
-import React, { useState } from "react";
-import styles from "./DisplayHeading.module.css";
+import React, { useState, useRef, useEffect } from "react";
+import styles from "../styles/DisplayHeading.module.css";
+import mergeInterval from "../utils/mergeIntervals";
+import { useEditingContent } from "../context/EditingContentContext"; // adjust path if needed
 
-const DisplayHeading = ({ item, index, items, isCreator }) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [content, setContent] = useState(item.data);
+const DisplayHeading = ({ item,index,contentSection ,setContentSection}) => {
   const [insight, setInsight] = useState(item.insight || []);
   const [showDeleteMenu, setShowDeleteMenu] = useState(null); // Position of delete menu
-
+  const textareaRef = useRef(null);
+  const {editingState, editingItem,setEditingItem,updateItemData} = useEditingContent();
+  const text=item.data;
   // Handle text change when editing (only for creators)
   const handleChange = (e) => {
-    setContent(e.target.value);
-    const updatedItems = [...items];
-    updatedItems[index].content = e.target.value;
+    updateItemData(e.target.value);
+    adjustHeight(); // Call this after updating text
   };
-  const handleInsightUpdate=()=>{
+  useEffect(() => {
+    if (textareaRef.current) {
+      adjustHeight();
+    }
+    return ()=>{cleanupScrollListener()};
+  }, [editingState.curData]);
+  
+  const adjustHeight = () => {
+    const textarea = textareaRef.current;
+    textarea.style.height = textarea.scrollHeight + "px"; // Set to scroll height
+  };
 
+  const handleEdit=()=>{
+    setEditingItem(contentSection,setContentSection,index);
   }
-  const handleBlur = () => setIsEditing(false);
-
-  // Function to merge overlapping highlights
-  const mergeHighlights = (newInsight) => {
-    const merged = [...insight, newInsight].sort((a, b) => a[0] - b[0]);
-    let result = [];
-
-    merged.forEach(([start, end]) => {
-      if (result.length && result[result.length - 1][1] >= start) {
-        result[result.length - 1][1] = Math.max(result[result.length - 1][1], end);
-      } else {
-        result.push([start, end]);
-      }
-    });
-
-    return result;
-  };
 
   // Handle user highlighting text (only for non-creators)
   const handleMouseUp = () => {
-    if (isCreator || !window.getSelection) return; // Skip if user is creator
+    if (contentSection.isCreator || !window.getSelection) return; // Skip if user is creator
   
     const selection = window.getSelection();
     if (!selection.rangeCount) return;
@@ -44,29 +40,43 @@ const DisplayHeading = ({ item, index, items, isCreator }) => {
     const range = selection.getRangeAt(0);
     const startNode = range.startContainer.parentElement;
     const endNode = range.endContainer.parentElement;
-    console.log(startNode,endNode);
-    if (!startNode || !endNode) return; // Ensure valid elements
-  
-    const startBaseOffset = parseInt(startNode.getAttribute("data-startOffset")) || 0;
-    const endBaseOffset = parseInt(endNode.getAttribute("data-startOffset")) || 0;
+    if (!startNode || !endNode||startNode.parentElement !== endNode.parentElement) return; 
+
+    const startBaseOffset = parseInt(startNode.getAttribute("data-startoffset")) || 0;
+    const endBaseOffset = parseInt(endNode.getAttribute("data-startoffset")) || 0;
   
     const start = startBaseOffset + range.startOffset;
     const end = endBaseOffset + range.endOffset;
-  
-    if (start !== end) {
-      setInsight(mergeHighlights([Math.min(start, end), Math.max(start, end)]));
+
+    if (start < end) {
+      const updatedInsight=mergeInterval([...insight,[start,end]]);
+      setInsight(updatedInsight);
+      window.getSelection().removeAllRanges();
     }
   };
 
   // Handle clicking on a highlighted section to remove it
   const handleHighlightClick = (index, event) => {
-    if (isCreator) return; // Only non-creators can remove highlights
-    if(showDeleteMenu&&index==showDeleteMenu.index)
-    {
+    if (contentSection.isCreator) return;
+
+    if (showDeleteMenu && index === showDeleteMenu.index) {
       setShowDeleteMenu(null);
+      cleanupScrollListener(); // remove listener if already there
       return;
     }
-    setShowDeleteMenu({ index, x: event.pageX, y: event.pageY });
+  
+        setShowDeleteMenu({ index, x: event.clientX, y: event.clientY });
+    window.addEventListener("scroll", handleScrollClose);
+  };
+
+  const cleanupScrollListener = () => {
+    window.removeEventListener("scroll", handleScrollClose);
+  };
+  
+  // Helper to close the menu & remove scroll listener
+  const handleScrollClose = () => {
+    setShowDeleteMenu(null);
+    window.removeEventListener("scroll", handleScrollClose);
   };
 
   // Confirm deletion of a highlight
@@ -85,59 +95,48 @@ const DisplayHeading = ({ item, index, items, isCreator }) => {
     insight.forEach(([start, end], idx) => {
       if (start > lastIndex) {
         result.push(
-          <span key={`normal-${idx}`} className={styles.unhighlighted} data-startOffset={lastIndex}> 
-            {content.slice(lastIndex, start)}
+          <span key={`normal-${idx}`} className={styles.unhighlighted} data-startoffset={lastIndex}> 
+            {text.slice(lastIndex, start)}
           </span>
         );
       }
       result.push(
-        <span
-          key={`highlight-${idx}`}
-          className={styles.highlighted}
-          onClick={(e) => handleHighlightClick(idx, e)}
-          data-startOffset={lastIndex}
-        >
-          {content.slice(start, end)}
+        <span key={`highlight-${idx}`} className={styles.highlighted} onClick={(e) => handleHighlightClick(idx, e)} data-startoffset={start}>
+          {text.slice(start, end)}
         </span>
       );
       lastIndex = end;
     });
 
-    if (lastIndex < content.length) {
+    if (lastIndex < text.length) {
       result.push(
-        <span key="last-normal" className={styles.unhighlighted} data-startOffset={lastIndex}>
-          {content.slice(lastIndex)}
+        <span key="last-normal" className={styles.unhighlighted} data-startoffset={lastIndex}>
+          {text.slice(lastIndex)}
         </span>
       );
     }
 
     return result;
   };
-
   return (
     <div onMouseUp={handleMouseUp}>
-      {isEditing ? (
-        <input
-          type="text"
-          value={content}
+      {editingItem==item? (
+        <textarea
+          ref={textareaRef}
+          value={editingState.curData}
           onChange={handleChange}
-          onBlur={handleBlur}
           autoFocus
-          className={styles.editInput}
+          className={styles.textarea}
         />
       ) : (
-        <h1 onDoubleClick={() => isCreator && setIsEditing(true)} className={styles.heading}>
+        <h2 onDoubleClick={() => contentSection.isCreator&&handleEdit()} className={styles.heading}>
           {renderHighlightedText()}
-        </h1>
+        </h2>
       )}
 
       {showDeleteMenu && (
-        <div
-          className={styles.deleteMenu}
-          style={{ top: showDeleteMenu.y, left: showDeleteMenu.x }}
-          onClick={deleteHighlight}
-        >
-          Remove Highlight
+        <div className={styles.deleteMenu} style={{ top: showDeleteMenu.y, left: showDeleteMenu.x }} onClick={deleteHighlight}>
+          Delete
         </div>
       )}
     </div>

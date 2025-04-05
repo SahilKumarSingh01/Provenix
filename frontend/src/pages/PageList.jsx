@@ -39,7 +39,7 @@ const PageList = () => {
         setCourse(fetchedCourse);
         setPageCollection(fetchedPC);
         setModuleTitle(module.title);
-        setPages(fetchedPC.pages);
+        setPages([...fetchedPC.pages]);//same as module list
       }
       fetchAll();
   }, [courseId, pageCollectionId]);
@@ -67,25 +67,26 @@ const PageList = () => {
 
   const handleTitleChange = (e) => {
     setEditingPage({ ...editingPage, curTitle: e.target.value });
-    const updatedPages = [...pages];
-    updatedPages[editingPage.curIndex].title = e.target.value;
-    setPages(updatedPages);
   };
 
   const handleSaveEdit = async () => {
     try {
+      console.log(pages);
       let promises = [];
       const oldIndex=editingPage.prevIndex;
       const newIndex=editingPage.curIndex;
       const title= editingPage.curTitle;
-      const pageId=pages[oldIndex];
+      const pageId=pages[newIndex]._id;
       if (!editingPage.curTitle) return toast.warn("Page title is required");
       if (editingPage.prevTitle !== editingPage.curTitle)
         promises.push(axios.put(`/api/course/page/${pageCollection._id}/update`,{title},{params:{pageId}}));
       if (editingPage.prevIndex !== editingPage.curIndex)
         promises.push(axios.put(`/api/course/page/${pageCollection._id}/reorder`,{oldIndex,newIndex}));
       const results = await Promise.all(promises);
-      results.forEach((result) => toast.success(result.data.message));
+      results.forEach((result) => {toast.success(result.data.message);console.log(result.data.message,result.data.pages);});
+      const updatedPages=[...pages];
+      updatedPages[newIndex].title=editingPage.curTitle;
+      setPages(updatedPages);
       setCache(pageCollection._id,{...pageCollection,pages});
       setEditingPage(null);
     } catch (e) {
@@ -176,7 +177,7 @@ const PageList = () => {
               onClick={() => handleClick(page, index)}
               onDoubleClick={() => course.isCreator && handleDoubleClick(page, index)}
             >
-              <span>{index + 1}. {page.title}</span>
+              <span>{index + 1}. {editingPage?.curIndex === index ? editingPage.curTitle: page.title}</span>
               {!course.isCreator?<input 
                 type="checkbox" 
                 checked={progress[index]} 

@@ -6,7 +6,7 @@ import styles from "../styles/Sidebar.module.css";
 const Sidebar = () => {
   const { courseId } = useParams();
   const { fetchCourse, fetchModuleCollection, fetchPageCollection } = useCourse();
-
+  
   const [courseTitle, setCourseTitle] = useState("");
   const [modules, setModules] = useState([]);
   const [expandedModules, setExpandedModules] = useState({});

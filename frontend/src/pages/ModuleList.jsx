@@ -35,10 +35,9 @@ const ModuleList = () => {
         }
         setCourse(fetchedCourse);
         setModuleCollection(fetchedMC);
-        setModules(fetchedMC.modules);
+        setModules([...fetchedMC.modules]);//a seperate collection so any changes that left wouldn't affect it
       }
       fetchAll();
-      return handleSaveEdit;
   },[courseId])
 
 
@@ -67,14 +66,10 @@ const ModuleList = () => {
 
   const handleTitleChange=(e)=>{
     setEditingModule({...editingModule ,curTitle:e.target.value});
-    const updatedmodules=modules;
-    updatedmodules[editingModule.curIndex].title=e.target.value;
-    setModules(updatedmodules);
   }
 
   const handleSaveEdit = async() => {
     try{
-        console.log(editingModule);
         if(!editingModule)return ;
         let promises=[];
         const index=editingModule.curIndex;
@@ -83,7 +78,7 @@ const ModuleList = () => {
         if(editingModule.prevTitle!==editingModule.curTitle)
           promises.push(axios.put(`/api/course/module/${course.moduleCollection}/update`,{
             moduleId:modules[index]._id,
-            title:modules[index].title
+            title:editingModule.curTitle,
           })
         )
         if(editingModule.prevIndex!==editingModule.curIndex)
@@ -94,15 +89,19 @@ const ModuleList = () => {
         )
         const results=await Promise.all(promises);
         results.forEach((result)=>toast.success(result.data.message));
+        
+        const updatedModules=[...modules];
+        updatedModules[index].title=editingModule.curTitle;
+        setModules(updatedModules);
+        setCache(moduleCollection._id,{...moduleCollection,modules});
         setEditingModule(null);
-        setCache(moduleCollection._id,{...moduleCollection,modules})
       }catch(e){
         console.log(e);
         toast.error(e.response?.data?.message||"failed to save changes");
     }
   };
 
-  const handleRemovemodule = async() => {
+  const handleRemoveModule = async() => {
     const onConfirm=async ()=>{
         try{
         const {data}=await axios.delete(`/api/course/module/${course.moduleCollection}/remove`,
@@ -155,7 +154,6 @@ const ModuleList = () => {
   {
     return <p>Loading...</p>
   }
-  console.log(editingModule);
 
   return (
     <>
@@ -166,10 +164,10 @@ const ModuleList = () => {
       </h1>
 
       {editingModule !== null && (
-        <div className={styles.editBox}>
+        <div className={styles.editBox} >
           <input type="text" value={editingModule.curTitle} onChange={handleTitleChange}/>
           <button onClick={handleSaveEdit} className={styles.saveButton}>✔ Save</button>
-          <button onClick={handleRemovemodule} className={styles.removeButton}>❌ Remove</button>
+          <button onClick={handleRemoveModule} className={styles.removeButton}>❌ Remove</button>
           <button onClick={() => handleShift("left")} className={styles.shiftButton}>⬅ Left</button>
           <button onClick={() => handleShift("right")} className={styles.shiftButton}>➡ Right</button>
         </div>
@@ -183,7 +181,7 @@ const ModuleList = () => {
             onClick={() => handleClick(module, index)}
             onDoubleClick={() => course.isCreator && handleDoubleClick(module,index)}
           >
-            <p>{module.title}</p>
+            <p>{editingModule?.curIndex === index ? editingModule.curTitle :module.title}</p>
           </div>
         ))}
 

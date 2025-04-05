@@ -41,49 +41,77 @@ const getContent = async (req, res) => {
 const reorder = async (req, res) => {
   try {
     const { contentSectionId } = req.params;
-    const { index1, index2 } = req.body;
+    let { oldIndex, newIndex } = req.body;
     const userId = req.user.id;
 
-    // Fetch only the necessary fields to validate ownership and size
-    const contentSection = await ContentSection.find({_id:contentSectionId,status:"draft"});
-    if (!contentSection) return res.status(404).json({ message: "Content section not found" });
-
-    // Ensure only the creator can reorder
-    if (!contentSection.creatorId.equals(userId)) {
-      return res.status(403).json({ message: "Unauthorized" });
-    }
-    if (contentSection.status !== "draft") {
-      return res.status(400).json({ message: "Reordering is only allowed in draft status" });
-    }
-    // Validate indices
-    if (
-      index1 === index2 ||
-      index1 < 0 || index2 < 0 ||
-      index1 >= contentSection.items.length ||
-      index2 >= contentSection.items.length
-    ) {
-      return res.status(400).json({ message: "Invalid indices" });
-    }
-
-    // Swap items directly in MongoDB using $set
-    const item1 = contentSection.items[index1];
-    const item2 = contentSection.items[index2];
-
-    await ContentSection.updateOne(
-      { _id: contentSectionId },
+    const updatedSection = await ContentSection.findOneAndUpdate(
       {
-        $set: {
-          [`items.${index1}`]: item2,
-          [`items.${index2}`]: item1,
-        },
-      }
+        _id: contentSectionId,
+        creatorId: userId,
+        status: "active",
+        [`items.${oldIndex}`]: { $exists: true },
+        [`items.${newIndex}`]: { $exists: true }
+      },
+      [
+        {
+          $set: {
+            items: {
+              $let: {
+                vars: {
+                  itemToMove: { $arrayElemAt: ["$items", oldIndex] },
+                  filteredItems: {
+                    $filter: {
+                      input: "$items",
+                      as: "item",
+                      cond: { $ne: ["$$item", { $arrayElemAt: ["$items", oldIndex] }] }
+                    }
+                  }
+                },
+                in: {
+                  $concatArrays: [
+                    {
+                      $cond: {
+                        if: { $eq: [newIndex, 0] },
+                        then: [],
+                        else: { $slice: ["$$filteredItems", 0, newIndex] }
+                      }
+                    },
+                    ["$$itemToMove"],
+                    {
+                      $cond: {
+                        if: { $eq: [newIndex, { $size: "$$filteredItems" }] },
+                        then: [],
+                        else: {
+                          $slice: [
+                            "$$filteredItems",
+                            newIndex,
+                            { $subtract: [{ $size: "$$filteredItems" }, newIndex] }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      ],
+      { new: true }
     );
 
-    res.json({ success: true, message: "Items reordered successfully" });
+    if (!updatedSection) {
+      return res.status(403).json({ message: "Failed to reorder items" });
+    }
 
+    res.status(200).json({
+      message: "Items reordered successfully",
+      items: updatedSection.items
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 module.exports = { reorder,getContent };
