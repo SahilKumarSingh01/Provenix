@@ -28,7 +28,7 @@ routes.delete('/text', textController.remove);
 
 // code Routes
 routes.post('/code', codeController.create);
-routes.put('/code', codeController.reorder);
+routes.put('/code', codeController.update);
 routes.put('/code/push', codeController.push);
 routes.put('/code/edit', codeController.edit);
 routes.put('/code/pull', codeController.pull);

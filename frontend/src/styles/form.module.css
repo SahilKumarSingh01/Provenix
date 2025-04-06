@@ -58,12 +58,13 @@
   background: var(--bg-primary);
   color: var(--text-primary);
   font-size: 14px;
+  outline: none;
   transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
 .formContainer input:focus {
   border-color: var(--btn-primary-bg);
-  outline: none;
+  
   box-shadow: 0 0 8px rgba(79, 70, 229, 0.3);
 }
 

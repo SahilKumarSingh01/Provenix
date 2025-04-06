@@ -13,14 +13,14 @@ const create = async (req, res) => {
         title: "add title here...",
         url: "paste url here...",
         platform: "Platform name...",
-        difficulty: "difficulty...",
+        difficulty: "Easy",
       },
     };
 
     const updatedSection = await ContentSection.findOneAndUpdate(
       { _id: contentSectionId, creatorId, status: "active" },
       { $push: { items: newItem } },
-      { new: true, projection: { "items": { $slice: -1 } } } // Return only the last added item
+      { new: true } // Return only the last added item
     );
 
     if (!updatedSection) {
@@ -30,7 +30,7 @@ const create = async (req, res) => {
     res.status(201).json({
       success: true,
       message: "Reference added successfully",
-      newItem: updatedSection.items[0], // Return the newly added item
+      items: updatedSection.items, // Return the newly added item
     });
 
   } catch (error) {
@@ -42,23 +42,26 @@ const create = async (req, res) => {
 
 const update = async (req, res) => {
   try {
-    const { contentSectionId, courseId } = req.params;
-    const { itemId, title, url, platform, difficulty } = req.body;
+    const { contentSectionId } = req.params;
+    const {itemId, data, courseId} = req.body;
+    const { title, url, platform, difficulty}=data;
     const creatorId = req.user.id;
-
     // Ensure all fields are strings
     if (![title, url, platform, difficulty].every((field) => typeof field === "string")) {
       return res.status(400).json({ message: "All fields must be of type string" });
     }
 
     // Fetch old data and check active enrollment in a single batch query
-    const [contentSection, activeEnrollment] = await Promise.all([
-      ContentSection.findOne(
-        { _id: contentSectionId, creatorId, "items._id": itemId, "items.type": "reference", status: "active" },
-        { "items.$": 1 }
-      ),
-      Enrollment.exists({ course: courseId, status: "active" })
-    ]);
+   const [contentSection, activeEnrollment] = await Promise.all([
+         ContentSection.findOne(
+           {_id: contentSectionId, creatorId, courseId,items: { $elemMatch: { _id: itemId, type: "reference" } }},
+           {"items.$": 1}
+         ),
+         Enrollment.exists({
+           course: courseId,
+           status: "active"
+         })
+       ]);
 
     if (!contentSection) {
       return res.status(404).json({ message: "Reference not found or unauthorized" });
@@ -79,7 +82,7 @@ const update = async (req, res) => {
     const updatedSection = await ContentSection.findOneAndUpdate(
       { _id: contentSectionId, creatorId, "items._id": itemId },
       { $set: { "items.$.data": newData } },
-      { new: true, projection: { "items.$": 1 } } // Return only the updated item
+      { new: true } // Return only the updated item
     );
 
     if (!updatedSection) {
@@ -89,7 +92,7 @@ const update = async (req, res) => {
     res.json({
       success: true,
       message: "Reference updated successfully",
-      newItem: updatedSection.items[0] // Return the updated item
+      items: updatedSection.items // Return the updated item
     });
 
   } catch (error) {
@@ -100,7 +103,8 @@ const update = async (req, res) => {
 
 const remove = async (req, res) => {
   try {
-    const { contentSectionId, courseId, itemId } = req.params;
+    const { contentSectionId } = req.params;
+    const { itemId, courseId } = req.query;
     const creatorId = req.user.id;
 
     // Check for active enrollments
@@ -109,16 +113,21 @@ const remove = async (req, res) => {
       return res.status(403).json({ message: "Cannot remove reference. Active enrollments exist." });
     }
 
-    const result = await ContentSection.updateOne(
-      { _id: contentSectionId, creatorId },
-      { $pull: { items: { _id: itemId, type: "reference" } } }
-    );
-
-    if (result.modifiedCount === 0) {
-      return res.status(404).json({ message: "Content section or reference not found" });
-    }
-
-    res.json({ success: true, message: "Reference removed successfully" });
+    const updatedSection = await ContentSection.findOneAndUpdate(
+          { _id: contentSectionId, creatorId, status: "active", items: { $elemMatch: { _id: itemId, type: "reference" } } },
+          { $pull: { items: { _id: itemId, type: "reference" } } },
+          { new: true }
+        );
+    
+      if (!updatedSection) {
+        return res.status(404).json({ message: "Content section or item not found" });
+      }
+  
+      res.status(200).json({
+        success: true,
+        message: "Reference removed successfully",
+        items: updatedSection.items,
+      });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

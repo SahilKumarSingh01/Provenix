@@ -13,17 +13,17 @@
   
   .textarea {
     width: 100%;
-    min-height: 40px;
-    resize: none;
+    resize: none; /* Disable manual resizing, handled automatically */
     overflow: hidden;
     font-size: 1.1rem;
     font-weight: normal;
-    border: none;
+    border: 1px solid var(--bg-selected);
     outline: none;
     background: transparent;
-    line-height: 1.6;
+    color: var(--text-secondary);
+    box-shadow: 0 0 6px rgba(30, 90, 85, 0.6); /* subtle shadow using bg-selected tone */
+    border-radius: 6px; /* optional: for smoother corners */
   }
-  
   .highlighted {
     background-color: var(--bg-highlight);
     color: var(--text-selected);

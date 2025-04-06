@@ -19,7 +19,7 @@ const DisplayHeading = ({ item,index,contentSection ,setContentSection}) => {
       adjustHeight();
     }
     return ()=>{cleanupScrollListener()};
-  }, [editingState.curData]);
+  }, [editingItem]);
   
   const adjustHeight = () => {
     const textarea = textareaRef.current;

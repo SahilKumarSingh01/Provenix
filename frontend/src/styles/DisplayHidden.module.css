@@ -1,0 +1,44 @@
+.container {
+    border: 1px solid var(--border-primary);
+    border-radius: 8px;
+    margin: 10px 0;
+    background-color: inherit; /* Inherit background from parent */
+    transition: border 0.3s ease;
+  }
+  
+  .header {
+    padding: 12px 16px;
+    cursor: pointer;
+    background-color: inherit; /* No change on hover */
+    color: var(--text-heading);
+    font-weight: 600;
+    font-size: 16px;
+    transition: color 0.2s ease;
+    user-select: none;
+  }
+  
+  .arrow {
+    font-size: 0.7rem;
+    
+    transition: transform 0.3s ease;
+  }
+  .textarea {
+    width: 95%;
+    min-height: 40px;
+    resize: none; /* Disable manual resizing, handled automatically */
+    overflow: hidden;
+    font-size: 1.1rem;
+    font-weight: normal;
+    border: 1px solid var(--bg-selected);
+    outline: none;
+    background: transparent;
+    color: var(--text-highlight);
+    box-shadow: 0 0 6px rgba(30, 90, 85, 0.6); /* subtle shadow using bg-selected tone */
+    border-radius: 6px; /* optional: for smoother corners */
+  }
+  
+  .contentWrapper {
+    padding: 12px 16px;
+    border-top: 1px solid var(--border-primary);
+  }
+  

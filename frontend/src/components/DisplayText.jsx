@@ -17,7 +17,7 @@ const DisplayText = ({ item, index, contentSection, setContentSection }) => {
   useEffect(() => {
     if (textareaRef.current) adjustHeight();
     return ()=>{cleanupScrollListener()};
-  }, [editingState.curData]);
+  }, [editingItem]);
 
   const adjustHeight = () => {
     const textarea = textareaRef.current;

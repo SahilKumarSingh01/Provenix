@@ -1,89 +1,151 @@
 /* CodeBox.module.css */
 .codeboxContainer {
-    width: 100%;
-    max-width: 700px;
-    margin: 20px auto;
-    border-radius: 8px;
-    background: #112240;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-    overflow: hidden;
-    border: 1px solid #233554;
-    font-family: "Courier New", monospace;
-}
-
-.codeboxTabs {
+    max-width: 800px;
+    margin: 16px auto;
+    padding: 0 12px;
+  }
+  
+  .codeboxTabs {
     display: flex;
-    background: #233554;
-    padding: 8px;
-}
-
-.codeboxTab {
-    flex: 1;
-    padding: 10px;
-    border: none;
-    background: transparent;
-    color: #A8B2D1;
+    gap: 8px;
+    border-bottom: 1px solid var(--bg-tertiary);
+    overflow-x: auto;
+  }
+  
+  .codeboxTab {
+    padding: 8px 16px;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
     cursor: pointer;
     font-size: 14px;
-    font-weight: bold;
-    text-align: center;
+    font-weight: 600;
+    border-radius: 6px 6px 0 0;
+    border: 1px solid transparent;
+    border-bottom: none;
     transition: all 0.3s ease;
-}
-
-.codeboxTab:hover {
-    color: #64FFDA;
-}
-
-.active {
-    color: #64FFDA;
-    border-bottom: 2px solid #64FFDA;
-}
-
-.codeboxContent {
+    white-space: nowrap;
+    max-width: 300px;
+    overflow: hidden;
+  }
+  
+  .codeboxTab:hover {
+    color: var(--text-highlight);
+    background: var(--bg-tertiary);
+  }
+  
+  .addTabBtn {
+    padding: 8px 12px;
+    background: transparent;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--text-primary);
+  }
+  
+  .addTabBtn:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-selected);
+  }
+  
+  .active {
+    color: var(--text-selected);
+    background: var(--bg-primary);
+    border-color: var(--bg-selected);
+    border-bottom: 1px solid var(--bg-primary); /* blends with editor */
+  }
+  
+  .tabInput {
+    padding: 8px 10px;
+    font-size: 15px;
+    border: none;
+    background-color: transparent;
+    color: var(--text-primary);
+    outline: none;
+  }
+  
+  .removeTabBtn {
+    background-color: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 16px;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+  
+  .removeTabBtn:hover {
+    background-color: var(--bg-tertiary);
+    color: var(--text-error);
+  }
+  
+  .codeEditor {
+    width: 100%;
+    height: auto;
+    font-family: 'Fira Code', monospace;
+    font-size: 14px;
+    border: 1px solid var(--border-primary);
+    padding: 10px 12px;
+    line-height: 1.5;
+    border-radius: 8px;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    overflow-y: hidden;
+    resize: none;
+  }
+  
+  .codeboxContent {
     display: flex;
     position: relative;
-    padding: 15px;
-    color: #E6F1FF;
-    background: #0A192F;
+    min-height: 300px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
     overflow-x: auto;
-}
-
-.lineNumbers {
+    border: 1px solid var(--border-primary);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(10, 25, 47, 0.4);
+  }
+  
+  .lineNumbers {
     text-align: right;
     user-select: none;
     font-size: 14px;
     color: #6272a4;
-    background: #112240;
-    padding-right: 10px;
-    padding-top: 5px;
+    background: var(--bg-secondary);
+    padding: 10px 12px;
     line-height: 1.5;
     min-width: 40px;
-    border-right: 1px solid #233554;
-}
-
-.codeboxLines {
-    padding-left: 10px;
+    border-right: 1px solid var(--bg-tertiary);
+  }
+  
+  .codeboxLines {
+    padding: 10px 12px;
     line-height: 1.5;
     white-space: pre;
     font-size: 14px;
     overflow-x: auto;
-}
-
-.copyBtn {
+  }
+  
+  .copyBtn {
     position: absolute;
     top: 10px;
     right: 10px;
-    background: #64FFDA;
-    color: #0A192F;
+    background: var(--bg-primary);
+    color: var(--text-muted);
     border: none;
-    padding: 5px 10px;
+    padding: 6px 12px;
     cursor: pointer;
     font-size: 12px;
     font-weight: bold;
-    border-radius: 3px;
-    transition: background 0.3s ease;
-}
-
-.copyBtn:hover {
-    background: #4CAF50;
-}
+    border-radius: 6px;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  
+  .copyBtn:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-selected);
+  }
+  

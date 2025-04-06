@@ -9,10 +9,10 @@ import { toast } from "react-toastify";
 // Importing display components
 import DisplayHeading from "./DisplayHeading";
 import DisplayText from "./DisplayText";
-// import DisplayCode from "./DisplayCode";
+import DisplayCode from "./DisplayCode";
 // import DisplayMCQ from "./DisplayMCQ";
-// import DisplayHidden from "./DisplayHidden";
-// import DisplayReference from "./DisplayReference";
+import DisplayHidden from "./DisplayHidden";
+import DisplayReference from "./DisplayReference";
 import { useCache } from "../context/CacheContext.jsx";
 
 const DisplayContents = ({ contentSectionId }) => {
@@ -46,7 +46,10 @@ const DisplayContents = ({ contentSectionId }) => {
       setShowMenu(false);
     }
   };
-
+  const codeData = [
+    { lang: "JavaScript", data: "console.log('Hello, World!');\nlet x = 10;" },
+    { lang: "Python", data: "print('Hello, World!')\nx = 10" },
+  ];
   if (!contentSection) return <p>Loading content...</p>;
   const itemsToDisplay=editingState.contentSection?._id==contentSection._id?editingState.items:contentSection.items;
   return (
@@ -71,14 +74,26 @@ const DisplayContents = ({ contentSectionId }) => {
             case "code":
               return <DisplayCode 
                         key={index} 
-                        item={item}
-                        isCreator={contentSection.isCreator} />;
+                        item={item} 
+                        index={index}
+                        contentSection={contentSection}
+                        setContentSection={setContentSection} />;
             case "MCQ":
               return <DisplayMCQ key={index} item={item} isCreator={contentSection.isCreator} />;
             case "hidden":
-              return <DisplayHidden key={index} item={item} baseEditingItem={baseEditingItem} isCreator={contentSection.isCreator} />;
+              return <DisplayHidden 
+                        key={index} 
+                        item={item} 
+                        index={index}
+                        contentSection={contentSection}
+                        setContentSection={setContentSection} />;
             case "reference":
-              return <DisplayReference key={index} item={item} baseEditingItem={baseEditingItem} isCreator={contentSection.isCreator} />;
+              return <DisplayReference 
+                        key={index} 
+                        item={item} 
+                        index={index}
+                        contentSection={contentSection}
+                        setContentSection={setContentSection} />;
             default:
               return null;
           }

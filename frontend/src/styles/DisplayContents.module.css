@@ -1,6 +1,8 @@
 .container {
     position: relative;
     padding: 1rem;
+    min-height:4rem;
+    padding-bottom:5rem;
   }
   
   .addButton {
@@ -33,6 +35,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    z-index:100;
   }
   
   .selectionMenu button {

@@ -99,3 +99,9 @@ button:disabled{
     -webkit-box-shadow: 0 0 0 50px var(--bg-tertiary) inset;
     -webkit-text-fill-color: var(--text-primary);
   }
+
+ .hljs {
+    background-color: var(--bg-primary) !important;
+    line-height: 1.5 !important;
+    padding: 0 !important;
+  }

@@ -5,7 +5,6 @@ const MAX_CACHE_SIZE = 1000;
 
 export function CacheProvider({ children }) {
     const [cache] = useState(new Map());
-    console.log(cache);
     function getCache(id) {
         return cache.get(id) || null;
     }

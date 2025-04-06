@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import {useCourse} from "../context/CourseContext"; // Import CourseContext
@@ -6,7 +6,6 @@ import ConfirmBox from "../components/confirmBox.jsx";
 import axios from "../api/axios";
 import styles from "../styles/PageList.module.css";
 import { useCache } from "../context/CacheContext.jsx";
-import SideBar from '../components/SideBar.jsx'
 const PageList = () => {
   const { courseId, pageCollectionId } = useParams();
   const navigate = useNavigate();
@@ -53,7 +52,6 @@ const PageList = () => {
       clearTimeout(clickTimeoutRef.current);
     }
     clickTimeoutRef.current = setTimeout(() => {
-      console.log(page);
       navigate(`/course/${courseId}/module/${pageCollectionId}/page/${page.contentSection}`);
     }, 250);
   };
