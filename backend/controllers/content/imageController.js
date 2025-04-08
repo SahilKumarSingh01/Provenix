@@ -1,7 +1,7 @@
 const OrphanResource = require("../../models/OrphanResource");
 const ContentSection = require("../../models/ContentSection");
-const cloudinary = require("../../config/cloudinary");
-
+const Enrollment = require("../../models/Enrollment");
+const extractPublicId=require('../../utils/extractPublicId');
 
 const IMAGE_EXPIRY_TIME = 5 * 60 * 60;
 
@@ -9,231 +9,113 @@ const IMAGE_EXPIRY_TIME = 5 * 60 * 60;
 const create = async (req, res) => {
   try {
     const { contentSectionId } = req.params;
-    let { publicId, height, width } = req.body;
     const creatorId = req.user.id;
-
-    if (typeof publicId !== "string" || isNaN(height = Number(height)) || isNaN(width = Number(width))) {
-      return res.status(400).json({ message: "Invalid data type for publicId, height, or width" });
-    }
-
-    // Push the new image item and return the updated section
     const updatedSection = await ContentSection.findOneAndUpdate(
       { _id: contentSectionId, creatorId, status: "active" },
-      { 
-        $push: { 
-          items: { 
-            type: "image", 
-            data: { publicId, height, width } 
-          } 
-        } 
-      },
-      { new: true, projection: { "items.$": 1 } } // Return only the newly added item
+      { $push: { items: { type: "image", data: { url:""} } }},
+      { new: true } 
     );
 
-    if (!updatedSection) {
+    if (!updatedSection) 
       return res.status(404).json({ message: "Content section not found or unauthorized" });
-    }
 
-    const newItem = updatedSection.items[0]; // Store the added item
-
-    // Attempt to delete the orphan resource after successful update
-    const deleteResult = await OrphanResource.deleteOne({ publicId, type: "image", category: "pagePhoto" });
-
-    if (deleteResult.deletedCount === 0) {
-      // Cleanup: Remove the added item from ContentSection since orphan deletion failed
-      await ContentSection.updateOne(
-        { _id: contentSectionId, "items._id": newItem._id },
-        { $pull: { items: { _id: newItem._id } } }
-      );
-
-      return res.status(400).json({ 
-        message: "File might have been deleted. Please try reuploading it." 
-      });
-    }
-
-    // Generate a temporary signed URL (valid for IMAGE_EXPIRY_TIME seconds)
-    const url = cloudinary.utils.signed_url(publicId, {
-      type: "authenticated",
-      resource_type: "image",
-      format: "webp",
-      expires_at: Math.floor(Date.now() / 1000) + IMAGE_EXPIRY_TIME,
-    });
-    newItem.data.url = url;
-
-    res.status(201).json({
-      success: true,
-      message: "Image added successfully",
-      newItem,
-    });
-
+    res.status(201).json({success: true,message: "Image added successfully",items:updatedSection.items});
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-
-
-
-
-const refreshUrl = async (req, res) => {
-  try {
-    const { contentSectionId, courseId } = req.params;
-    const { itemId } = req.body;
-    const userId = req.user.id;
-
-    // Check if user is creator or enrolled
-    const [contentSection, isEnrolled] = await Promise.all([
-      ContentSection.findOne(
-        { _id: contentSectionId, "items._id": itemId, "items.type": "image", status: "active" },
-        { "items.$": 1, creatorId: 1 }
-      ),
-      Enrollment.exists({ course: courseId, user: userId, status: "active" })
-    ]);
-
-    if (!contentSection || (!contentSection.creatorId.equals(userId) && !isEnrolled)) {
-      return res.status(403).json({ message: "Access denied" });
-    }
-
-    const publicId = contentSection.items[0].data.publicId;
-    const url = cloudinary.utils.signed_url(publicId, {
-      type: "authenticated",
-      resource_type: "image", // Ensure it's an image
-      format: "webp", // Specify format explicitly if needed
-      expires_at: Math.floor(Date.now() / 1000) + IMAGE_EXPIRY_TIME,
-    });
-    
-
-    res.json({ success: true, message: "URL refreshed", url });
-
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
 
 const update = async (req, res) => {
   try {
-    const { contentSectionId, courseId } = req.params;
-    let { itemId, publicId, height, width } = req.body;
+    const { contentSectionId } = req.params;
+    const { itemId, data, courseId } = req.body;
+    const { url } = data;
     const creatorId = req.user.id;
 
-    if (typeof publicId !== "string" || isNaN(height = Number(height)) || isNaN(width = Number(width))) {
-      return res.status(400).json({ message: "Invalid data type for publicId, height, or width" });
+    if (typeof url !== "string") {
+      return res.status(400).json({ message: "Invalid data type for url" });
     }
 
-    // Run all queries in parallel to optimize DB calls
-    const [orphanExists, activeEnrollmentExists, contentSection] = await Promise.all([
-      OrphanResource.exists({ publicId, type: "image", category: "pagePhoto" }),
+    const newPublicId = extractPublicId(url);
+
+    const [activeEnrollmentExists, deletionResult] = await Promise.all([
       Enrollment.exists({ course: courseId, status: "active" }),
-      ContentSection.findOne(
-        { _id: contentSectionId, creatorId, "items._id": itemId, "items.type": "image", status: "active" },
-        { "items.$": 1 }
-      ),
+      OrphanResource.deleteOne({ publicId: newPublicId, type: "image", category: "pagePhoto" })
     ]);
 
-    if (!contentSection) {
-      return res.status(404).json({ message: "Image not found or unauthorized" });
-    }
-    
-    const existingItem = contentSection.items[0];
-    if ((existingItem.data.publicId !== publicId && !orphanExists)) {
-      return res.status(400).json({ message: "Invalid request." });
-    }
-    
     if (activeEnrollmentExists) {
+      await OrphanResource.create({ publicId: newPublicId, type: "image", category: "pagePhoto" });
       return res.status(403).json({ message: "Modification not allowed. Active enrollments exist." });
     }
-    
 
+    if (deletionResult.deletedCount === 0) {
+      return res.status(400).json({ message: "Orphan entry not found or already used." });
+    }
 
-    // Run both updates in parallel using Promise.all and destructure results
-    const [updatedSection] = await Promise.all([
-      // Update the image data and return the updated item
-      ContentSection.findOneAndUpdate(
-        { _id: contentSectionId, "items._id": itemId },
-        { $set: { "items.$.data": { publicId, height, width } } },
-        { new: true, projection: { "items.$": 1 } } // Return only the updated item
-      ),
+    const fetchedSection = await ContentSection.findOneAndUpdate(
+      {_id: contentSectionId,creatorId,status:"active",items: { $elemMatch: { _id: itemId, type: "image" } }},
+      {$set: { "items.$.data": { publicId: newPublicId, url } }},
+      { new: false }
+    );
 
-      // Manage orphan resources if publicId has changed
-      existingItem.data.publicId !== publicId
-        ? OrphanResource.bulkWrite([
-            { insertOne: { document: { publicId: existingItem.data.publicId, type: "image", category: "pagePhoto" } } },
-            { deleteOne: { filter: { publicId, type: "image", category: "pagePhoto" } } },
-          ])
-        : Promise.resolve({ result: "No changes" }), // Return a dummy result to maintain consistency
-    ]);
+    if (!fetchedSection) {
+      await OrphanResource.create({ publicId: newPublicId, type: "image", category: "pagePhoto" });
+      return res.status(500).json({ message: "Failed to update image." });
+    }
 
-    // Generate a signed URL with expiration
-    const url = cloudinary.utils.signed_url(publicId, {
-      type: "authenticated",
-      resource_type: "image",
-      format: "webp",
-      expires_at: Math.floor(Date.now() / 1000) + IMAGE_EXPIRY_TIME,
-    });
-    const newItem=updatedSection.items[0];
-    
-    newItem.data.url = url;
+    const itemIndex = fetchedSection.items.findIndex((item) => item._id.toString() === itemId);
+    const oldPublicId = fetchedSection.items[itemIndex]?.data?.publicId;
+    fetchedSection.items[itemIndex].data = { publicId: newPublicId, url };
 
-    res.json({
-      success: true,
-      message: "Image updated successfully",
-      newItem
-    });
+    if (oldPublicId && oldPublicId !== newPublicId) {
+      await OrphanResource.create({ publicId: oldPublicId, type: "image", category: "pagePhoto" });
+    }
+    res.json({success: true,message: "Image updated successfully",items: fetchedSection.items});
 
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
+
 
 
 
 
 const remove = async (req, res) => {
   try {
-    const { contentSectionId, courseId } = req.params;
-    const { itemId } = req.body;
+    const { contentSectionId } = req.params;
+    const { itemId,courseId } = req.query;
     const creatorId = req.user.id;
 
-    // Run both queries in parallel for efficiency
-    const [activeEnrollmentExists, contentSection] = await Promise.all([
-      Enrollment.exists({ course: courseId, status: "active" }),
-      ContentSection.findOne(
-        { _id: contentSectionId, creatorId, "items._id": itemId, "items.type": "image" },
-        { "items.$": 1 } // Fetch the item before deletion
-      ),
-    ]);
-
-    if (!contentSection) {
-      return res.status(404).json({ message: "Image not found or unauthorized" });
-    }
-
-    if (activeEnrollmentExists) {
+    const enrollmentExists = await Enrollment.exists({ course: courseId, status: "active" });
+    if (enrollmentExists) {
       return res.status(403).json({ message: "Modification not allowed. Active enrollments exist." });
     }
 
-    const existingItem = contentSection.items[0];
+    const section = await ContentSection.findOneAndUpdate(
+      { _id: contentSectionId, creatorId,status:"active", items: { $elemMatch: { _id: itemId, type: "image" } }, },
+      { $pull: { items: { _id: itemId } } },
+      { new: false }
+    );
+    const itemIndex = section.items.findIndex(item => item._id.toString() === itemId && item.type === "image");
 
-    await Promise.all([
-      // Remove the image item
-      ContentSection.updateOne(
-        { _id: contentSectionId },
-        { $pull: { items: { _id: itemId } } }
-      ),
+    if (!section) {
+      return res.status(404).json({ message: "Image not found or unauthorized" });
+    }
+    
+    const { publicId } = section.items[itemIndex].data;
+    section.items.splice(itemIndex, 1);
 
-      // Move the deleted image to OrphanResource
-      OrphanResource.create({
-        publicId: existingItem.data.publicId,
-        type: "image",
-        category: "pagePhoto"
-      }),
-    ]);
+    await OrphanResource.create({ publicId, type: "image", category: "pagePhoto" });
 
-    res.json({ success: true, message: "Image removed successfully" });
-
+    res.json({ success: true, message: "Image removed successfully", items: section.items });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
 
-module.exports = { create,refreshUrl ,update,remove};
+
+module.exports = { create ,update,remove};

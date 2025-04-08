@@ -10,7 +10,9 @@ import { toast } from "react-toastify";
 import DisplayHeading from "./DisplayHeading";
 import DisplayText from "./DisplayText";
 import DisplayCode from "./DisplayCode";
-// import DisplayMCQ from "./DisplayMCQ";
+import DisplayImage from "./DisplayImage.jsx";
+
+import DisplayMCQ from "./DisplayMCQ.jsx";
 import DisplayHidden from "./DisplayHidden";
 import DisplayReference from "./DisplayReference";
 import { useCache } from "../context/CacheContext.jsx";
@@ -78,8 +80,13 @@ const DisplayContents = ({ contentSectionId }) => {
                         index={index}
                         contentSection={contentSection}
                         setContentSection={setContentSection} />;
-            case "MCQ":
-              return <DisplayMCQ key={index} item={item} isCreator={contentSection.isCreator} />;
+            case "mcq":
+              return <DisplayMCQ 
+                        key={index} 
+                        item={item} 
+                        index={index}
+                        contentSection={contentSection}
+                        setContentSection={setContentSection} />;
             case "hidden":
               return <DisplayHidden 
                         key={index} 
@@ -94,18 +101,27 @@ const DisplayContents = ({ contentSectionId }) => {
                         index={index}
                         contentSection={contentSection}
                         setContentSection={setContentSection} />;
+            case "image":
+              return <DisplayImage 
+                        key={index} 
+                        item={item} 
+                        index={index}
+                        contentSection={contentSection}
+                        setContentSection={setContentSection} />;
             default:
               return null;
           }
         })}
 
       {/* Add Element Button */}
-      {contentSection.isCreator&&<button className={styles.addButton} onClick={() => setShowMenu(!showMenu)}>+ Add Element</button>}
+      {contentSection.isCreator&&<button className={styles.addButton} onClick={() => setShowMenu(!showMenu)}>
+        + Add Element
+      </button>}
 
       {/* Quick Selection Menu */}
       {showMenu && (
         <div className={styles.selectionMenu}>
-          {["heading", "text", "code", "MCQ", "hidden", "reference"].map((type) => (
+          {["heading", "text", "code", "mcq", "hidden", "reference","image","video"].map((type) => (
             <button key={type} onClick={() => addElement(type)}>{type}</button>
           ))}
         </div>

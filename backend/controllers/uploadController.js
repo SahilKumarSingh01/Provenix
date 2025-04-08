@@ -104,8 +104,10 @@ const pagePhoto = async (req, res) => {
             format: "webp",         // Best compression
             transformation: [
                 { width: 600, height: 600, crop: "limit" },  // **Ensures full image within 600x600**
-                { quality: "auto:good" },                   // **Higher quality, still optimized**
-                { fetch_format: "auto" }                    // Auto-select best format (WebP, JPEG)
+                { quality: "auto:best" },             // Best possible clarity for text
+                { fetch_format: "auto" },                    // Auto-select best format (WebP, JPEG)
+                { effect: "sharpen:50" },             // Light sharpening to make text pop
+
             ]
         };
 
@@ -118,19 +120,18 @@ const pagePhoto = async (req, res) => {
 
             uploadStream.end(req.file.buffer);
         });
-
         await OrphanResource.create({
             publicId: cloudUpload.public_id,
             type: "image",
             category: "pagePhoto"   // **Updated category**
         });
-         const url = cloudinary.utils.signed_url(publicId, {
-              type: "authenticated",
-              resource_type: "image",
-              format: "webp",
-              expires_at: Math.floor(Date.now() / 1000) + IMAGE_EXPIRY_TIME,
-            });
-        res.status(201).json({ success: true, publicId: cloudUpload.public_id ,url});
+        
+        res.status(201).json({ success: true, 
+            publicId: cloudUpload.public_id ,
+            url:cloudUpload.secure_url,
+            width:cloudUpload.width,
+            height:cloudUpload.height,
+        });
     } catch (error) {
         console.log(error.message);
         res.status(500).json({ success: false, message: error.message });

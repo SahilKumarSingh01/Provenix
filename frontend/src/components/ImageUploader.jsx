@@ -3,7 +3,7 @@ import Cropper from "react-easy-crop";
 import styles from "../styles/ImageUploader.module.css";
 import { toast } from "react-toastify";
 
-const ImageUploader = ({ onCancel, onUpload, aspect }) => {
+const ImageUploader = ({ onCancel, onUpload, aspect ,forceCropping=true}) => {
   const [preview, setPreview] = useState(null);
   const [croppedPreview, setCroppedPreview] = useState(null);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
@@ -29,9 +29,18 @@ const ImageUploader = ({ onCancel, onUpload, aspect }) => {
         toast.error("File size exceeds 10MB. Please upload a smaller image.");
         return;
       }
-      setPreview(URL.createObjectURL(file));
-      setCroppedPreview(null); // Reset cropped state
-      setCropConfirmed(false); // Reset crop toggle
+      const url=URL.createObjectURL(file);
+      setPreview(url);
+      if(forceCropping)
+      {
+        setCroppedPreview(null); // Reset cropped state
+        setCropConfirmed(false); // Reset crop toggle
+      }
+      else{
+        setCroppedPreview(url);
+        setCropConfirmed(true);
+      }
+
     }
   };
 
@@ -101,7 +110,7 @@ const ImageUploader = ({ onCancel, onUpload, aspect }) => {
         <input type="file" accept="image/*" className={styles.fileInput} onChange={handleFileChange} />
         <div className={styles.actions}>
           <button className={styles.actionButton} onClick={handleButtonClick} disabled={!preview}>
-            {cropConfirmed ? "Crop Again" : "Confirm Selection"}
+            {cropConfirmed ? "Crop" : "Confirm Selection"}
           </button>
 
           <button className={styles.actionButton} onClick={uploadCroppedImage} disabled={!croppedPreview}>

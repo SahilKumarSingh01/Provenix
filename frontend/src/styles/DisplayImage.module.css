@@ -1,0 +1,92 @@
+.container {
+  margin: 1rem 0;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+/* Add Image Button */
+.addButton {
+  width: 100%;
+  max-width: 600px;
+  aspect-ratio: 4 / 3;
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 2px dashed var(--text-muted);
+  color: var(--text-heading);
+  font-size: 24px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  padding: 1rem;
+}
+
+.addButton:hover {
+  transform: scale(1.02);
+}
+
+/* Image container */
+.imageWrapper {
+  width: 100%;
+  max-width: 600px;
+  cursor: pointer;
+  position: relative;
+}
+
+.image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  display: block;
+}
+
+/* Image Controls */
+.controls {
+  position: absolute;
+  display:flex;
+  flex-direction: column;
+  top: 10px;
+  right: -140px;
+  z-index: 10;
+}
+
+.controls button {
+  background: var(--btn-primary-bg);
+  color: var(--btn-secondary-text);
+  border: none;
+  padding: 6px 10px;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: background 0.2s ease;
+}
+
+.controls button:hover {
+  background: var(--btn-primary-hover);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .controls {
+    position: static;
+    flex-direction: row;
+    justify-content: end;
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+  }
+
+  .controls button {
+    font-size: 13px;
+    padding: 6px 8px;
+  }
+
+  .addButton {
+    font-size: 1.125rem;
+    padding: 0.5rem;
+  }
+}

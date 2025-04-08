@@ -28,10 +28,10 @@ const getContent = async (req, res) => {
     }
 
     // Modify content
-    const modifiedContent = addUrls(contentSection);
+    // const modifiedContent = addUrls(contentSection);
     const isCreator=contentSection.creatorId.toString()==req.user.id.toString();
     const isEnrolled=enrollment?true:false;
-    res.json({ success: true,message:"contentSection fetch successfully", contentSection: {...modifiedContent,isCreator,isEnrolled} });
+    res.json({ success: true,message:"contentSection fetch successfully", contentSection: {...contentSection,isCreator,isEnrolled} });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

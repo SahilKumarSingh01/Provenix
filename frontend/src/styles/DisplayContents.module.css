@@ -25,7 +25,7 @@
   
   .selectionMenu {
     position: absolute;
-    bottom: -250px;
+    bottom: -330px;
     right: 10px;
     background-color: var(--bg-tertiary);
     border: 1px solid var(--border-primary);

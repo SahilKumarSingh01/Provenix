@@ -29,14 +29,10 @@ routes.delete('/text', textController.remove);
 // code Routes
 routes.post('/code', codeController.create);
 routes.put('/code', codeController.update);
-routes.put('/code/push', codeController.push);
-routes.put('/code/edit', codeController.edit);
-routes.put('/code/pull', codeController.pull);
 routes.delete('/code', codeController.remove);
 
 // Image Routes
 routes.post('/image', imageController.create);
-routes.get('/image', imageController.refreshUrl);
 routes.put('/image', imageController.update);
 routes.delete('/image', imageController.remove);
 
@@ -47,13 +43,8 @@ routes.put('/video', videoController.update);
 routes.delete('/video', videoController.remove);
 
 // MCQ Routes
-routes.post("/mcq", mcqController.create);
-routes.post("/mcq/option", mcqController.addOption);
-routes.delete("/mcq/option", mcqController.removeOption);
-routes.get("/mcq/ques/url", mcqController.refreshUrlQues);
-routes.put("/mcq/ques", mcqController.editQues);
-routes.put("/mcq/option", mcqController.editOption);
-routes.get("/mcq/option/url", mcqController.refreshUrlOption);
+routes.post("/mcq", mcqController.create); 
+routes.put("/mcq", mcqController.update);
 routes.delete("/mcq", mcqController.remove);
 
 // Hidden Routes
