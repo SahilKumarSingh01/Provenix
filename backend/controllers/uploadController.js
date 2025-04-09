@@ -148,20 +148,24 @@ const pageVideo = async (req, res) => {
         }
 
         const uploadOptions = {
-            folder: "pageVideo",  
+            folder: "pageVideo",
             resource_type: "video",
-            format: "mp4",           // **MP4 for universal compatibility**
+            type: "authenticated",
+            format: "mp4",
             transformation: [
-                { quality: "auto:good" },  // **Balances quality & compression**
-                { fetch_format: "mp4" },   // **Ensures MP4 format**
-                { width: 960, height: 540, crop: "limit" }, // **540p resolution**
-                { video_codec: "h264" },   // **H.264 for efficient compression**
-                { bit_rate: "400k" },      // **Slightly higher than WebM for same quality**
-                { fps: "24" },             // **Smooth playback, reduces size**
-                { audio_codec: "aac" },    // **Good audio quality & compression**
-                { audio_bit_rate: "80k" }  // **Reduces size while keeping clear speech**
+                { quality: "auto:good" },
+                { fetch_format: "mp4" },
+                { width: 960, height: 540, crop: "limit" },
+                { video_codec: "h264" },
+                { bit_rate: "250k" },
+                { fps: "10" },
+                { audio_codec: "aac" },
+                { audio_bit_rate: "24k" }  // 💡 Lowered for speech-only use
             ]
         };
+        
+        
+        
 
         // Upload to Cloudinary
         const cloudUpload = await new Promise((resolve, reject) => {
@@ -172,22 +176,21 @@ const pageVideo = async (req, res) => {
 
             uploadStream.end(req.file.buffer);
         });
-
+        const publicId=cloudUpload.public_id;
         // Store in OrphanResource
         await OrphanResource.create({
-            publicId: cloudUpload.public_id,
+            publicId,
             type: "video",
             category: "pageVideo"
         });
-        const url = cloudinary.utils.signed_url(publicId, {
-              type: "authenticated",
-              resource_type: "video",
-              format: "mp4",
-              expires_at: Math.floor(Date.now() / 1000) + VIDEO_EXPIRY_TIME,
-            });
-        res.status(201).json({ success: true, publicId: cloudUpload.public_id ,url});
+        const url = cloudinary.utils.private_download_url(publicId, "mp4", {
+            resource_type: "video",
+            type: "authenticated", // matches the uploaded asset type
+            expires_at: Math.floor(Date.now() / 1000) + VIDEO_EXPIRY_TIME // expires in 10 seconds
+        });
+        res.status(201).json({ success: true, publicId,url});
     } catch (error) {
-        console.log(error.message);
+        console.log("error is from uploadController",error.message);
         res.status(500).json({ success: false, message: error.message });
     }
 };

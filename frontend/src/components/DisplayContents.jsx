@@ -11,6 +11,7 @@ import DisplayHeading from "./DisplayHeading";
 import DisplayText from "./DisplayText";
 import DisplayCode from "./DisplayCode";
 import DisplayImage from "./DisplayImage.jsx";
+import DisplayVideo from "./DisplayVideo.jsx";
 
 import DisplayMCQ from "./DisplayMCQ.jsx";
 import DisplayHidden from "./DisplayHidden";
@@ -103,6 +104,13 @@ const DisplayContents = ({ contentSectionId }) => {
                         setContentSection={setContentSection} />;
             case "image":
               return <DisplayImage 
+                        key={index} 
+                        item={item} 
+                        index={index}
+                        contentSection={contentSection}
+                        setContentSection={setContentSection} />;
+            case "video":
+              return <DisplayVideo 
                         key={index} 
                         item={item} 
                         index={index}

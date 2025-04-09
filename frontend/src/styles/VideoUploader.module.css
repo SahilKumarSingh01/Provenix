@@ -1,0 +1,100 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .uploaderForm {
+    background: var(--bg-primary);
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 600px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.6);
+    border: 1px solid var(--border-primary);
+  }
+  
+  .uploaderForm h2 {
+    color: var(--text-heading);
+    text-align: center;
+  }
+  
+  /* Video preview container */
+  .videoContainer {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: var(--bg-tertiary);
+    border-radius: 6px;
+    border: 1px solid var(--border-primary);
+    margin: 12px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .videoContainer video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  
+  /* Action buttons */
+  .actions {
+    margin-top: 15px;
+    display: flex;
+    justify-content: end;
+    gap: 10px;
+  }
+  
+  .actionButton,
+  .cancelButton,
+  .fileInput::file-selector-button {
+    color: var(--btn-primary-text);
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+    border: none;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    min-width: 90px;
+  }
+  
+  /* File input button styling */
+  .fileInput::file-selector-button {
+    background: var(--bg-tertiary);
+  }
+  
+  .fileInput::file-selector-button:hover {
+    background-color: var(--bg-highlight);
+  }
+  
+  .actionButton {
+    background-color: var(--btn-primary-bg);
+  }
+  
+  .actionButton:not(:disabled):hover {
+    background-color: var(--btn-primary-hover);
+  }
+  
+  .actionButton:not(:disabled):active,
+  .cancelButton:active,
+  .fileInput::file-selector-button:active {
+    transform: scale(0.95);
+  }
+  
+  .cancelButton {
+    background-color: var(--btn-danger-bg);
+  }
+  
+  .cancelButton:hover {
+    background-color: var(--btn-danger-hover);
+  }
+  

@@ -1,168 +1,147 @@
 const OrphanResource = require("../../models/OrphanResource");
 const ContentSection = require("../../models/ContentSection");
 const Enrollment = require("../../models/Enrollment");
+const extractPublicId = require("../../utils/extractPublicId");
 const cloudinary = require("../../config/cloudinary");
 const Course = require("../../models/Course");
 
-const VIDEO_EXPIRY_TIME = 5 * 60 * 60; // 5 hours
+const VIDEO_EXPIRY_TIME = 5*60 * 60; // 1 hour or however long you want
 
 const create = async (req, res) => {
   try {
     const { contentSectionId } = req.params;
-    const { publicId } = req.body;
     const creatorId = req.user.id;
 
-    if (typeof publicId !== "string") {
-      return res.status(400).json({ message: "Invalid data type for publicId" });
-    }
-
-    // Push the new video item and return the updated section
     const updatedSection = await ContentSection.findOneAndUpdate(
       { _id: contentSectionId, creatorId, status: "active" },
-      { $push: { items: { type: "video", data: { publicId } } } },
-      { new: true, projection: { "items.$": 1 ,courseId: 1} } // Return only the newly added item
+      { $push: { items: { type: "video", data: { publicId: "" } } } },
+      { new: true }
     );
 
-    if (!updatedSection) {
+    if (!updatedSection)
       return res.status(404).json({ message: "Content section not found or unauthorized" });
-    }
 
-    const newItem = updatedSection.items[0]; // Store the added item
-
-    // Attempt to delete the orphan resource after successful update
-    const deleteResult = await OrphanResource.deleteOne({ publicId, type: "video", category: "pageVideo" });
-
-    if (deleteResult.deletedCount === 0) {
-      // Cleanup: Remove the added item from ContentSection since orphan deletion failed
-      await ContentSection.updateOne(
-        { _id: contentSectionId, "items._id": newItem._id },
-        { $pull: { items: { _id: newItem._id } } }
-      );
-
-      return res.status(400).json({ message: "File might have been deleted. Please try reuploading it." });
-    }
-
-    await Course.updateOne({ _id: updatedSection.courseId }, { $inc: { videoCount: 1 } });
-
-
-    // Generate a temporary signed URL (valid for VIDEO_EXPIRY_TIME seconds)
-    const url = cloudinary.utils.signed_url(publicId, {
-      type: "authenticated",
-      resource_type: "video",
-      format: "mp4",
-      expires_at: Math.floor(Date.now() / 1000) + VIDEO_EXPIRY_TIME,
+    res.status(201).json({
+      success: true,
+      message: "Video added successfully",
+      items: updatedSection.items,
     });
-    newItem.data.url = url;
-
-    res.status(201).json({ success: true, message: "Video added successfully", newItem});
-
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
-
-
-const refreshUrl = async (req, res) => {
-  try {
-    const { contentSectionId, courseId } = req.params;
-    const { itemId } = req.body;
-    const userId = req.user.id;
-
-    // Check if user is creator or enrolled
-    const [contentSection, isEnrolled] = await Promise.all([
-      ContentSection.findOne(
-        { _id: contentSectionId, "items._id": itemId, "items.type": "video", status: "active" },
-        { "items.$": 1, creatorId: 1 }
-      ),
-      Enrollment.exists({ course: courseId, user: userId, status: "active" })
-    ]);
-
-    if (!contentSection || (!contentSection.creatorId.equals(userId) && !isEnrolled)) {
-      return res.status(403).json({ message: "Access denied" });
-    }
-
-    const publicId = contentSection.items[0].data.publicId;
-    const url = cloudinary.utils.signed_url(publicId, {
-      type: "authenticated",
-      resource_type: "video",
-      format: "mp4",
-      expires_at: Math.floor(Date.now() / 1000) + VIDEO_EXPIRY_TIME,
-    });
-
-    res.json({ success: true, message: "URL refreshed", url });
-
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
 
 const update = async (req, res) => {
   try {
-    const { contentSectionId, courseId } = req.params;
-    const { itemId, publicId } = req.body;
+    const { contentSectionId } = req.params;
+    const { itemId, data, courseId } = req.body;
+    const { publicId } = data;
     const creatorId = req.user.id;
 
-    // Validate input types
     if (typeof publicId !== "string") {
-      return res.status(400).json({ message: "Invalid data type for publicId" });
+      return res.status(400).json({ message: "Invalid data type for url" });
     }
 
-    // Run all queries in parallel for better performance
-    const [orphanExists, activeEnrollmentExists, contentSection] = await Promise.all([
-      OrphanResource.exists({ publicId, type: "video", category: "pageVideo" }),
+    const newPublicId = publicId;
+
+    const [activeEnrollmentExists, deletionResult] = await Promise.all([
       Enrollment.exists({ course: courseId, status: "active" }),
-      ContentSection.findOne(
-        { _id: contentSectionId, creatorId, "items._id": itemId, "items.type": "video", status: "active" },
-        { "items.$": 1 }
-      ),
+      OrphanResource.deleteOne({ publicId: newPublicId, type: "video", category: "pageVideo" }),
     ]);
 
-    if (!contentSection) {
-      return res.status(404).json({ message: "Video not found or unauthorized" });
-    }
-
-    const existingItem = contentSection.items[0];
-
-    // Ensure orphan resource exists if publicId is changing
-    if (existingItem.data.publicId !== publicId && !orphanExists) {
-      return res.status(400).json({ message: "Invalid request. New publicId not found in orphan resources." });
-    }
-
     if (activeEnrollmentExists) {
+      await OrphanResource.create({ publicId: newPublicId, type: "video", category: "pageVideo" });
       return res.status(403).json({ message: "Modification not allowed. Active enrollments exist." });
     }
 
-    // Run updates in parallel
-    const [updatedSection] = await Promise.all([
-      // Update the video data
-      ContentSection.findOneAndUpdate(
-        { _id: contentSectionId, "items._id": itemId },
-        { $set: { "items.$.data": { publicId } } },
-        { new: true, projection: { "items.$": 1 } }
-      ),
+    if (deletionResult.deletedCount === 0) {
+      return res.status(400).json({ message: "Orphan entry not found or already used." });
+    }
 
-      // Manage orphan resources if publicId has changed
-      existingItem.data.publicId !== publicId
-        ? OrphanResource.bulkWrite([
-            { insertOne: { document: { publicId: existingItem.data.publicId, type: "video", category: "pageVideo" } } },
-            { deleteOne: { filter: { publicId, type: "video", category: "pageVideo" } } },
-          ])
-        : Promise.resolve({ result: "No changes" }),
-    ]);
+    const fetchedSection = await ContentSection.findOneAndUpdate(
+      {
+        _id: contentSectionId,
+        creatorId,
+        status: "active",
+        items: { $elemMatch: { _id: itemId, type: "video" } },
+      },
+      { $set: { "items.$.data": { publicId: newPublicId } } },
+      { new: false }
+    );
 
-    // Generate a signed URL with expiration
-    const url = cloudinary.utils.signed_url(publicId, {
-      type: "authenticated",
-      resource_type: "video",
-      format: "mp4",
-      expires_at: Math.floor(Date.now() / 1000) + VIDEO_EXPIRY_TIME,
+    if (!fetchedSection) {
+      await OrphanResource.create({ publicId: newPublicId, type: "video", category: "pageVideo" });
+      return res.status(500).json({ message: "Failed to update video." });
+    }
+
+    const itemIndex = fetchedSection.items.findIndex((item) => item._id.toString() === itemId);
+    const oldPublicId = fetchedSection.items[itemIndex]?.data?.publicId;
+
+    fetchedSection.items[itemIndex].data = { publicId: newPublicId };
+
+    if (oldPublicId && oldPublicId !== newPublicId) {
+      await OrphanResource.create({ publicId: oldPublicId, type: "video", category: "pageVideo" });
+    }
+    let course={};
+    if(!oldPublicId)//first time video upload
+    {
+      course= await Course.findOneAndUpdate(
+            { _id: fetchedSection.courseId },
+            { $inc: { videoCount: 1 } },
+            { new: true, lean: true }
+          ).select("videoCount");
+    }
+
+    res.json({
+      success: true,
+      message: "Video updated successfully",
+      items: fetchedSection.items,
+      vidoeCount:course?.videCount,
     });
 
-    const newItem=updatedSection.items[0];
-    
-    newItem.data.url = url;
-    res.json({success: true,message: "Video updated successfully",newItem});
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const refreshUrl = async (req, res) => {
+  try {
+    const { contentSectionId } = req.params;
+    const { itemId, courseId } = req.query;
+    const userId = req.user.id;
+
+    // Fetch the content section without filtering by creator
+    const section = await ContentSection.findOne({
+      _id: contentSectionId,
+      status: "active",
+      items: { $elemMatch: { _id: itemId, type: "video" } }
+    });
+
+    if (!section) {
+      return res.status(404).json({ message: "Content section or video not found." });
+    }
+
+    // Check enrollment (if buyer)
+    const isEnrolled = await Enrollment.exists({ course: courseId, user: userId, status: "active" });
+
+    const isCreator = section.creatorId.toString() === userId;
+
+    if (!isCreator && !isEnrolled) {
+      return res.status(403).json({ message: "Unauthorized to access video URL." });
+    }
+
+    const item = section.items.find((i) => i._id.toString() === itemId && i.type === "video");
+    if (!item || !item.data?.publicId) {
+      return res.status(404).json({ message: "Video item or publicId missing." });
+    }
+
+    const url = cloudinary.utils.private_download_url(item.data.publicId, "mp4", {
+        resource_type: "video",
+        type: "authenticated", // matches the uploaded asset type
+        expires_at: Math.floor(Date.now() / 1000) +VIDEO_EXPIRY_TIME,// VIDEO_EXPIRY_TIME, // expires in 10 seconds
+    });
+
+    res.json({ success: true, url });
 
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -172,46 +151,52 @@ const update = async (req, res) => {
 
 const remove = async (req, res) => {
   try {
-    const { contentSectionId, courseId } = req.params;
-    const { itemId } = req.body;
+    const { contentSectionId } = req.params;
+    const { itemId, courseId } = req.query;
     const creatorId = req.user.id;
 
-    const [activeEnrollmentExists, contentSection] = await Promise.all([
-      Enrollment.exists({ course: courseId, status: "active" }),
-      ContentSection.findOne(
-        { _id: contentSectionId, creatorId, "items._id": itemId, "items.type": "video" },
-        { "items.$": 1 }
-      ),
-    ]);
-
-    if (!contentSection) {
-      return res.status(404).json({ message: "Video not found or unauthorized" });
-    }
-
-    if (activeEnrollmentExists) {
+    const enrollmentExists = await Enrollment.exists({ course: courseId, status: "active" });
+    if (enrollmentExists) {
       return res.status(403).json({ message: "Modification not allowed. Active enrollments exist." });
     }
 
-    const existingItem = contentSection.items[0];
+    const section = await ContentSection.findOneAndUpdate(
+      {
+        _id: contentSectionId,
+        creatorId,
+        status: "active",
+        items: { $elemMatch: { _id: itemId, type: "video" } },
+      },
+      { $pull: { items: { _id: itemId } } },
+      { new: false }
+    );
 
-    await Promise.all([
-      ContentSection.updateOne(
-        { _id: contentSectionId },
-        { $pull: { items: { _id: itemId } } }
-      ),
-      OrphanResource.create({
-        publicId: existingItem.data.publicId,
-        type: "video",
-        category: "pageVideo"
-      }),
-      Course.updateOne({ _id: courseId ,creator:creatorId}, { $inc: { videoCount: -1 } }) // Decrement video count
-    ]);
+    if (!section) {
+      return res.status(404).json({ message: "Video not found or unauthorized" });
+    }
 
-    res.json({ success: true, message: "Video removed successfully" });
+    const itemIndex = section.items.findIndex(item => item._id.toString() === itemId && item.type === "video");
+    const { publicId } = section.items[itemIndex].data;
+
+    section.items.splice(itemIndex, 1);
+
+    await OrphanResource.create({ publicId, type: "video", category: "pageVideo" });
+    const course= await Course.findOneAndUpdate(
+      { _id: section.courseId },
+      { $inc: { videoCount: -1 } },
+      { new: true, lean: true }
+    ).select("videoCount");
+
+    res.json({
+      success: true,
+      message: "Video removed successfully",
+      items: section.items,
+      videoCount:course.videoCount,
+    });
 
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
-
-module.exports = { create, refreshUrl, update, remove };
+ 
+module.exports = { create, refreshUrl,update, remove };
