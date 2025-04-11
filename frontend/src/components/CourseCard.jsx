@@ -12,6 +12,7 @@ const CourseCard = ({ course }) => {
   const handleCardClick = () => {
     navigate(`/course/${course._id}/view`);
   };
+  const progess=course.completedPages?(course.completedPages.length/course.pageCount)*100:null;
   return (
     <div className={styles.ccContainer} onClick={handleCardClick}>
       {/* <Link to={`/course-view/${course._id}`} className={styles.ccLink}> */}
@@ -50,10 +51,11 @@ const CourseCard = ({ course }) => {
 
         <div className={styles.ccPriceRatingWrapper}>
         <div className={styles.ccCourseRating}><AvgRating course={course}/></div>
-        <p className={styles.ccCoursePrice}>
-          {course.price > 0 ? `₹${course.price.toFixed(2)}` : "Free"}
-        </p>
-        
+          <p className={styles.ccCoursePrice}>
+            {progess!==null?progess.toFixed(2)+"%":
+            course.price > 0 ? `₹${course.price.toFixed(2)}` : "Free"}
+          </p>
+          
         </div>
       </div>
     </div>

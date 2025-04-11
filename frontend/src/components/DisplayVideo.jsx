@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
-import styles from "../styles/DisplayVideo.module.css";
 import { toast } from "react-toastify";
 import axios from "../api/axios";
 import { useEditingContent } from "../context/EditingContentContext";
 import VideoUploader from "./VideoUploader.jsx";
+import styles from "../styles/DisplayVideo.module.css";
 
-const DisplayVideo = ({ item, index, contentSection, setContentSection }) => {
+
+const DisplayVideo = ({ item, index, contentSection, setContentSection,insight,updateInsight }) => {
   const { editingItem, setEditingItem, updateItemData, editingState } = useEditingContent();
   const [overlay, setOverlay] = useState(null);
   const [url, setUrl] = useState("");
   const [showVideo, setShowVideo] = useState(false);
-  const [bookmarks,setBookmarks]=useState([{label:"dfd",time:89}]);
+  const [bookmarks,setBookmarks]=useState(insight?.data||[]);
   const [editingBookmark, setEditingBookmark] = useState(null);
   const videoRef = useRef(null);
 
@@ -18,13 +19,19 @@ const DisplayVideo = ({ item, index, contentSection, setContentSection }) => {
   const { publicId } = isEditing ? editingState.curData : item.data || {};
   const isEmpty = !publicId;
 
+  useEffect(()=>{
+    if(insight?.data)
+      setBookmarks(insight.data||[]);
+  },[insight])
+
   const saveBookmarkEdit = () => {
     //you need some logic here 
     const updatedBookmarks=[...bookmarks];
     const {index,label}=editingBookmark;
     updatedBookmarks[index]={...updatedBookmarks[index],label};
-    console.log(updatedBookmarks)
+
     setBookmarks(updatedBookmarks);
+    updateInsight({itemId:item._id,data:updatedBookmarks},index);
     setEditingBookmark(null);
   };
 
@@ -126,8 +133,6 @@ const DisplayVideo = ({ item, index, contentSection, setContentSection }) => {
           {!showVideo ? (
             <div className={styles.thumbnail} onClick={() => setShowVideo(true)}>
               <div className={styles.playIcon}>▶</div>
-              <p className={styles.clickToPlay}></p>
-              {renderControls()}
             </div>
           ) : (
             <>

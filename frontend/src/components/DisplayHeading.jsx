@@ -3,8 +3,8 @@ import styles from "../styles/DisplayHeading.module.css";
 import mergeInterval from "../utils/mergeIntervals";
 import { useEditingContent } from "../context/EditingContentContext"; // adjust path if needed
 
-const DisplayHeading = ({ item,index,contentSection ,setContentSection}) => {
-  const [insight, setInsight] = useState(item.insight || []);
+const DisplayHeading = ({ item,index,contentSection ,setContentSection,insight,updateInsight}) => {
+  const [highlights, setHighlights] = useState( insight?.data||[]);
   const [showDeleteMenu, setShowDeleteMenu] = useState(null); // Position of delete menu
   const textareaRef = useRef(null);
   const {editingState, editingItem,setEditingItem,updateItemData} = useEditingContent();
@@ -20,7 +20,9 @@ const DisplayHeading = ({ item,index,contentSection ,setContentSection}) => {
     }
     return ()=>{cleanupScrollListener()};
   }, [editingItem]);
-  
+  useEffect(()=>{
+    setHighlights(insight?.data||[])
+  },[insight])
   const adjustHeight = () => {
     const textarea = textareaRef.current;
     textarea.style.height = textarea.scrollHeight + "px"; // Set to scroll height
@@ -49,8 +51,9 @@ const DisplayHeading = ({ item,index,contentSection ,setContentSection}) => {
     const end = endBaseOffset + range.endOffset;
 
     if (start < end) {
-      const updatedInsight=mergeInterval([...insight,[start,end]]);
-      setInsight(updatedInsight);
+      const updatedHighlights=mergeInterval([...highlights,[start,end]]);
+      setHighlights(updatedHighlights);
+      contentSection.isEnrolled&&updateInsight({itemId:item._id,data:updatedHighlights},index);
       window.getSelection().removeAllRanges();
     }
   };
@@ -81,9 +84,10 @@ const DisplayHeading = ({ item,index,contentSection ,setContentSection}) => {
 
   // Confirm deletion of a highlight
   const deleteHighlight = () => {
-    const updatedInsight = [...insight];
-    updatedInsight.splice(showDeleteMenu.index, 1);
-    setInsight(updatedInsight);
+    const updatedHighlights = [...highlights];
+    updatedHighlights.splice(showDeleteMenu.index, 1);
+    setHighlights(updatedHighlights);
+    contentSection.isEnrolled&&updateInsight({itemId:item._id,data:updatedHighlights},index);
     setShowDeleteMenu(null);
   };
 
@@ -91,8 +95,7 @@ const DisplayHeading = ({ item,index,contentSection ,setContentSection}) => {
   const renderHighlightedText = () => {
     let result = [];
     let lastIndex = 0;
-
-    insight.forEach(([start, end], idx) => {
+    highlights.forEach(([start, end], idx) => {
       if (start > lastIndex) {
         result.push(
           <span key={`normal-${idx}`} className={styles.unhighlighted} data-startoffset={lastIndex}> 

@@ -36,11 +36,13 @@ const UserMenu = ({ children }) => {
       </button>
 
       {isOpen && (
-        <ul className={styles.dropdownMenu}>
+        <ul className={styles.dropdownMenu} >
           <li onClick={() => handleNavigate("/dashboard")}>Dashboard</li>
           <li onClick={() => handleNavigate("/profile")}>Profile</li>
           <li onClick={() => handleNavigate("/course/create")}>Create Course</li>
           <li onClick={() => handleNavigate("/course/my-courses")}>My Courses</li>
+          <li onClick={() => handleNavigate("/course/my-enrollments")}>My Enrollments</li>
+
           <li className={styles.logout} onClick={handleLogout}>Logout</li>
         </ul>
       )}

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const commentSchema = new mongoose.Schema({
-  content: { type: String, required: true },
+  text: { type: String, required: true },
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // Added ref to "User"
   courseId: { type: String, required: true },
   pageId: { type: mongoose.Schema.Types.ObjectId, required: true }, // Links to Lesson or Practice

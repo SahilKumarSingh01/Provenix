@@ -4,10 +4,11 @@ const verifyPayment = require("./enrollment/verifyPayment");
 const removeEnrollment = require("./enrollment/removeEnrollment");
 const pushProgress  =require('./enrollment/pushProgress');
 const pullProgress  =require('./enrollment/pullProgress');
-
+const getProgress   =require('./enrollment/getProgress')
 module.exports = {
   enroll,
   getEnrolledCourses,
+  getProgress,
   verifyPayment,
   pushProgress,
   pullProgress,

@@ -4,6 +4,7 @@ import { useCourse } from "../context/CourseContext";
 import { EditingContentProvider, useEditingContent } from "../context/EditingContentContext";
 import Sidebar from '../components/Sidebar.jsx';
 import DisplayContents from "../components/DisplayContents";
+import CommentSection from '../components/CommentSection';
 import styles from "../styles/PageView.module.css";
 
 const PageViewContent = () => {
@@ -15,6 +16,7 @@ const PageViewContent = () => {
   const [pageTitle, setPageTitle] = useState("");
   const [pages, setPages] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [showComment,setShowComment]=useState(false);
 
 
   useEffect(() => {
@@ -56,7 +58,7 @@ const PageViewContent = () => {
 
         {/* Buttons Section */}
         <div className={styles.actions}>
-          <button className={styles.actionBtn}>Comments</button>
+          <button className={styles.actionBtn} onClick={() => setShowComment(!showComment)}>Comments</button>
 
           <div className={styles.navButtons}>
             <button className={styles.actionBtn} onClick={handlePrev} disabled={currentIndex === 0}>
@@ -67,7 +69,9 @@ const PageViewContent = () => {
             </button>
           </div>
         </div>
+        
       </div>
+      {showComment?<CommentSection page={pages[currentIndex]}/>:''}
     </>
   );
 };

@@ -2,7 +2,6 @@ const Course = require("../../models/Course");
 const searchCourses = async (req, res) => {
     try {
       const { keyword, category, tags, level, minPrice, maxPrice, limit = 10, skip = 0, sortBy = "createdAt", order = -1 } = req.body;
-  
       const matchStage = { status: "published" };
   
       if (tags) matchStage.tags = { $in: tags.split(",") };
@@ -37,9 +36,10 @@ const searchCourses = async (req, res) => {
         pipeline.push({ $match: { matchCount: { $gt: 0 } } });
         pipeline.push({ $sort: { matchCount: -1 } });
       }
-  
+
       pipeline.push({ $skip: Number(skip) }, { $limit: Number(limit) });
       pipeline.push({ $sort: { [sortBy]: order } });
+
       pipeline.push({
         $lookup: {
           from: "users", // Collection name in MongoDB (pluralized)
@@ -48,22 +48,7 @@ const searchCourses = async (req, res) => {
           as: "creator",
         }
       });
-      pipeline.push({ $unwind: "$creator" }); // To flatten the array (if needed)
-      pipeline.push({
-        $project: {
-            title: 1,
-            category: 1,
-            tags: 1,
-            level: 1,
-            price: 1,
-            status: 1,
-            createdAt: 1,
-            updatedAt: 1,
-            "creator.username": 1,
-            "creator.displayName": 1,
-            "creator.photo": 1  // Changed from "thumbnail" to "photo"
-        }
-    });
+      pipeline.push({ $unwind: "$creator" }); 
     
       const courses = await Course.aggregate(pipeline);
       res.status(200).json({ success: true, courses });

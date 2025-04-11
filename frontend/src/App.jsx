@@ -54,20 +54,7 @@ function App() {
         {/* <Route path='/explore' element={<Editor/>}/> */}
         <Route path='/explore' element={<Explore/>}/>
         <Route path='/login' element={<Login/>}/>
-        {/* <Route path='/course-creation' element={<CourseCreation/>}/>
-        <Route path='/my-courses' element={<MyCourses/>}/>
-        <Route path='/course-detail-form' element={<CourseDetailForm/>}/>
-        <Route path='/course-sections/:courseId' element={<SectionList/>}/> 
-        <Route path='/course/:courseId/section-pages/:sectionId' element={<PageList/>}/>
-        <Route path='/course-view/:courseId' element={<CourseView/>}/> */}
-
-
         <Route path="/course/*" element={<CourseRoutes />} />
-
-        {/* <Route path="/courses/:courseId/">
-            <Route index element={<CourseOverview />} />
-            <Route path="pages" element={<PageList />} />
-        </Route> */}
 
 
 

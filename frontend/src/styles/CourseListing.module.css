@@ -20,6 +20,7 @@
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
+  justify-content: start;
 }
 
 .filters select {
@@ -27,11 +28,41 @@
   border: 1px solid var(--border-primary);
   border-radius: 6px;
   background: var(--bg-secondary);
-  color: var(--text-primary);
+  color: var(--text-secondary);
   cursor: pointer;
   outline: none; /* Prevents default focus border */
 
 }
+
+.filters input {
+  padding: 8px 12px;
+  border: 1px solid var(--border-primary);
+  border-radius: 6px;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  outline: none;
+  min-width: 50px; /* helps maintain decent size in wrap */
+}
+.filters input[type=number]{
+  width: 10px;
+}
+.filters button {
+  padding: 8px 14px;
+  background: var(--btn-primary-bg);
+  color: var(--text-primary);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+}
+
+.filters button:hover {
+  background: var(--btn-primary-hover);
+}
+.filters button:active{
+  transform:scale(0.95);
+}
+
 
 .sortOptions {
   display: flex;

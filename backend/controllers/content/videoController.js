@@ -96,7 +96,7 @@ const update = async (req, res) => {
       success: true,
       message: "Video updated successfully",
       items: fetchedSection.items,
-      vidoeCount:course?.videCount,
+      videoCount:course?.videoCount,
     });
 
   } catch (error) {

@@ -20,18 +20,54 @@ import { useCache } from "../context/CacheContext.jsx";
 
 const DisplayContents = ({ contentSectionId }) => {
   const { fetchContentSection } = useCourse();
-  const {setCache}=useCache();
+  const {setCache,getCache}=useCache();
   const [contentSection, setContentSection] = useState(null);
+  const [insightSection,setInsightSection]=useState(null);
   const [showMenu, setShowMenu] = useState(false);
   const {editingState,saveEditing}=useEditingContent();
+
   useEffect(() => {
     const fetchAll = async () => {
       const fetchedCS = await fetchContentSection(contentSectionId);
-      if(!fetchedCS)return;
+      if (!fetchedCS) return;
+  
       setContentSection(fetchedCS);
-    }
+  
+      if (fetchedCS.isEnrolled) {
+        try {
+          const { data } = await axios.get(`/api/enrollment/insight/${fetchedCS._id}`);
+          const rawInsights = data.insightSection;
+          if (rawInsights && Array.isArray(rawInsights.insights)) {
+            const insightMap = {};
+            for (const i of rawInsights.insights) {
+              insightMap[i.itemId?.toString()] = i;
+            }
+  
+            const orderedInsights = fetchedCS.items.map(
+              item => insightMap[item._id?.toString()]
+            );
+  
+            setInsightSection({ ...rawInsights, insights: orderedInsights });
+          } 
+        } catch (e) {
+          console.error("Error fetching insight section:", e);
+        }
+      }
+    };
+  
     fetchAll();
   }, [contentSectionId]);
+  
+  const updateInsight = async (newInsight,index) => {
+    try {
+      const { data } = await axios.put(`/api/enrollment/insight/${insightSection._id}`,{ insight: newInsight });
+      toast.success(data.message);
+    } catch (error) {
+      toast.error(error.response.data?.message||"failed to update insight");
+      console.error("Error updating insight:", error);
+    }
+  };
+  
   // console.log("from content Display",contentSection);
   const addElement = async (type) => {
     try{
@@ -39,6 +75,11 @@ const DisplayContents = ({ contentSectionId }) => {
       const {data}=await axios.post(`/api/course/content/${contentSectionId}/${type}`);
       const updatedSection={...contentSection,items:data.items};
       setCache(contentSection._id,updatedSection);
+      const course=getCache(contentSection.courseId);
+      if(course&&data.codeCount)
+      {
+          setCache(course._id,{...course,codeCount:data.codeCount});
+      }
       setContentSection(updatedSection);
       toast.success(data.message);
     }catch(e){
@@ -49,10 +90,6 @@ const DisplayContents = ({ contentSectionId }) => {
       setShowMenu(false);
     }
   };
-  const codeData = [
-    { lang: "JavaScript", data: "console.log('Hello, World!');\nlet x = 10;" },
-    { lang: "Python", data: "print('Hello, World!')\nx = 10" },
-  ];
   if (!contentSection) return <p>Loading content...</p>;
   const itemsToDisplay=editingState.contentSection?._id==contentSection._id?editingState.items:contentSection.items;
   return (
@@ -65,6 +102,8 @@ const DisplayContents = ({ contentSectionId }) => {
                         key={index} 
                         item={item} 
                         index={index}
+                        insight={insightSection?.insights[index]}
+                        updateInsight={updateInsight}
                         contentSection={contentSection}
                         setContentSection={setContentSection} />;
             case "text":
@@ -72,6 +111,8 @@ const DisplayContents = ({ contentSectionId }) => {
                         key={index} 
                         item={item} 
                         index={index}
+                        insight={insightSection?.insights[index]}
+                        updateInsight={updateInsight}
                         contentSection={contentSection}
                         setContentSection={setContentSection} />;
             case "code":
@@ -86,6 +127,8 @@ const DisplayContents = ({ contentSectionId }) => {
                         key={index} 
                         item={item} 
                         index={index}
+                        insight={insightSection?.insights[index]}
+                        updateInsight={updateInsight}
                         contentSection={contentSection}
                         setContentSection={setContentSection} />;
             case "hidden":
@@ -114,6 +157,8 @@ const DisplayContents = ({ contentSectionId }) => {
                         key={index} 
                         item={item} 
                         index={index}
+                        insight={insightSection?.insights[index]}
+                        updateInsight={updateInsight}
                         contentSection={contentSection}
                         setContentSection={setContentSection} />;
             default:

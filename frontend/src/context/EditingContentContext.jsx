@@ -18,7 +18,7 @@ export const EditingContentProvider = ({ children }) => {
     curData: null,
   });
   const [overlay, setOverlay] = useState(null);
-  const {setCache}=useCache();
+  const {setCache,getCache}=useCache();
   
   const editingItem=editingState.items?editingState.items[editingState.curIndex]:null;
   
@@ -65,10 +65,22 @@ export const EditingContentProvider = ({ children }) => {
             newIndex:editingState.curIndex
           })
         )
+        if(promises.length==0)
+          return clearEditingState();; 
         const results=await Promise.all(promises);
         results.forEach((result)=>toast.success(result.data.message));
         const updatedSection={...contentSection,items:editingState.items,};
         updatedSection.items[index].data=editingState.curData;
+        let updates={};
+        if(results[0].data.codeCount)
+          updates.codeCount=results[0].data.codeCount;
+        if(results[0].data.videoCount)
+          updates.videoCount=results[0].data.videoCount;
+        //may use it save 
+        const course=getCache(contentSection.courseId);
+        if(course)
+            setCache(course._id,{...course,...updates});
+        console.log(updates);
         setCache(contentSection._id,updatedSection);
         editingState.setContentSection(updatedSection);
         clearEditingState();
@@ -87,6 +99,15 @@ export const EditingContentProvider = ({ children }) => {
           {params:{itemId:editingItem._id,courseId:contentSection.courseId}}
         );
         const updatedSection={...contentSection,items:data.items}
+        let updates={};
+        if(data.codeCount)
+          updates.codeCount=data.codeCount;
+        if(data.videoCount)
+          updates.videoCount=data.videoCount;
+        //may use it save 
+        const course=getCache(contentSection.courseId);
+        if(course)
+            setCache(course._id,{...course,...updates});
         setCache(contentSection._id,updatedSection);
         editingState.setContentSection(updatedSection);
         toast.success(data.message);

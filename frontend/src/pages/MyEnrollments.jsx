@@ -3,14 +3,13 @@ import axios from "../api/axios";
 import CourseCard from "../components/CourseCard";
 import styles from "../styles/CourseListing.module.css";
 import {toast} from 'react-toastify'
-const MyEnrollments = () => {
+const MyCourses = () => {
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [sortBy, setSortBy] = useState("updatedAt");
     const [order, setOrder] = useState(-1);
     const [hasNext, setHasNext] = useState(false);
     const [status, setStatus] = useState(""); 
-    const [price, setPrice] = useState("");  
     const [level, setLevel] = useState("");  
     const [skip, setSkip] = useState(0);  
     const limit = 3;  
@@ -19,15 +18,18 @@ const MyEnrollments = () => {
     const fetchCourses = async () => {
         try {
             setLoading(true);
-            const { data } = await axios.get("/api/course/created-courses", {
-                params: { sortBy, order, skip: 0, limit: limit + 1, status, price, level }
+            const { data } = await axios.get("/api/enrollment/enrolled-courses", {
+                params: { sortBy, order, skip: 0, limit: limit + 1, status, level }
             });
-
-            setCourses(data.courses.slice(0, limit));
+            const fetchedCourses=data.enrollments.map((enrollment)=>{
+                return {...enrollment.course,completedPages:enrollment.completedPages};
+            })
+            setCourses(fetchedCourses.slice(0, limit));
             setSkip(limit);
-            setHasNext(data.courses.length > limit);
+            setHasNext(fetchedCourses.length > limit);
         } catch (error) {
-            toast.error("Error fetching courses:", error);
+            console.log(error)
+            toast.error(error.response.data?.message||"Error fetching enrollments");
         } finally {
             setLoading(false);
         }
@@ -39,7 +41,7 @@ const MyEnrollments = () => {
         try {
             setLoading(true);
             const { data } = await axios.get("/api/course/created-courses", {
-                params: { sortBy, order, skip, limit: limit + 1, status, price, level }
+                params: { sortBy, order, skip, limit: limit + 1, status, level }
             });
 
             setCourses((prevCourses) => [...prevCourses, ...data.courses.slice(0, limit)]);
@@ -55,18 +57,18 @@ const MyEnrollments = () => {
     // Fetch fresh courses when filters change
     useEffect(() => {
         fetchCourses();
-    }, [sortBy, order, status, price, level]);
+    }, [sortBy, order, status, level]);
 
     return (
         <div className={styles.courseContainer}>
             <div className={styles.courseHeader}>
-                <h2>My Courses</h2>
+                <h2>My Enrollments</h2>
                 <div className={styles.sortOptions}>
                     <label>Sort by: </label>
                     <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-                        <option value="title">Title</option>
-                        <option value="price">Price</option>
-                        <option value="updatedAt">Date Modified</option>
+                        <option value="course.title">Title</option>
+                        <option value="course.price">Price</option>
+                        <option value="completedPagesSize">Progress</option>
                         <option value="createdAt">Date Created</option>
                     </select>
                     <button onClick={() => setOrder(order * -1)}>
@@ -79,15 +81,8 @@ const MyEnrollments = () => {
             <div className={styles.filters}>
                 <select value={status} onChange={(e) => setStatus(e.target.value)}>
                     <option value="">All Status</option>
-                    <option value="draft">Draft</option>
-                    <option value="published">Published</option>
-                    <option value="deleted">Deleted</option>
-                </select>
-
-                <select value={price} onChange={(e) => setPrice(e.target.value)}>
-                    <option value="">All Types</option>
-                    <option value="free">Free</option>
-                    <option value="paid">Paid</option>
+                    <option value="active">Active</option>
+                    <option value="expired">expired</option>
                 </select>
 
                 <select value={level} onChange={(e) => setLevel(e.target.value)}>
@@ -123,4 +118,4 @@ const MyEnrollments = () => {
     );
 };
 
-export default MyEnrollments;
+export default MyCourses;

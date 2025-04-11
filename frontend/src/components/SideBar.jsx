@@ -46,7 +46,9 @@ const Sidebar = () => {
       </button>
 
       <div className={styles.sidebarContent}>
-        <div className={styles.courseTitle}>{courseTitle}</div>
+        <Link key={courseId} className={styles.courseTitle} to={`/course/${courseId}/modules`}>
+          {courseTitle}
+        </Link>
 
         <div className={styles.moduleList}>
           {modules.map((module) => {

@@ -1,28 +1,34 @@
 const Enrollment = require("../models/Enrollment");
 
-async function extendEnrollmentExpiry(userId, courseId) {
+async function extendEnrollmentExpiry(enrollmentId) {
     try {
-        const updatedEnrollment = await Enrollment.updateOne(
-            { user: userId, course: courseId },
+        const updated = await Enrollment.updateOne(
+            { _id:enrollmentId },
             [
                 {
                     $set: {
                         expiresAt: {
                             $add: [
-                                { $max: ["$expiresAt", "$$NOW"] }, // Extend from the latest expiry or now
-                                30 * 24 * 60 * 60 * 1000 // Add 30 days
+                                {
+                                    $cond: {
+                                        if: { $gt: ["$expiresAt", "$$NOW"] },
+                                        then: "$expiresAt",
+                                        else: "$$NOW"
+                                    }
+                                },
+                                30 * 24 * 60 * 60 * 1000 // 30 days in ms
                             ]
-                        }
+                        },
+                        status: "active"
                     }
                 }
             ]
         );
-
-        return updatedEnrollment;
+        return updated;
     } catch (error) {
         console.error("Error extending enrollment expiry:", error);
         throw error;
     }
 }
 
-module.exports =  extendEnrollmentExpiry ;
+module.exports = extendEnrollmentExpiry;

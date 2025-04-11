@@ -10,7 +10,9 @@ const enroll = async (req, res) => {
 
         // Fetch course and enrollment in parallel
         const [course, enrollment] = await Promise.all([
-            Course.findOne({ _id: courseId, status: "published" }),
+            Course.findOne({ _id: courseId, status: "published" })
+            .populate("creator", "username photo displayName")
+            .lean(),
             Enrollment.findOne({ user: userId, course: courseId })
         ]);
 
@@ -31,7 +33,9 @@ const enroll = async (req, res) => {
             } else {
                 await extendEnrollmentExpiry(enrollment._id); // Extend access for existing enrollment
             }
-            return res.status(200).json({ success: true, message: "Free course enrolled successfully" });
+            return res.status(200).json({ success: true, 
+                message: "Free course enrolled successfully",
+                course:{...course,isEnrolled:true,isCreator:false} });
         }
 
         let lastOrderIndex = enrollment?.orderIds?.length - 1;

@@ -5,8 +5,8 @@ import ImageUploader from "./ImageUploader";
 import { toast } from "react-toastify";
 import axios from "../api/axios";
 
-const DisplayMCQ = ({ item, index, contentSection, setContentSection }) => {
-  const [chosenOptionIndexes, setChosenOptionIndexes] = useState([]);
+const DisplayMCQ = ({ item, index, contentSection, setContentSection,insight,updateInsight }) => {
+  const [selectedOptions, setSelectedOptions] = useState(insight?.data||[]);
   const [showResult, setShowResult] = useState(false);
   const [overlay, setOverlay] = useState(null);
   const questionRef = useRef(null);
@@ -27,6 +27,14 @@ const DisplayMCQ = ({ item, index, contentSection, setContentSection }) => {
       });
 
   }, [isEditing]);
+
+  useEffect(()=>{
+    if(insight?.data)
+      setSelectedOptions(insight.data||[]);
+    if(insight?.data?.length)
+      setShowResult(true);
+
+  },[insight])
 
   const setImageOverlay = (type, idx) => {
     setOverlay(
@@ -92,16 +100,18 @@ const DisplayMCQ = ({ item, index, contentSection, setContentSection }) => {
   };
 
   const toggleOptionSelection = (idx) => {
-    setChosenOptionIndexes((prev) =>
-      prev.includes(idx) ? prev.filter((i) => i !== idx) : [...prev, idx]
-    );
+    const prev=selectedOptions;
+    const updatedOptions=prev.includes(idx) ? prev.filter((i) => i !== idx) : [...prev, idx];
+    setSelectedOptions(updatedOptions);
   };
 
   const toggleVerify = () => {
     if (showResult) {
-      setChosenOptionIndexes([]);
+      setSelectedOptions([]);
+      contentSection.isEnrolled&&updateInsight({itemId:item._id,data:[]},index);
       setShowResult(false);
     } else {
+      contentSection.isEnrolled&&updateInsight({itemId:item._id,data:selectedOptions},index);
       setShowResult(true);
     }
   };
@@ -193,7 +203,7 @@ const DisplayMCQ = ({ item, index, contentSection, setContentSection }) => {
             <ul className={styles.options}>
               {mcqData.options.map((opt, idx) => {
                 const base = styles.optionText;
-                const selected = chosenOptionIndexes.includes(idx);
+                const selected = selectedOptions.includes(idx);
                 const isCorrect = opt.isCorrect;
 
                 const optionClass = [
@@ -222,7 +232,7 @@ const DisplayMCQ = ({ item, index, contentSection, setContentSection }) => {
             <button
               className={styles.verifyButton}
               onClick={toggleVerify}
-              disabled={chosenOptionIndexes.length === 0}
+              disabled={selectedOptions.length === 0}
             >
               {showResult ? "Clear" : "Verify"}
             </button>

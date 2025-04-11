@@ -2,8 +2,8 @@ const Enrollment = require("../../models/Enrollment");
 
 const pushProgress = async (req, res) => {
     try {
-        const { enrollmentId } = req.params;
         const userId = req.user.id;
+        const {courseId}=req.query
         const { pageId } = req.body;
 
         if (!pageId) {
@@ -11,7 +11,7 @@ const pushProgress = async (req, res) => {
         }
 
         const result = await Enrollment.updateMany(
-            { _id: enrollmentId, user: userId },
+            { course:courseId, user: userId },
             { $addToSet: { completedPages: pageId } }
         );
 

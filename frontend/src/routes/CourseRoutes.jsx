@@ -4,6 +4,8 @@ import CourseView from "../pages/CourseView";
 import ModuleList from '../pages/ModuleList.jsx'
 import PageList from '../pages/PageList.jsx'
 import MyCourses from "../pages/MyCourses";
+import MyEnrollments from "../pages/MyEnrollments";
+
 import PageView from '../pages/PageView.jsx';
 import CourseDetailForm from "../pages/CourseDetailForm";
 import { CourseProvider } from "../context/CourseContext";
@@ -19,6 +21,7 @@ const CourseRoutes = () => {
     
       <Routes>
         <Route path='/my-courses' element={<MyCourses/>}/>
+        <Route path='/my-enrollments' element={<MyEnrollments/>}/>
         <Route path='/create' element={<CourseCreation/>}/>
         <Route path="/:courseId" element={<CourseContextWrapper />}>
             <Route path='detail-form' element={<CourseDetailForm/>}/>

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, {  useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {toast} from 'react-toastify'
 import {useCourse} from "../context/CourseContext"; // Import CourseContext
@@ -34,6 +34,18 @@ const CourseView = () => {
         try {
             const response = await axios.put(`api/course/${course._id}/recover`);
             toast.success(response.data.message);
+            setCache(courseId,response.data.course);
+            setCourse(response.data.course);
+        } catch (error) {
+            console.log(error);
+            toast.error(error.response?.data?.message || "Something went wrong!");
+        }
+    }
+    const handleEnrollment=async()=>{
+        try {
+            const response = await axios.post(`api/enrollment/${course._id}/enroll`);
+            toast.success(response.data.message);
+            console.log(response.data)
             setCache(courseId,response.data.course);
             setCourse(response.data.course);
         } catch (error) {
@@ -94,7 +106,7 @@ const CourseView = () => {
                 {/* Action Buttons */}
                 <div className={styles.actions}>
                     {!course.isEnrolled&&!course.isCreator ? (
-                        <button className={styles.actionBtn} onClick={() => navigate(`/course/${course._id}/enroll`)}>
+                        <button className={styles.actionBtn} onClick={handleEnrollment}>
                             Enroll
                         </button>
                     ) : ""}

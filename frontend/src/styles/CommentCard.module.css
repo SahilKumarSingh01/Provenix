@@ -1,40 +1,24 @@
-/* Review Card */
-.reviewCard {
+/* Comment Card */
+.commentCard {
     background: var(--bg-primary);
     padding: 15px;
     margin-bottom: 10px;
     border-radius: 8px;
 }
 
-/* Review Header */
-.reviewHeader {
+/* Header */
+.commentHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-/* User Name */
-.reviewUser {
-    color: var(--text-highlight);
-}
-
-.ratingActionWrapper {
-    display: flex;
-    align-items: center;
-    gap: 12px; /* Space between stars & menu */
-}
-
-/* Star Ratings */
-.reviewRating {
-    color: gold;
-    font-size: 14px;
-}
-
-/* Options Button & Menu */
-.reviewOptions {
+/* Actions Wrapper (⋮ menu) */
+.commentActions {
     position: relative;
 }
 
+/* ⋮ Button */
 .optionsButton {
     background: none;
     border: none;
@@ -49,6 +33,7 @@
     color: var(--text-highlight);
 }
 
+/* Dropdown Menu */
 .optionsMenu {
     position: absolute;
     top: 25px;
@@ -73,18 +58,26 @@
 }
 
 .optionsMenu button:hover {
-    background: rgba(255, 255, 255, 0.1); /* Subtle hover effect */
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .optionsMenu button:active {
-    background: rgba(255, 255, 255, 0.15); /* Slightly deeper active state */
+    background: rgba(255, 255, 255, 0.15);
     transform: scale(0.95);
 }
 
-/* Review Comment */
-.reviewText {
-    margin-top: 5px;
+/* Comment Text */
+.commentText {
+    margin-top: 8px;
     font-size: 13px;
-    padding:15px;
+    padding:10px;
     color: var(--text-primary);
+}
+
+/* Comment Timestamp */
+.commentDate {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 4px;
+    text-align: right;
 }

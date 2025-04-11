@@ -1,7 +1,8 @@
 const Review = require("../models/Review.js");
 const Enrollment = require("../models/Enrollment");
+const Course=require('../models/Course')
 
-const  MAX_REPORT=3;
+const  MAX_REPORT=2;
 
 const create = async (req, res) => {
   try {
@@ -22,8 +23,25 @@ const create = async (req, res) => {
         return res.status(400).json({ message: "You have already reviewed this course", existingReview });
       }
     // Create new review
-    const review = await Review.create({ courseId, user, rating, text });
-    res.status(201).json({ message: "Review added successfully", review });
+    const createdReview = await Review.create({ courseId, user, rating, text });
+      const review = await Review.findById(createdReview._id)
+            .populate("user", "username photo displayName")
+            .lean(); // Convert to plain JS object
+    // Update course rating stats atomically
+    const course = await Course.findByIdAndUpdate(
+      courseId,
+      {
+        $inc: {
+          totalRating: rating,
+          numberOfRatings: 1
+        }
+      },
+      { new: true } // So you get the updated course doc back if needed
+    )
+    .populate("creator", "username photo displayName")
+    .lean(); // Convert to plain JS object
+
+    res.status(201).json({ message: "Review added successfully", course:{...course,isEnrolled:true,isCreator:false} ,review});
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -67,13 +85,24 @@ const remove = async (req, res) => {
     const { reviewId } = req.params;
     const user = req.user.id;
 
-    const result = await Review.deleteOne({ _id: reviewId, user });
+    const review = await Review.findOneAndDelete({ _id: reviewId, user });
 
-    if (result.deletedCount === 0) {
+    if (!review) {
       return res.status(404).json({ message: "Review not found or Unauthorized" });
     }
-
-    return res.status(200).json({ message: "Review deleted successfully" });
+    const course = await Course.findByIdAndUpdate(
+      review.courseId,
+      {
+        $inc: {
+          totalRating: -review.rating,
+          numberOfRatings: -1
+        }
+      },
+      { new: true } // So you get the updated course doc back if needed
+    )
+    .populate("creator", "username photo displayName")
+    .lean(); // Convert to plain JS object
+    return res.status(200).json({ message: "Review deleted successfully",course:{...course,isEnrolled:true,isCreator:false}  });
 
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -96,7 +125,14 @@ const report=async(req,res)=>{
     }
     if(review.reportedBy.length>=MAX_REPORT)
     {
-        await Review.deleteOne({_id:reviewId});
+        const deletedReview=await Review.findOneAndDelete({_id:reviewId});
+        await Course.findByIdAndUpdate(
+          deletedReview.courseId,
+          {$inc: {totalRating: -deletedReview.rating,numberOfRatings: -1}},
+          { new: true } // So you get the updated course doc back if needed
+        )
+        .populate("creator", "username photo displayName")
+        .lean(); // Convert to plain JS object
         return res.status(200).json({ message: "Review has been deleted after exceeding report limit" });
 
     }
@@ -119,14 +155,26 @@ const update = async (req, res) => {
     const review = await Review.findOneAndUpdate(
       { _id: reviewId, user },
       { rating, text },
-      { new: true } // This will return the updated review
-    ).populate('user'); // Optionally populate the user field if needed
+      { new: false } // This will return the updated review
+    ).populate("user", "username photo displayName"); // Optionally populate the user field if needed
 
     if (!review) {
       return res.status(404).json({ message: "Review not found or Unauthorized" });
     }
+    const course = await Course.findByIdAndUpdate(
+      review.courseId,
+      {
+        $inc: {
+          totalRating: rating-review.rating
+        }
+      },
+      { new: true } // So you get the updated course doc back if needed
+    ) 
+    .populate("creator", "username photo displayName")
+    .lean(); // Convert to plain JS object
 
-    return res.status(200).json({ message: "Review updated successfully", review });
+
+    return res.status(200).json({ message: "Review updated successfully", course:{...course,isEnrolled:true,isCreator:false} ,review});
 
 
   } catch (error) {

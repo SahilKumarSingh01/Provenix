@@ -93,14 +93,15 @@
 
 
 .completed {
-  background: var(--completed-bg);
-  color: var(--completed-text);
+  /* background-color: var(--bg-selected); */
+  color:var(--text-highlight);
+  /* border-color: var(--text-se/lected); */
 }
 
 .selected {
   background-color: var(--bg-selected);
   color:var(--text-selected);
-  border-color: var(--border-highlight);
+  border-color: var(--text-selected);
 }
 
 .addPageCard {

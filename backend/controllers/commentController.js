@@ -3,11 +3,11 @@ const PageCollection = require("../models/PageCollection");
 
 const MAX_REPORT=3;
 
-const notifyAllMentions = async (content, comment) => {
-  // Extract mentions from content (assumes mentions are in "@username" format)
+const notifyAllMentions = async (text, comment) => {
+  // Extract mentions from text (assumes mentions are in "@username" format)
   const mentionRegex = /@(\w+)/g;
   
-  const mentionedUsernames = content.match(mentionRegex)?.map(name => name.slice(1)) || [];
+  const mentionedUsernames = text.match(mentionRegex)?.map(name => name.slice(1)) || [];
   
   if (mentionedUsernames.length === 0) return; // No mentions, exit
 
@@ -27,61 +27,79 @@ const notifyAllMentions = async (content, comment) => {
 
 const create = async (req, res) => {
   try {
-    const { content, parentComment } = req.body;
-    const { pageCollectionId,pageId } = req.params;
+    const { pageCollectionId, pageId } = req.params;
+    const { text, parentComment } = req.body;
     const userId = req.user.id;
 
-    // Fetch the Page first (trusted source)
-    const PageCollection = await PageCollection.findOne({_id:pageCollectionId,"pages._id":pageId});
-    if (!PageCollection) {
+    const [pageCollection, parent] = await Promise.all([
+      PageCollection.findOne(
+        { _id: pageCollectionId, "pages._id": pageId },
+        { courseId: 1, moduleId: 1 }
+      ).lean(),
+      parentComment ? Comment.findById(parentComment).lean() : Promise.resolve(null)
+    ]);
+
+    if (!pageCollection) {
       return res.status(404).json({ success: false, message: "Page not found" });
     }
 
-    const { courseId, moduleId } = PageCollection;
-
-    // Verify if parent comment exists (if it's a reply)
-    let parent = null;
-    if (parentComment) {
-      parent = await Comment.findById(parentComment);
-      if (!parent || !parent.pageId.equals( pageId) ){
-        return res.status(400).json({ success: false, message: "Invalid parent comment" });
-      }
+    if (parentComment && (!parent || !parent.pageId.equals(pageId))) {
+      return res.status(400).json({ success: false, message: "Invalid parent comment" });
     }
 
-    // Create the new comment
+    const { courseId, moduleId } = pageCollection;
+
     const newComment = await Comment.create({
-      content,
-      userId,
+      text,
+      user: userId,
       courseId,
       pageId,
       moduleId,
       parentComment: parentComment || null,
+    }).populate("user", "username photo displayName");
+
+    const updateTasks = [
+      PageCollection.updateOne(
+        { _id: pageCollectionId },
+        { $inc: { "pages.$[elem].commentCount": 1 } },
+        { arrayFilters: [{ "elem._id": pageId }] }
+      )
+    ];
+
+    if (parent) {
+      updateTasks.push(
+        Comment.updateOne(
+          { _id: parentComment },
+          { $inc: { repliesCount: 1 } }
+        )
+      );
+    }
+
+    Promise.all(updateTasks).catch(console.error);
+
+    notifyAllMentions(text, newComment).catch(err => {
+      console.error("notifyAllMentions error:", err);
     });
 
-    // Increment replies count in parent comment (if it's a reply)
-    if (parent) {
-      await Comment.updateOne({ _id: parentComment }, { $inc: { repliesCount: 1 } });
-    }
-    notifyAllMentions(content, newComment)
-    .catch(error => console.error("Error in notifyAllMentions:", error));
-  
-    res.status(201).json({ success: true, comment: newComment });
+    return res.status(201).json({ success: true,message:"Comment created successfully", comment: newComment });
+
   } catch (error) {
-    res.status(500).json({ success: false, message: "Internal Server Error" });
+    console.error("Comment creation error:", error);
+    return res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
 
 
 
+
 const getAll = async (req, res) => {
   try {
-    const { pageId, courseId } = req.params; // Using both pageId and courseId from params
+    const { pageId } = req.params; // Using both pageId and courseId from params
     const { skip = 0, limit = 6, parentComment = null } = req.query;
 
-    const filter = { pageId, courseId, parentComment }; // Using courseId directly from params
-
+    const filter = { pageId, parentComment }; // Using courseId directly from params
     const comments = await Comment.find(filter)
-      .sort("-createdAt")
+      .sort("-updatedAt")
       .skip(Number(skip))
       .limit(Number(limit))
       .populate("user", "username photo displayName"); // Populating user instead of userId
@@ -126,7 +144,7 @@ const report=async(req,res)=>{
     }
     if(Comment.reportedBy.length>=MAX_REPORT)
     {
-        await Comment.deleteOne({_id:commentId});
+        await remove(req,res);
         return res.status(200).json({ message: "Review has been deleted after exceeding report limit" });
 
     }
@@ -182,7 +200,7 @@ const remove = async (req, res) => {
 const update = async (req, res) => {
   try {
     const { commentId } = req.params;
-    const { content } = req.body;
+    const { text } = req.body;
     const userId = req.user._id;
 
     const comment = await Comment.findById(commentId);
@@ -194,9 +212,9 @@ const update = async (req, res) => {
       return res.status(403).json({ success: false, message: "Unauthorized to update this comment" });
     }
 
-    comment.content = content;
+    comment.text = text;
     await comment.save();
-    notifyAllMentions(content, newComment)
+    notifyAllMentions(text, newComment)
     .catch(error => console.error("Error in notifyAllMentions:", error));
     res.status(200).json({ success: true, message: "Comment updated successfully", comment });
 

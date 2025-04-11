@@ -39,8 +39,10 @@
 .actions {
   display: flex;
   justify-content: space-between; /* Aligns buttons properly */
+  flex-wrap: wrap;
   width: 100%;
   padding:10px;
+  /* border:1px solid black; */
   margin-top: 15px;
 }
 
@@ -55,6 +57,7 @@
   font-weight: 500;
   transition: all 0.2s ease-in-out;
   border: none;
+  margin:10px;
 }
 
 .actionBtn:hover {
@@ -75,3 +78,9 @@
   gap: 10px;
 }
 
+@media(max-height:786px)
+{
+  .actionBtn{
+    flex-direction: column;
+  }
+}

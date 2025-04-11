@@ -15,7 +15,7 @@ const PageList = () => {
   const [pageCollection,setPageCollection]=useState();
   const [pages, setPages] = useState([]);
   const [moduleTitle ,setModuleTitle]=useState('');
-  const [progress, setProgress] = useState([]);
+  const [completedPages, setCompletedPages] = useState([]);
   const [editingPage, setEditingPage] = useState(null);
   const [overlay, setOverlay] = useState(null);
   const clickTimeoutRef = useRef(null);
@@ -39,6 +39,21 @@ const PageList = () => {
         setPageCollection(fetchedPC);
         setModuleTitle(module.title);
         setPages([...fetchedPC.pages]);//same as module list
+        if(fetchedCourse.isEnrolled)
+        {
+          try{
+            const {data}=await axios.get('/api/enrollment/completed-pages',{params:{courseId:fetchedCourse._id}});
+            const completedPageIds = new Set(data.completedPages); // for faster lookup
+            const updatedCompletionStatus = fetchedPC.pages.map(page => 
+              completedPageIds.has(page._id)
+            );
+            setCompletedPages(updatedCompletionStatus);
+          }
+          catch(e)
+          {
+            console.log("error form page view",e);
+          }
+        }
       }
       fetchAll();
   }, [courseId, pageCollectionId]);
@@ -55,6 +70,27 @@ const PageList = () => {
       navigate(`/course/${courseId}/module/${pageCollectionId}/page/${page.contentSection}`);
     }, 250);
   };
+
+
+  const toggleCompletion=(index)=>{
+    const updatedPages=[...completedPages];
+    updatedPages[index]=!updatedPages[index];
+    setCompletedPages(updatedPages);
+    const updateRemote=async()=>{
+      try{
+        const {data}=await axios.patch(`/api/enrollment/progress/${completedPages[index]?'pull':'push'}`,
+          {pageId:pages[index]._id},
+          {params:{courseId:course._id}});
+        toast.success(data.message);
+      }catch(e){
+        toast.error(e.response.data?.message||"fail to update remotely");
+        const rollback=[...updatedPages];
+        rollback[index]=!rollback[index];
+        setCompletedPages(rollback);
+      }   
+    }
+    updateRemote();
+  }
 
   const handleDoubleClick = async (page, index) => {
     if (!course.isCreator) return;
@@ -170,7 +206,7 @@ const PageList = () => {
             <div
               key={page._id}
               className={`${styles.pageCard} 
-                          ${progress[index] ? styles.completed : ""} 
+                          ${completedPages[index] ? styles.completed : ""} 
                           ${editingPage?.curIndex === index ? styles.selected : ""}`}
               onClick={() => handleClick(page, index)}
               onDoubleClick={() => course.isCreator && handleDoubleClick(page, index)}
@@ -178,7 +214,7 @@ const PageList = () => {
               <span>{index + 1}. {editingPage?.curIndex === index ? editingPage.curTitle: page.title}</span>
               {!course.isCreator?<input 
                 type="checkbox" 
-                checked={progress[index]} 
+                checked={completedPages[index]!==true?false:true} 
                 onChange={() => toggleCompletion(index)} 
                 onClick={(e) => e.stopPropagation()} 
               />:""}

@@ -74,12 +74,13 @@
 
 /* Video Controls */
 .controls {
-  position: absolute;
-  top: 10px;
-  right: -140px;
   display: flex;
-  flex-direction: column;
   z-index: 10;
+  position: static;
+  flex-direction: row;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
 }
 
 .controls button {
@@ -176,14 +177,6 @@
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
-  .controls {
-    position: static;
-    flex-direction: row;
-    justify-content: flex-end;
-    flex-wrap: wrap;
-    margin-top: 0.5rem;
-  }
-
   .controls button {
     font-size: 13px;
     padding: 6px 8px;

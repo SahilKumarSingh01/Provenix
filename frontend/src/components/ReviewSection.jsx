@@ -6,19 +6,21 @@ import ReviewCard from "./ReviewCard";
 import styles from "../styles/ReviewSection.module.css"; // Import CSS module
 import axios from "../api/axios";
 import { toast } from "react-toastify";
+import { useCache } from "../context/CacheContext.jsx";
+
 
 const ReviewSection = ({ course }) => {
     const [reviews, setReviews] = useState([]);
     const [loading, setLoading] = useState(true);
     const [formOpen, setFormOpen] = useState(false);
     const [myReview, setMyReview] = useState({});
+    const { setCache}=useCache(); 
     const [skip, setSkip] = useState(0);
     const [hasNext, setHasNext] = useState(false);
     const limit = 3;
 
     const { user } = useContext(AuthContext);
-    const canReview = course.canAccessContent && user._id !== course.creator._id;
-
+    const canReview = course.isEnrolled&&user._id !== course.creator._id;
     // Fetch Reviews
     const fetchReviews = async (reset = false) => {
         try {
@@ -53,19 +55,21 @@ const ReviewSection = ({ course }) => {
 
     const onReviewSubmit = async ({ text, rating }) => {
         try {
-            myReview?._id
+            const {data}=myReview?._id
                 ? await axios.put(`/api/course/${course._id}/review/${myReview._id}`, { text, rating })
                 : await axios.post(`/api/course/${course._id}/review/create`, { text, rating });
 
-            toast.success("Review submitted successfully");
+            toast.success(data.message);
             setFormOpen(false);
+            setCache(course._id,data.course);
+            const review=data.review;
             fetchReviews(true);
             fetchMyReview();
         } catch (error) {
             toast.error(error.response?.data?.message || "Failed to submit review");
         }
     };
-
+    console.log(myReview)
     const handleDeleteReview = async () => {
         try {
             await axios.delete(`/api/course/${course._id}/review/${myReview._id}`);
