@@ -24,7 +24,7 @@ passport.use(new LocalStrategy(async (username, password, done) => {
       if (!user)
            return done(null, false, { message: "User not found" });
       if(!user.password)
-            return done(null,false,{message:"password is not set"});
+            return done(null,false,{message:"password is not set may be you login with google or github"});
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) return done(null, false, { message: "Invalid password" });
       return done(null, user);

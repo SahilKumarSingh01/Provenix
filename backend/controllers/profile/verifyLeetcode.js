@@ -1,5 +1,5 @@
 const Profile = require('../../models/Profile'); // Adjust path as needed
-const fetch = require('node-fetch');
+// const {fetch} = require('node-fetch');
 
 async function verifyLeetcode(req, res) {
     try {
@@ -9,7 +9,6 @@ async function verifyLeetcode(req, res) {
         if (!profile || !profile.codingProfiles.leetcode?.username) {
             return res.status(400).json({ message: "LeetCode profile not linked." });
         }
-
         // Step 2: Get LeetCode username directly
         const username = profile.codingProfiles.leetcode.username;
 
@@ -41,12 +40,12 @@ async function verifyLeetcode(req, res) {
             await profile.save();
             return res.json({ message: "LeetCode profile verified successfully!" });
         } else {
-            return res.status(400).json({ message: "Verification failed. 'aboutMe' does not match the stored hashCode." });
+            return res.status(400).json({ message: "Verification failed. 'Summary' in basic info does not match the stored hashCode." });
         }
 
     } catch (error) {
-        console.error("Error verifying LeetCode:", error);
-        res.status(500).json({ message: "Server error" });
+        // console.error("Error verifying LeetCode:", error);
+        res.status(500).json({ message:error.message });
     }
 }
 

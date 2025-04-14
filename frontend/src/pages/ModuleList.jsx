@@ -3,6 +3,8 @@ import { useNavigate,useParams} from "react-router-dom";
 import {useCourse} from "../context/CourseContext"; // Import CourseContext
 import { toast } from "react-toastify";
 import ConfirmBox from "../components/confirmBox.jsx";
+import BackspaceButton from "../components/BackspaceButton.jsx"
+
 import axios from '../api/axios.js';
 import styles from "../styles/ModuleList.module.css";
 import { useCache } from "../context/CacheContext.jsx";
@@ -158,6 +160,7 @@ const ModuleList = () => {
   return (
     <>
     {overlay}
+    <BackspaceButton to={`/course/${course._id}/view`}/>
     <div className={styles.container}>
       <h1 className={styles.courseTitle} onClick={() => {console.log("navigate is trigger");navigate(`/course/${course._id}/view`)}}>
         {course.title}

@@ -4,6 +4,7 @@ import { useCourse } from "../context/CourseContext";
 import { EditingContentProvider, useEditingContent } from "../context/EditingContentContext";
 import Sidebar from '../components/Sidebar.jsx';
 import DisplayContents from "../components/DisplayContents";
+import BackspaceButton from "../components/BackspaceButton.jsx"
 import CommentSection from '../components/CommentSection';
 import styles from "../styles/PageView.module.css";
 
@@ -50,6 +51,7 @@ const PageViewContent = () => {
   return (
     <>
       <Sidebar />
+      <BackspaceButton to={`/course/${courseId}/module/${pageCollectionId}`}/>
       <div className={styles.pageViewContainer}>
         <h1 className={styles.pageTitle}>{pageTitle}</h1>
         <div className={styles.contentWrapper}>

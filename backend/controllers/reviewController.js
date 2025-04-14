@@ -69,11 +69,27 @@ const getAll = async (req, res) => {
     const { skip = 0, limit = 6 } = req.query;
     // Fetch reviews for the given course
     const reviews = await Review.find({ courseId })
-                          .sort('-updatedAt')
-                          .skip(skip)
-                          .limit(limit)
-                          .populate("user", "username photo displayName");
-    res.json({ reviews});
+      .sort('-updatedAt')
+      .skip(Number(skip))
+      .limit(Number(limit))
+      .populate("user", "username photo displayName status");
+
+    const PROVENIX_USER = {
+      username: "provenix_user",
+      displayName: "Deleted User",
+      photo: "", 
+    };
+
+    const cleanedReviews = reviews.map(review => {
+      if (!review.user || review.user.status === "deleted") {
+        return {
+          ...review.toObject(),
+          user: PROVENIX_USER
+        };
+      }
+      return review;
+    });
+    res.json({ reviews:cleanedReviews});
 
   } catch (error) {
     res.status(500).json({ message: error.message });

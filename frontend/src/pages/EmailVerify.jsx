@@ -1,7 +1,9 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef ,useContext} from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "../api/axios";
 import styles from "../styles/form.module.css"; // Import CSS module
+import { AuthContext } from "../context/AuthContext.jsx";
+
 
 const EmailVerification = () => {
   const location = useLocation();
@@ -9,6 +11,7 @@ const EmailVerification = () => {
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const {fetchUser } = useContext(AuthContext);
   const inputRefs = useRef([]);
   const navigate = useNavigate();
 
@@ -61,6 +64,7 @@ const EmailVerification = () => {
 
     try {
       await axios.post("/auth/verify-otp", { email, otp: otpCode });
+      fetchUser();
       navigate("/"); // Redirect to home after successful verification
     } catch (e) {
       setError(e.response?.data?.message || "Invalid OTP");

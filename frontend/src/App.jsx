@@ -6,7 +6,7 @@ import Navbar from './components/Navbar';
 import Login from "./pages/Login";
 import {ToastContainer} from 'react-toastify'
 
-import UpdateProfile from "./pages/UpdateProfile";
+import ProfileEditor from "./pages/ProfileEditor";
 
 import Search from "./pages/Search";
 
@@ -14,7 +14,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 import Error404 from "./pages/Error404";
 
-
+import Profile from './pages/Profile.jsx'
 
 import CourseRoutes from './routes/CourseRoutes.jsx';
 
@@ -23,6 +23,8 @@ import EmailVerify from "./pages/EmailVerify"
 import ForgotPassword from "./pages/ForgotPassword"
 import ResetPassword from './pages/ResetPassword'
 import {AuthProvider} from'./context/AuthContext.jsx';
+import AccountDeletion from "./pages/AccountDeletion"
+
 
 import {CacheProvider} from'./context/CacheContext.jsx';
 
@@ -55,18 +57,19 @@ function App() {
         <Route path='/explore' element={<Explore/>}/>
         <Route path='/login' element={<Login/>}/>
         <Route path="/course/*" element={<CourseRoutes />} />
-
+        <Route path="/profile/:username" element={<Profile/>}/>
 
 
         <Route path='/*' element={<Error404/>}/>
 
-        <Route path='/update-profile' element={<UpdateProfile/>}/>
+        <Route path='/edit-profile' element={<ProfileEditor/>}/>
 
         <Route path='/privacy-policy' element={<PrivacyPolicy/>}/>
 
         <Route path='/search' element={<Search/>}/>
 
 
+        <Route path='/account-delete' element={<AccountDeletion/>}/>
 
 
         <Route path='/signup' element={<Signup/>}/>

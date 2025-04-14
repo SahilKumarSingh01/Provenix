@@ -3,6 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import {useCourse} from "../context/CourseContext"; // Import CourseContext
 import ConfirmBox from "../components/confirmBox.jsx";
+import BackspaceButton from "../components/BackspaceButton.jsx"
+
 import axios from "../api/axios";
 import styles from "../styles/PageList.module.css";
 import { useCache } from "../context/CacheContext.jsx";
@@ -190,6 +192,8 @@ const PageList = () => {
   return (
     <>
       {overlay}
+      <BackspaceButton to={`/course/${course._id}/modules`}/>
+
       <div className={styles.container}>
         <h1 className={styles.courseTitle} onClick={()=>navigate(`/course/${course._id}/view`)}>{course?.title} - {moduleTitle}</h1>
         {editingPage !== null && (

@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link,useLocation } from "react-router-dom";
 import axios from "../api/axios"; // Your API setup
 import styles from "../styles/form.module.css"; // Import CSS module
 
 const ForgotPassword = () => {
-  const [email, setEmail] = useState("");
+  const location = useLocation();
+  const [email, setEmail] = useState(location?.state?.email || "");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
@@ -39,7 +40,7 @@ const ForgotPassword = () => {
       </form>
 
       <div className={styles.formLinks}>
-        <Link to="/email-verify">Email not verified? Verify Email</Link>
+        <Link to="/email-verify" state={{email}}>Email not verified? Verify Email</Link>
       </div>
     </div>
   );

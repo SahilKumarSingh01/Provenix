@@ -1,0 +1,21 @@
+.backspaceButton {
+    position: fixed;
+    top: 80px;
+    left: 16px;
+    background-color: var(--bg-secondary);
+    color: var(--text-tertiary);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    box-shadow: 0 0px 6px rgba(0, 0, 0, 0.6);
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    border: none;
+    text-align: center;
+}
+
+.backspaceButton:hover {
+    color: var(--text-selected);
+    transform:scale(1.1);
+}

@@ -1,66 +1,66 @@
-const Course = require("../../models/Course"); 
-const User = require('../../models/User');
+const User = require("../../models/User");
 const OrphanResource = require("../../models/OrphanResource");
-const extractPublicId = require('../../utils/extractPublicId');
+const extractPublicId = require("../../utils/extractPublicId");
 
-const updateDetails = async (req, res) => {
+const updateProfile = async (req, res) => {
     try {
-        const { courseId } = req.params;
-        const { title, description, thumbnail, price, category, tags, level } = req.body;
-        const publicId = thumbnail ? extractPublicId(thumbnail) : "";
+        const { userId } = req.params; // Admin or staff updating profile
+        const { username, photo, displayName, email, bio } = req.body;
 
-        const [course, user, isOrphanResource] = await Promise.all([
-            Course.findOne({ _id: courseId, creator: req.user.id }).select("thumbnail"),
-            User.findById(req.user.id).select("accountId"),
-            publicId ? OrphanResource.exists({ publicId, type: "image", category: "thumbnail" }) : null,
-        ]);
+        const publicId = photo ? extractPublicId(photo) : "";
 
-        if (!course) {
-            return res.status(403).json({ message: "You are not authorized to edit this course." });
+        const isOrphanPhoto = publicId
+            ? await OrphanResource.exists({ publicId, type: "image", category: "profile" })
+            : null;
+
+        const updates = {};
+        if (username) updates.username = username;
+        if (displayName) updates.displayName = displayName;
+        if (email) {
+            updates.email = email;
+            updates.verifiedEmail = false;
         }
+        if (bio) updates.bio = bio;
+        if (photo !== undefined) updates.photo = photo;
 
-        if (thumbnail && course.thumbnail !== thumbnail && !isOrphanResource) {
-            return res.status(400).json({ message: "Invalid thumbnail reference." });
-        }
-        if(price>0&&!user.accountId)
-        {
-            return res.status(400).json({message:"You don't have any account associated with us"});
-        }
-        // Prepare update object with only the provided fields
-        const updateFields = {};
-        if (title) updateFields.title = title;
-        if (description) updateFields.description = description;
-        updateFields.price = price;
-        if (category) updateFields.category = category;
-        if (tags) updateFields.tags = tags;
-        if (level) updateFields.level = level;
+        const prevUser = await User.findByIdAndUpdate(userId, { $set: updates }, { new: false }).select("username displayName email bio photo").lean();
 
-        // Handle thumbnail updates
-        const prevThumbnail = course.thumbnail;
-        if (thumbnail !== prevThumbnail) {
-            updateFields.thumbnail = thumbnail || "";
-        }
+        if (!prevUser)
+            return res.status(404).json({ message: "User not found." });
 
-        // Update the course
-        const updatedCourse =await Course.findOneAndUpdate({ _id: courseId }, { $set: updateFields },{new:true})
-                                         .populate("creator", "username photo displayName")
-                                         .lean();
+        if (photo && prevUser.photo !== photo && !isOrphanPhoto)
+            return res.status(400).json({ message: "Invalid photo reference." });
 
-        // Handle  orphan resource cleanup
-        if (thumbnail !== prevThumbnail) {
+        // Manual merge like a pro 😎
+        const updatedUser = {
+            ...prevUser,
+            ...updates
+        };
+
+        if (photo !== prevUser.photo) {
             await Promise.all([
-                prevThumbnail ? OrphanResource.create({ publicId: extractPublicId(prevThumbnail), type: "image", category: "thumbnail" }) : null,
-                thumbnail ? OrphanResource.deleteOne({ publicId, type: "image", category: "thumbnail" }) : null,
+                prevUser.photo && OrphanResource.create({
+                    publicId: extractPublicId(prevUser.photo),
+                    type: "image",
+                    category: "profile"
+                }),
+                photo && OrphanResource.deleteOne({
+                    publicId,
+                    type: "image",
+                    category: "profile"
+                })
             ]);
         }
 
-        return res.status(200).json({ message: "Course updated successfully.",
-            course: { ...updatedCourse, isCreator:true, isEnrolled:false }
+        res.status(200).json({
+            message: "Profile updated successfully.",
+            user: updatedUser
         });
 
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        console.error(error);
+        res.status(500).json({ message: error.message || "Internal Server Error" });
     }
 };
 
-module.exports = updateDetails;
+module.exports = updateProfile;

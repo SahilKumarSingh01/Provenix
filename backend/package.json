@@ -46,8 +46,6 @@
 
     "node-cron": "^3.0.3",
 
-    "node-fetch": "^3.3.2",
-
     "nodemailer": "^6.10.0",
 
     "passport": "^0.7.0",

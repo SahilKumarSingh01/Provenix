@@ -32,7 +32,15 @@ const userSchema = new mongoose.Schema({
   resetPasswordToken: String,
   resetPasswordExpiry: Number,
 
+  status: {
+    type: String,
+    enum: ["active", "deleted"],
+    default: "active"
+  },
   notifications: [notificationSchema], // Array of notifications inside user
+  
+  bio: { type: String, default: "" }, // Added bio field
+
   
 }, { timestamps: true });
 
@@ -43,7 +51,9 @@ userSchema.methods.getInfo = function () {
     photo: this.photo,
     displayName: this.displayName || this.username, 
     verifiedEmail: this.verifiedEmail,
+    hasEmail:!!this.email,
     accountId:this.accountId,
+    status:this.status,
   };
 };
 

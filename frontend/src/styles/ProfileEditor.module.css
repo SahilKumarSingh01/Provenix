@@ -1,0 +1,166 @@
+.profileContainer {
+  display: flex;
+  flex-direction: column;
+  max-width: 900px;
+  width: 80%;
+  gap: 20px;
+  padding: 25px;
+  margin: 20px auto;
+  border-radius: 8px;
+  border: 1px solid var(--border-primary);
+  background: var(--bg-secondary);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.heading {
+  color: var(--text-heading);
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.profileForm {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.formGroupWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: flex-end;
+}
+
+.formGroupWrapper .formGroup {
+  flex: 1;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.formGroup label {
+  font-weight: 600;
+  font-size: 0.8rem;
+  padding: 0 6px;
+  color: var(--text-primary);
+}
+
+.formGroup input,
+.formGroup textarea {
+  padding: 10px;
+  border: 1px solid var(--border-primary);
+  border-radius: 6px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  outline: none;
+  transition: border 0.3s ease-in-out;
+}
+
+.formGroup input:focus,
+.formGroup textarea:focus {
+  border-color: var(--btn-primary-bg);
+}
+
+.formGroup textarea {
+  resize: none;
+  height: 300px;
+}
+
+.photoPreview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.photoPreview img {
+  width: 150px;
+  height: auto;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.photoGroup {
+  padding: 10px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.inputButtonWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding-right: 10px;
+  gap: 1rem;
+}
+
+.inputButtonWrapper input {
+  flex: 1;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.actionGroup {
+  display: flex;
+  gap: 10px;
+}
+.saveButton,
+.deleteBtn,
+.actionButton {
+  padding: 10px 14px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out, transform 0.2s;
+}
+
+.saveButton:active:not(:disabled),
+.deleteBtn:active:not(:disabled),
+.actionButton:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+.saveButton {
+  background: var(--btn-secondary-bg);
+  color: var(--btn-secondary-text);
+}
+
+.saveButton:hover:not(:disabled) {
+  background: var(--btn-secondary-hover);
+}
+
+.deleteBtn {
+  background: var(--btn-danger-bg);
+  color: var(--btn-danger-text);
+}
+
+.deleteBtn:hover:not(:disabled) {
+  background: var(--btn-danger-hover);
+}
+
+.actionButton {
+  background-color: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+}
+
+.actionButton:hover:not(:disabled) {
+  background-color: var(--btn-primary-hover);
+}
+
+.actionButton:disabled {
+  background-color: var(--btn-disabled-bg);
+  color: var(--btn-disabled-text);
+  cursor: not-allowed;
+}

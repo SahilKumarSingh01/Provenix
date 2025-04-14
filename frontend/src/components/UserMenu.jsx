@@ -7,7 +7,7 @@ import styles from "../styles/UserMenu.module.css";
 const UserMenu = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-  const { setUser } = useContext(AuthContext); // Access setUser from AuthContext
+  const { setUser,user } = useContext(AuthContext); // Access setUser from AuthContext
 
   // Handle menu item clicks
   const handleNavigate = (path) => {
@@ -37,8 +37,8 @@ const UserMenu = ({ children }) => {
 
       {isOpen && (
         <ul className={styles.dropdownMenu} >
-          <li onClick={() => handleNavigate("/dashboard")}>Dashboard</li>
-          <li onClick={() => handleNavigate("/profile")}>Profile</li>
+          <li onClick={() => handleNavigate(`/dashboard/${user.username}`)}>Dashboard</li>
+          <li onClick={() => handleNavigate(`/profile/${user.username}`)}>Profile</li>
           <li onClick={() => handleNavigate("/course/create")}>Create Course</li>
           <li onClick={() => handleNavigate("/course/my-courses")}>My Courses</li>
           <li onClick={() => handleNavigate("/course/my-enrollments")}>My Enrollments</li>

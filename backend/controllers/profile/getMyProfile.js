@@ -5,7 +5,7 @@ const getMyProfile = async (req, res) => {
         const userId = req.user.id;
 
         const user = await User.findById(userId)
-            .select("username photo displayName profile accountId email verifiedEmail notifications")
+            .select("username photo displayName profile accountId email verifiedEmail bio status")
             .populate("profile");
 
         if (!user) {

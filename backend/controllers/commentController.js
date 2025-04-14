@@ -102,9 +102,23 @@ const getAll = async (req, res) => {
       .sort("-updatedAt")
       .skip(Number(skip))
       .limit(Number(limit))
-      .populate("user", "username photo displayName"); // Populating user instead of userId
-
-    res.status(200).json({ success: true, comments });
+      .populate("user", "username photo displayName status"); // Populating user instead of userId
+    const PROVENIX_USER = {
+      username: "provenix_user",
+      displayName: "Deleted User",
+      photo: "", 
+    };
+    
+    const cleanedComments = comments.map(comment => {
+      if (!comment.user || comment.user.status === "deleted") {
+        return {
+          ...comment.toObject(),
+          user: PROVENIX_USER
+        };
+      }
+      return comment;
+    });
+    res.status(200).json({ success: true, comments:cleanedComments });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -116,7 +130,7 @@ const getComment = async (req, res) => {
     const { commentId } = req.params;
 
     const comment = await Comment.findById(commentId)
-      .populate("userId", "username photo displayName");
+      .populate("user", "username photo displayName");
 
     if (!comment) {
       return res.status(404).json({ success: false, message: "Comment not found" });

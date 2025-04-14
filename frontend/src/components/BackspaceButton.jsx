@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import styles from "./BackspaceButton.module.css"; // Import CSS module
+import styles from "../styles/BackspaceButton.module.css"; // Import CSS module
 
 const BackspaceButton = ({ to }) => {
     const navigate = useNavigate();
@@ -14,7 +14,7 @@ const BackspaceButton = ({ to }) => {
 
     return (
         <button onClick={handleClick} className={styles.backspaceButton}>
-            ⇦ 
+            ‹
         </button>
     );
 };

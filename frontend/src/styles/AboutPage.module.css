@@ -1,26 +1,15 @@
-:root {
-  --primary-color: #E6F1FF;
-  --secondary-color: #4F46E5;
-  --accent-color: #57CBFF;
-  --background-dark: #0A192F;
-  --background-medium: #112240;
-  --text-primary: #A8B2D1;
-  --text-secondary: #8892B0;
-}
-
-/* Base Styles */
 .aboutContainer {
   line-height: 1.6;
-  background-color: var(--background-dark);
+  background-color: var(--bg-primary);
 }
 
-/* Hero Section */
+/* ============================
+   Hero Section
+============================ */
 .aboutHero {
-  background: linear-gradient(rgba(10, 25, 47, 0.9), rgba(10, 25, 47, 0.9)),
-    url('https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
   background-size: cover;
   background-position: center;
-  color: var(--primary-color);
+  color: var(--text-primary);
   padding: 8rem 1rem;
   text-align: center;
 }
@@ -28,21 +17,23 @@
 .heroContent h1 {
   font-size: 3rem;
   margin-bottom: 1rem;
-  color: var(--secondary-color);
+  color: var(--text-heading);
 }
 
 .heroContent p {
   font-size: 1.5rem;
   max-width: 800px;
   margin: 0 auto;
-  color: var(--text-primary);
+  color: var(--text-secondary);
 }
 
-/* Mission Section */
+/* ============================
+   Mission Section
+============================ */
 .missionSection {
   padding: 4rem 1rem;
   text-align: center;
-  background-color: var(--background-medium);
+  background-color: var(--bg-secondary);
 }
 
 .missionContent {
@@ -53,17 +44,19 @@
 .missionContent h2 {
   font-size: 2.5rem;
   margin-bottom: 2rem;
-  color: var(--secondary-color);
+  color: var(--text-heading);
 }
 
 .missionContent p {
   color: var(--text-primary);
 }
 
-/* Features Section */
+/* ============================
+   Features Section
+============================ */
 .featuresSection {
   padding: 4rem 1rem;
-  background-color: var(--background-dark);
+  background-color: var(--bg-primary);
 }
 
 .featuresGrid {
@@ -75,30 +68,32 @@
 }
 
 .featureCard {
-  background: var(--background-medium);
+  background: var(--bg-secondary);
   padding: 2rem;
   border-radius: 10px;
-  border: 1px solid rgba(100, 255, 218, 0.1);
-  transition: transform 0.3s ease;
+  border: 1px solid rgba(64, 224, 208, 0.1); /* soft border with text-highlight tone */
+  transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
 .featureCard:hover {
   transform: translateY(-5px);
-  border-color: var(--secondary-color);
+  border-color: var(--bg-highlight);
 }
 
 .featureCard h3 {
-  color: var(--secondary-color);
+  color: var(--text-heading);
   margin-bottom: 1rem;
 }
 
 .featureCard p {
-  color: var(--text-primary);
+  color: var(--text-secondary);
 }
 
-/* Stats Section */
+/* ============================
+   Stats Section
+============================ */
 .statsSection {
-  background-color: var(--background-medium);
+  background-color: var(--bg-secondary);
   padding: 4rem 1rem;
 }
 
@@ -114,24 +109,26 @@
 .statItem h4 {
   font-size: 2.5rem;
   margin-bottom: 0.5rem;
-  color: var(--accent-color);
+  color: var(--text-highlight);
 }
 
 .statItem p {
   color: var(--text-primary);
 }
 
-/* CTA Section */
+/* ============================
+   CTA Section
+============================ */
 .ctaSection {
   text-align: center;
   padding: 4rem 1rem;
-  background-color: var(--background-dark);
+  background-color: var(--bg-primary);
 }
 
 .ctaSection h2 {
   font-size: 2.5rem;
   margin-bottom: 2rem;
-  color: var(--secondary-color);
+  color: var(--text-heading);
 }
 
 .ctaButtons {
@@ -152,20 +149,30 @@
 
 .ctaBtn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(100, 255, 218, 0.3);
+  box-shadow: 0 5px 15px rgba(64, 224, 208, 0.3); /* matching text-highlight glow */
 }
 
 .learnerCta {
-  background-color: var(--secondary-color);
-  color: var(--background-dark);
+  background-color: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+}
+
+.learnerCta:hover {
+  background-color: var(--btn-primary-hover);
 }
 
 .educatorCta {
-  background-color: var(--accent-color);
-  color: var(--background-dark);
+  background-color: var(--btn-secondary-bg);
+  color: var(--btn-secondary-text);
 }
 
-/* Responsive Design */
+.educatorCta:hover {
+  background-color: var(--btn-secondary-hover);
+}
+
+/* ============================
+   Responsive
+============================ */
 @media (max-width: 768px) {
   .heroContent h1 {
     font-size: 2rem;

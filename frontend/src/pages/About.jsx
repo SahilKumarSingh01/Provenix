@@ -1,11 +1,12 @@
 import React from 'react';
+import backgroundImg from '../assets/aboutBackground.png'
 import styles from '../styles/AboutPage.module.css';
 
 const AboutPage = () => {
   return (
     <div className={styles.aboutContainer}>
       {/* Hero Section */}
-      <section className={styles.aboutHero}>
+      <section className={styles.aboutHero}style={{backgroundImage:`linear-gradient(rgba(10, 25, 47, 0.9), rgba(10, 25, 47, 0.9)), url(${backgroundImg})`}}>
         <div className={styles.heroContent}>
           <h1>About Provenix</h1>
           <p>Empowering learners and educators through innovative digital education</p>

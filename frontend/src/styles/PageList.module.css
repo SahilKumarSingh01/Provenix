@@ -64,7 +64,7 @@
   height: 16px;
   border: 2px solid var(--gray-color); /* Default border color */
   border-radius: 4px;
-  background-color:var(--primary-color); /* Default background */
+  background-color:white; /* Default background */
   display: inline-block;
   cursor: pointer;
   transition: all 0.2s ease-in-out;

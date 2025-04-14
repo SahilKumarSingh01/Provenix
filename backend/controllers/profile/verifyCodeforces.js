@@ -1,5 +1,5 @@
 const Profile = require('../../models/Profile'); // Adjust path as needed
-const fetch = require('node-fetch');
+// const fetch = require('node-fetch');
 
 async function verifyCodeforces(req, res) {
     try {
@@ -31,7 +31,7 @@ async function verifyCodeforces(req, res) {
             return res.json({ message: "Codeforces profile verified successfully!" });
         } else {
             return res.status(400).json({ 
-                message: "Verification failed. 'firstName' does not match the stored hashCode.",
+                message: "Verification failed. 'firstName'( in socials) does not match the stored hashCode.",
                 hashCode: profile.codingProfiles.codeforces.hashCode
             });
         }

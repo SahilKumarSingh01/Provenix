@@ -10,10 +10,28 @@ const setCodingProfile = async (req, res) => {
     try {
         const { platform, url } = req.body;
 
-        if (!platform || !url) {
+        if (!platform ) {
             return res.status(400).json({ message: "Platform and URL are required." });
         }
+        if(!url)
+        {
+            const updateResult = await Profile.updateOne(
+                { user: req.user.id }, 
+                { 
+                    $set: { 
+                        [`codingProfiles.${platform}.url`]: "", 
+                        [`codingProfiles.${platform}.username`]:"",
+                        [`codingProfiles.${platform}.hashCode`]:"",
+                        [`codingProfiles.${platform}.isVerified`]: false 
+                    } 
+                }
+            );
+            if (updateResult.modifiedCount === 0) {
+                return res.status(404).json({ message: "Profile not found or nothing changed." });
+            }
+            return res.status(200).json({ message: "Coding profile updated successfully.", username:'', hashCode:'' });
 
+        }
         const username = extractUsername(url);
         if (!username) {
             return res.status(400).json({ message: "Invalid URL format." });
@@ -22,12 +40,13 @@ const setCodingProfile = async (req, res) => {
         const hashCode = crypto.randomBytes(4).toString('hex'); // Generates 8-character hash
 
         const updateResult = await Profile.updateOne(
-            { user: req.user._id }, 
+            { user: req.user.id }, 
             { 
                 $set: { 
                     [`codingProfiles.${platform}.url`]: url, 
                     [`codingProfiles.${platform}.username`]: username,
-                    [`codingProfiles.${platform}.hashCode`]: hashCode 
+                    [`codingProfiles.${platform}.hashCode`]: hashCode ,
+                    [`codingProfiles.${platform}.isVerified`]: false 
                 } 
             }
         );

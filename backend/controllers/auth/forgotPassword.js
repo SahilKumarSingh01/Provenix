@@ -36,7 +36,8 @@ const forgotPassword= async (req, res) => {
 const resetPassword =  async (req, res) => {
     try {
       const { token, newPassword } = req.body;
-      console.log(token+" "+newPassword);
+      const passwordRegex = /^.{6,}$/; // At least 6 characters
+
       const user = await User.findOne({
         resetPasswordToken: token,
         resetPasswordExpiry: { $gt: Date.now() } // Token must be valid (not expired)
@@ -44,7 +45,8 @@ const resetPassword =  async (req, res) => {
   
       if (!user)
         return res.status(400).json({ success: false, message: "Invalid or expired token" });
-  
+      if (!newPassword || !passwordRegex.test(newPassword))
+        return res.status(400).json({ message: "Password must be at least 6 characters long." });
       // Hash new password
       const hashedPassword = await bcrypt.hash(newPassword, 10);
       user.password = hashedPassword;

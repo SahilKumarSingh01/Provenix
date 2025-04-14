@@ -1,14 +1,9 @@
-const fetch = require('node-fetch');
+// const fetch = require('node-fetch');
 const Profile = require('../../models/Profile');
-const crypto = require('crypto');
 
 const verifyGithub = async (req, res) => {
     try {
-        const userId = req.user._id; // Extract user ID from the authenticated request
-
-        if (!userId) {
-            return res.status(400).json({ message: "Unauthorized request." });
-        }
+        const userId = req.user.id;
 
         // Fetch user's profile from the database
         const profile = await Profile.findOne({ user: userId });
@@ -32,10 +27,6 @@ const verifyGithub = async (req, res) => {
             await Profile.updateOne({ user: userId }, { $set: { "codingProfiles.github.isVerified": true } });
             return res.status(200).json({ message: "GitHub profile verified successfully!" });
         } else {
-            // Generate a new hashCode and send instructions
-            const hashCode = crypto.randomBytes(4).toString('hex');
-            await Profile.updateOne({ user: userId }, { $set: { "codingProfiles.github.hashCode": hashCode } });
-
             return res.status(200).json({
                 message: "Verification failed. Please update your GitHub bio with the provided code and retry.",
                 hashCode

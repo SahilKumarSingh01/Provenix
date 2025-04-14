@@ -1,61 +1,80 @@
 const User = require("../../models/User");
 const OrphanResource = require("../../models/OrphanResource");
-const cloudinary = require("cloudinary").v2;
+const extractPublicId = require("../../utils/extractPublicId");
 
-const extractPublicId = (imageUrl) => {
+const updateProfile = async (req, res) => {
     try {
-        const urlParts = imageUrl.split("/");
-        const publicIdWithExtension = urlParts[urlParts.length - 1]; // Get last part
-        return publicIdWithExtension.split(".")[0]; // Remove extension
+        const { username, photo, displayName, email, bio } = req.body;
+        const userId=req.user.id;
+
+        const publicId = photo ? extractPublicId(photo) : "";
+
+        const [isOrphanPhoto, currentUser] = await Promise.all([
+            publicId
+              ? OrphanResource.exists({ publicId, type: "image", category: "profile" })
+              : Promise.resolve(null),
+            User.findById(userId)
+          ]);
+          
+        const updates = {};
+        if (username && username !== currentUser.username) {
+            const usernameRegex = /^[^\s]+$/;
+            if (!usernameRegex.test(username)) {
+              return res.status(400).json({ message: "Username must not contain spaces and cannot be empty." });
+            }
+            updates.username = username;
+        }
+        if (email && email !== currentUser.email) {
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!emailRegex.test(email)) {
+              return res.status(400).json({ message: "Please provide a valid email." });
+            }
+            updates.email = email;
+            updates.verifiedEmail = false;
+        }
+        if (displayName) updates.displayName = displayName;
+        if (bio) updates.bio = bio;
+        if (photo !== undefined) updates.photo = photo;
+
+        const prevUser = await User
+            .findByIdAndUpdate(userId, { $set: updates }, { new: false })
+            .select("username displayName email bio photo")
+            .lean();
+            
+        if (!prevUser)
+            return res.status(404).json({ message: "User not found." });
+
+        if (photo && prevUser.photo !== photo && !isOrphanPhoto)
+            return res.status(400).json({ message: "Invalid photo reference." });
+
+        const updatedUser = {
+            ...prevUser,
+            ...updates
+        };
+
+        if (photo !== prevUser.photo) {
+            await Promise.all([
+                prevUser.photo && OrphanResource.create({publicId: extractPublicId(prevUser.photo),type: "image",category: "profile"}),
+                photo && OrphanResource.deleteOne({publicId,type: "image",category: "profile"})
+            ]);
+        }
+
+        res.status(200).json({
+            message: "Profile updated successfully.",
+            user: updatedUser,
+        });
+
     } catch (error) {
-        console.error("Error extracting publicId:", error);
-        return null;
+        if (error.code === 11000) { // MongoDB error code for duplicate key
+            if (error.message.includes('username')) {
+                return res.status(400).json({ message: "Username is already taken." });
+            }
+            if (error.message.includes('email')) {
+                return res.status(400).json({ message: "Email is already in use." });
+            }
+        }
+        res.status(500).json({ message: error.message || "Internal Server Error" });
     }
 };
 
-const updateMyProfile = async (req, res) => {
-    try {
-        const userId = req.user.id;
-        const { username, photo, displayName, email } = req.body;
-
-        let updateFields = {};
-
-        if (username) updateFields.username = username;
-        if (displayName) updateFields.displayName = displayName;
-        if (email) {
-            updateFields.email = email;
-            updateFields.verifiedEmail = false;
-        }
-
-        if (photo) {
-            // Delete from orphan resources and check if it was present
-            const orphanDeletion = await OrphanResource.findOneAndDelete({ publicId: photo, type: "image", category: "profile" });
-
-            if (!orphanDeletion) {
-                return res.status(400).json({ error: "Invalid photo reference" });
-            }
-
-            // Generate signed URL for the new authenticated photo
-            updateFields.photo = cloudinary.utils.private_download_url(photo, "webp");
-        }
-
-        // Update the user and fetch the old document in one call
-        const oldUser = await User.findOneAndUpdate({ _id: userId }, updateFields, { new: false })
-            .select("photo");
-
-        // Extract publicId from old photo and delete from Cloudinary
-        if (oldUser?.photo) {
-            const oldPublicId = extractPublicId(oldUser.photo);
-            if (oldPublicId) {
-                await cloudinary.uploader.destroy(oldPublicId);
-            }
-        }
-
-        res.json({ success: true });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Internal Server Error" });
-    }
-};
-
-module.exports = updateMyProfile;
+module.exports = updateProfile;

@@ -13,8 +13,12 @@
     width: 60%;
     padding: 25px;
   }
-  .leftPane h2{
-    color:var(--text-heading);
+  .formHeading {
+    text-align: center;
+    margin-bottom: 20px;
+    color: var(--text-heading);
+    font-size: 24px;
+    
   }
   .createCourseForm {
     display: flex;

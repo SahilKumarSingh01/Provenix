@@ -1,47 +1,65 @@
-import { useState, useContext} from "react";
+import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
-import {AuthProvider,AuthContext} from'../context/AuthContext.jsx';
-// import axios from '../api/axios'
-import defaultPicture from '../assets/defaultPicture.png';
-import "../styles/navbar.css";
-import UserMenu from './UserMenu.jsx';
+import { AuthContext } from "../context/AuthContext.jsx";
+import defaultPicture from "../assets/defaultPicture.png";
+import styles from "../styles/Navbar.module.css";
+import UserMenu from "./UserMenu.jsx";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const {user,setUser}      = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
+
   return (
-    <nav className="navbar">
-      <h1 className="logo">Provenix</h1>
+    <>
+    <nav className={styles.navbar}>
+      <h1 className={styles.logo}>Provenix</h1>
 
       {/* Hamburger Menu Icon */}
-      <div className="menu-icon" onClick={() => setIsOpen(!isOpen)}>
-        <div className={isOpen ? "bar rotate1" : "bar"}></div>
-        <div className={isOpen ? "bar hide" : "bar"}></div>
-        <div className={isOpen ? "bar rotate2" : "bar"}></div>
+      <div className={styles.menuIcon} onClick={() => setIsOpen(!isOpen)}>
+        <div className={isOpen ? `${styles.bar} ${styles.rotate1}` : styles.bar}></div>
+        <div className={isOpen ? `${styles.bar} ${styles.hide}` : styles.bar}></div>
+        <div className={isOpen ? `${styles.bar} ${styles.rotate2}` : styles.bar}></div>
       </div>
 
       {/* Navigation Links */}
-      <div className={`nav-links ${isOpen ? "active" : ""}`}>
-        <Link to="/" className="nav-link" onClick={() => setIsOpen(false)}>Home</Link>
-        <Link to="/explore" className="nav-link" onClick={() => setIsOpen(false)}>Explore</Link>
-        <Link to="/about" className="nav-link" onClick={() => setIsOpen(false)}>About</Link>
+      <div className={`${styles.navLinks} ${isOpen ? styles.active : ""}`}>
+        <Link to="/" className={styles.navLink} onClick={() => setIsOpen(false)}>Home</Link>
+        <Link to="/explore" className={styles.navLink} onClick={() => setIsOpen(false)}>Explore</Link>
+        <Link to="/about" className={styles.navLink} onClick={() => setIsOpen(false)}>About</Link>
+        
         {user ? (
-          <>
           <UserMenu>
             <img 
               src={user.photo || defaultPicture} 
               alt="Profile" 
-              className="profile-pic"
+              className={styles.profilePic}
             />
           </UserMenu>
-            
-            {/* <button className="logout-btn" >Logout</button> */}
-          </>
         ) : (
-          <Link to="/login" className="nav-link" onClick={() => setIsOpen(false)}>Login</Link>
+          <Link to="/login" className={styles.navLink} onClick={() => setIsOpen(false)}>Login</Link>
         )}
       </div>
     </nav>
+    {user && (
+      user.status === "deleted" ? (
+        <div className={styles.notification}>
+          <span>Your account is marked as deleted. You can recover it anytime within 5 hours.</span>
+          <Link to="/edit-profile" className={styles.verifyLink}>Recover Account</Link>
+        </div>
+      ) : !user.hasEmail ? (
+        <div className={styles.notification}>
+          <span>Looks like you haven't linked an email with your Provenix account yet. Please update your profile to connect one.</span>
+          <Link to="/edit-profile" className={styles.verifyLink}>Provide Email</Link>
+        </div>
+      ) : !user.verifiedEmail ? (
+        <div className={styles.notification}>
+          <span>Your email is not verified.</span>
+          <Link to="/edit-profile" className={styles.verifyLink}>Verify Email</Link>
+        </div>
+      ) : null
+    )}
+
+    </>
   );
 }
 

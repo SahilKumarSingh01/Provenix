@@ -9,6 +9,9 @@ const verifyCodeforces = require('./profile/verifyCodeforces');
 const verifyGithub = require('./profile/verifyGithub');
 
 const updateMyProfile = require('./profile/updateMyProfile');
+const recoverAccount=require('./profile/recoverAccount')
+
+const {generateToken,verifyAndDelete}=require('./profile/deleteAccount')
 
 module.exports = {
     getAll,
@@ -18,5 +21,8 @@ module.exports = {
     verifyLeetcode,
     verifyCodeforces,
     verifyGithub,
-    updateMyProfile
+    updateMyProfile,
+    generateToken,
+    verifyAndDelete,
+    recoverAccount,
 };
