@@ -120,6 +120,7 @@
 .actionButton {
   padding: 10px 14px;
   border: none;
+  min-width:80px;
   border-radius: 6px;
   font-weight: bold;
   cursor: pointer;

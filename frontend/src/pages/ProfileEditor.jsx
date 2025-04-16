@@ -2,6 +2,7 @@ import React, { useEffect, useState ,useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "../api/axios";
+import BackspaceButton from "../components/BackspaceButton.jsx"
 import styles from "../styles/ProfileEditor.module.css";
 import ImageUploader from "../components/ImageUploader";
 import defaultProfile from "../assets/defaultPicture.png";
@@ -10,9 +11,9 @@ import ConfirmBox from "../components/confirmBox.jsx";
 
 
 const platformSections = {
-  leetcode: "About Me",
+  leetcode: "Summary",
   github: "Bio",
-  codeforces: "Bio",
+  codeforces: "First Name",
 };
 
 const ProfileEditor = () => {
@@ -150,6 +151,7 @@ const ProfileEditor = () => {
       const updatedProfile={...profile};
       updatedProfile.codingProfiles[platform].username=data.username;
       updatedProfile.codingProfiles[platform].hashCode=data.hashCode;
+      updatedProfile.codingProfiles[platform].isVerified=false;
       setProfile(updatedProfile);
       toast.success(data.message);
     } catch (err) {
@@ -173,6 +175,7 @@ const ProfileEditor = () => {
       const { data } = await axios.put("/api/profile/update-my-profile", { username, photo, displayName, email, bio }); // Send profile fields
       fetchUser();
       toast.success(data.message);
+      navigate(`/profile/${username}`);
     } catch (err) {
       toast.error(err.response.data?.message||"Profile update fail");
     }
@@ -184,6 +187,7 @@ const ProfileEditor = () => {
   return (
     <div className={styles.profileContainer}>
       {overlay}
+      <BackspaceButton to={`/profile/${profile.username}`}/>
       <h2 className={styles.heading}>Profile Detail Form</h2>
       <form onSubmit={handleSubmit} className={styles.profileForm}>
         <div className={styles.formGroup}>

@@ -1,102 +1,114 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "../api/axios";
-import defaultPicture from "../assets/defaultPicture.png";
-
+import { toast } from "react-toastify";
+import Error404 from "./Error404";
 import styles from "../styles/Profile.module.css";
+
+// Cards
+import ProfileInfoCard from "../components/ProfileInfoCard.jsx";
+import GitHubCard from "../components/GitHubCard.jsx";
+import LeetCodeCard from "../components/LeetCodeCard.jsx";
+import CodeforcesCard from "../components/CodeforcesCard.jsx";
 
 const Profile = () => {
   const { username } = useParams();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
-  const [error, setError] = useState("");
+  const [notFound, setNotFound] = useState(false);
+  const [showLeftPane, setShowLeftPane] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         const res = await axios.get(`/api/profile/${username}`);
         setUser(res.data);
-        setError("");
+        setNotFound(false);
       } catch (err) {
-        setError(err.response?.data?.error || "Failed to fetch profile");
-        setUser(null);
+        const errorMessage =
+          err.response?.data?.error || "Failed to fetch profile";
+        toast.error(errorMessage);
+        setNotFound(true);
       }
     };
 
     fetchProfile();
   }, [username]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+      if (window.innerWidth > 768) {
+        setShowLeftPane(true); // always show sidebar on desktop
+      } else {
+        setShowLeftPane(false); // default hidden on mobile
+      }
+    };
+
+    handleResize(); // call once on mount
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const handleEditRedirect = () => {
     navigate(`/edit-profile`);
   };
 
-  if (error) {
-    return <div className={styles.errorText}>{error}</div>;
+  if (notFound) {
+    return <Error404 />;
   }
 
   if (!user) {
     return <div className={styles.loadingText}>Loading profile...</div>;
   }
 
-  const { photo, displayName, profile } = user;
-  const codingProfiles = profile?.codingProfiles || {};
-
+  const codingProfiles = user.profile?.codingProfiles || {};
+  // console.log(user);
   return (
-    <div className={styles.profileContainer}>
-      {/* Header Section */}
-      <div className={styles.profileHeader}>
-        <img
-          src={photo || defaultPicture}
-          alt="User"
-          className={styles.profilePhoto}
-        />
-        <div className={styles.userInfo}>
-          <h2 className={styles.displayName}>{displayName || username}</h2>
-          <p className={styles.username}>@{username}</p>
+      <div className={styles.profileContainer}>
+
+        
+        <div className={`${styles.leftPane} ${isMobile &&!showLeftPane ? styles.leftPaneHidden : ''}`}>
+          <ProfileInfoCard
+            displayName={user.displayName}
+            username={user.username}
+            photo={user.photo}
+            bio={user.bio}
+            codingProfiles={codingProfiles}
+            onEdit={handleEditRedirect}
+          />
         </div>
-      </div>
+        {isMobile && (
+          <button
+            className={`${styles.toggleButton} ${showLeftPane ? styles.toggleShifted : ""}`}
+            onClick={() => setShowLeftPane((prev) => !prev)}
+          >
+            {showLeftPane ? "⏴" : "⏵"}
+          </button>
+        )}
+        <div className={styles.rightPane}>
+          <div className={styles.platformCardsWrapper}>
+            {codingProfiles.github?.username && (
+              <div className={styles.platformCard}>
+                <GitHubCard username={codingProfiles.github.username} />
+              </div>
+            )}
+            {codingProfiles.codeforces?.username && (
+              <div className={styles.platformCard}>
+                <CodeforcesCard username={codingProfiles.codeforces.username} />
+              </div>
+            )}
+          </div>
 
-      {/* Coding Profiles Section */}
-      {!!Object.keys(codingProfiles).length && (
-        <div className={styles.codingProfiles}>
-          <h3>Coding Profiles</h3>
-          <ul className={styles.profileList}>
-            {Object.entries(codingProfiles).map(([platform, details]) => {
-              const capitalizedPlatform =
-                platform.charAt(0).toUpperCase() + platform.slice(1);
-
-              return (
-                <li key={platform} className={styles.profileItem}>
-                  <strong>{capitalizedPlatform}:</strong>{" "}
-                  {details.url ? (
-                    <a
-                      href={details.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className={styles.profileLink}
-                    >
-                      {details.username}
-                    </a>
-                  ) : (
-                    <span>Not linked</span>
-                  )}
-                  {details.isVerified && (
-                    <span className={styles.verifiedBadge}>✔</span>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
+          {codingProfiles.leetcode?.username && (
+            <LeetCodeCard username={codingProfiles.leetcode.username} />
+          )}
         </div>
-      )}
 
-      {/* Edit Button */}
-      <div className={styles.editButtons}>
-        <button onClick={handleEditRedirect} className={styles.editButton}>
-          Edit Profile
-        </button>
       </div>
-    </div>
+    
   );
 };
 

@@ -1,0 +1,163 @@
+.card {
+    background-color: var(--bg-secondary);
+    padding: 2rem;
+    width: 300px;
+    border-radius: 1rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    height:100%;
+    border: 1px solid var(--border-primary);
+  }
+  .header{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .profilePhoto {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    border:2px solid var(--border-primary);
+
+  }
+  
+  .userInfo {
+    text-align: start;
+    margin-bottom: 1rem;
+  }
+  
+  .displayName {
+    font-size:1.2rem;
+    font-weight: bold;
+  }
+  
+  .username {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+  .displayName,
+.username {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width:150px; /* adjust based on your layout */
+  position: relative;
+  cursor: pointer;
+}
+
+/* Tooltip effect using data-text */
+.displayName::after,
+.username::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  bottom: 125%;
+  background-color: #333;
+  color: #fff;
+  padding: 0.4rem 0.6rem;
+  border-radius: 0.5rem;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(5px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 10;
+}
+
+/* Show on hover */
+.displayName:hover::after,
+.username:hover::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+  .editButtons {
+    margin-top: 1rem;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .editButton {
+    background-color: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s ease;
+  }
+  
+  .editButton:hover {
+    background-color: var(--btn-primary-hover);
+  }
+  .editButton:active{
+    transform: scale(0.95);
+  }
+  .bioSection {
+    width: 100%;
+    margin-top: 1.5rem;
+  }
+  
+  .bioText {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    white-space: pre-line;
+  }
+  
+  .sectionHeading {
+    font-size: 1.1rem;
+    margin-top: 1.8rem;
+    margin-bottom: 0.6rem;
+    color: var(--text-heading);
+    align-self: flex-start;
+  }
+  
+  .profileList {
+    list-style: none;
+    padding: 10px;
+    width: 100%;
+  }
+  .profileLinkWrapper {
+    display: flex;
+    flex-direction: row; /* stacks them vertically */
+    justify-content: space-between;
+    /* border:1px solid black; */
+    align-items: center;
+  }
+  
+  .profileItem {
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+  }
+  
+  .profileLink {
+    color: var(--text-highlight);
+    text-decoration: none;
+    cursor: pointer;
+    padding:0 1rem;
+  }
+  
+  .profileLink:hover {
+    color: var(--text-selected);
+    /* text-decoration: underline; */
+  }
+  
+  .unlinked {
+    color: var(--text-muted);
+  }
+  
+  .verifiedBadge {
+    color: var(--text-success);
+    /* margin-left: 0.4rem; */
+    /* border:1px solid black; */
+  }
+  .unverifiedBadge {
+    color: var(--text-error);
+    /* margin-left: 0.4rem; */
+  }
+  
+  

@@ -8,6 +8,10 @@ const verifyLeetcode = require('./profile/verifyLeetcode');
 const verifyCodeforces = require('./profile/verifyCodeforces');
 const verifyGithub = require('./profile/verifyGithub');
 
+const getLeetcode = require('./profile/getLeetcode');
+const getCodeforces = require('./profile/getCodeforces');
+const getGithub = require('./profile/getGithub');
+
 const updateMyProfile = require('./profile/updateMyProfile');
 const recoverAccount=require('./profile/recoverAccount')
 
@@ -25,4 +29,7 @@ module.exports = {
     generateToken,
     verifyAndDelete,
     recoverAccount,
+    getLeetcode,
+    getCodeforces,
+    getGithub,
 };

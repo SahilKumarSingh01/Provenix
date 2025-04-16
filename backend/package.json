@@ -40,6 +40,8 @@
 
     "express-session": "^1.18.1",
 
+    "leetcode-query": "^2.0.0",
+
     "mongoose": "^8.10.0",
 
     "multer": "^1.4.5-lts.1",
