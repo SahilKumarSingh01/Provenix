@@ -1,0 +1,32 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.text {
+  white-space: pre-wrap;
+  word-break: break-word; /* Break words to prevent overflow */
+  color: var(--text-primary);
+}
+
+.mention {
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.mention:hover {
+  text-decoration: underline;
+}
+
+.toggleButton {
+  align-self: flex-start;
+  background: none;
+  border: none;
+  color: var(--text-heading);
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 0;
+  margin-top: 0.25rem;
+}

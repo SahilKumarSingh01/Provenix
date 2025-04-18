@@ -19,7 +19,6 @@ const forgotPassword= async (req, res) => {
       user.resetPasswordToken = resetToken;
       user.resetPasswordExpiry = Date.now() + 15 * 60 * 1000; // Expires in 15 min
       await user.save();
-      console.log(resetToken)
       await sendMail({
         from: process.env.SENDER_EMAIL,
         to: email,
@@ -30,6 +29,7 @@ const forgotPassword= async (req, res) => {
       });
       return res.status(200).json({ success: true, message: "Password reset link sent" });
     } catch (e) {
+      console.log(e.message);
       res.status(500).json({ message: e.message });
     }
   };
@@ -56,6 +56,7 @@ const resetPassword =  async (req, res) => {
   
       return res.status(200).json({ success: true, message: "Password has been reset successfully" });
     } catch (e) {
+      
       res.status(500).json({ message: e.message });
     }
   }

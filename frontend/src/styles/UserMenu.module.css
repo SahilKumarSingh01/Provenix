@@ -19,7 +19,7 @@
     list-style: none;
     padding: 10px 0;
     margin: 5px 0;
-    min-width: 160px;
+    min-width: 120px;
     z-index: 1000;
     transition: all 0.2s ease-in-out;
   }

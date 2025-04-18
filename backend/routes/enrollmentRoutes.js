@@ -4,6 +4,8 @@ const enrollmentController = require("../controllers/enrollmentController");
 const insightRoutes=require("./insightRoutes");
 routes.get("/enrolled-courses", enrollmentController.getEnrolledCourses);
 routes.get("/completed-pages", enrollmentController.getProgress);
+routes.get("/stats", enrollmentController.getStats);
+
 routes.use("/insight",insightRoutes)
 routes.patch("/progress/push", enrollmentController.pushProgress);
 routes.patch("/progress/pull", enrollmentController.pullProgress);

@@ -8,6 +8,7 @@ const draftCourse = require("./course/draftCourse");
 const removeCourse = require("./course/removeCourse");
 const getCreatedCourses = require("./course/getCreatedCourses");
 const searchCourses = require("./course/searchCourses");
+const getStats     =require('./course/getStats')
 // Export Controllers
 module.exports = {
   createCourse,
@@ -18,5 +19,6 @@ module.exports = {
   searchCourses,
   publishCourse,
   recoverCourse,
-  draftCourse
+  draftCourse,
+  getStats,
 };

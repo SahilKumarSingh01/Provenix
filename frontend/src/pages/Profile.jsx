@@ -89,21 +89,21 @@ const Profile = () => {
           </button>
         )}
         <div className={styles.rightPane}>
-          <div className={styles.platformCardsWrapper}>
+          {(codingProfiles.github?.username||codingProfiles.codeforces?.username)&&<div className={styles.platformCardsWrapper}>
             {codingProfiles.github?.username && (
               <div className={styles.platformCard}>
-                <GitHubCard username={codingProfiles.github.username} />
+                <GitHubCard username={codingProfiles.github.username} isVerified={codingProfiles.github.isVerified}/>
               </div>
             )}
             {codingProfiles.codeforces?.username && (
               <div className={styles.platformCard}>
-                <CodeforcesCard username={codingProfiles.codeforces.username} />
+                <CodeforcesCard username={codingProfiles.codeforces.username} isVerified={codingProfiles.codeforces.isVerified}/>
               </div>
             )}
-          </div>
+          </div>}
 
           {codingProfiles.leetcode?.username && (
-            <LeetCodeCard username={codingProfiles.leetcode.username} />
+            <LeetCodeCard username={codingProfiles.leetcode.username} isVerified={codingProfiles.leetcode.isVerified}/>
           )}
         </div>
 

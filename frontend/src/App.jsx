@@ -15,6 +15,8 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Error404 from "./pages/Error404";
 
 import Profile from './pages/Profile.jsx'
+import Dashboard from './pages/Dashboard.jsx'
+import Notification from "./pages/Notification.jsx";
 
 import CourseRoutes from './routes/CourseRoutes.jsx';
 
@@ -57,6 +59,9 @@ function App() {
         <Route path='/explore' element={<Explore/>}/>
         <Route path='/login' element={<Login/>}/>
         <Route path="/course/*" element={<CourseRoutes />} />
+        <Route path="/dashboard" element={<Dashboard/>}/>
+        <Route path="/notification" element={<Notification/>}/>
+
         <Route path="/profile/:username" element={<Profile/>}/>
 
 

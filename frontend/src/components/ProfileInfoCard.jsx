@@ -61,20 +61,19 @@ const ProfileInfoCard = ({
                   <br/>
                   <div className={styles.profileLinkWrapper}>
                     {details.url ? (
-                      <span
-                        className={styles.profileLink}
-                        onClick={() => handleLinkClick(details.url)}
-                      >
-                        {details.username}
-                      </span>
+                      <>
+                      <span className={styles.profileLink} onClick={() => handleLinkClick(details.url)}>{details.username}</span>
+                      {details.isVerified ? (
+                          <span className={styles.verifiedBadge}>✔</span>
+                        ):(
+                          <span className={styles.unverifiedBadge}>unverified</span>
+                        )
+                      }
+                      </>
                     ) : (
                       <span className={styles.unlinked}>Not linked</span>
                     )}
-                    {details.isVerified ? (
-                      <span className={styles.verifiedBadge}>✔</span>
-                    ):
-                    <span className={styles.unverifiedBadge}>unverified</span>
-                    }
+                    
                   </div>
                 </li>
                 

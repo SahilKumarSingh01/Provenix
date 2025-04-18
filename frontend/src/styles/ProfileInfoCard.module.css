@@ -26,6 +26,7 @@
   .userInfo {
     text-align: start;
     margin-bottom: 1rem;
+    position: relative;
   }
   
   .displayName {
@@ -43,35 +44,33 @@
   overflow: hidden;
   text-overflow: ellipsis;
   width:150px; /* adjust based on your layout */
-  position: relative;
   cursor: pointer;
 }
 
 /* Tooltip effect using data-text */
-.displayName::after,
-.username::after {
+.username::before ,
+.displayName::before{
   content: attr(data-text);
   position: absolute;
-  left: 0;
-  bottom: 125%;
-  background-color: #333;
-  color: #fff;
-  padding: 0.4rem 0.6rem;
-  border-radius: 0.5rem;
-  white-space: nowrap;
-  font-size: 0.75rem;
+  background: #888888;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  white-space: wrap;
+  /* white-space: nowrap; */
   opacity: 0;
+  visibility: hidden;
+
   pointer-events: none;
-  transform: translateY(5px);
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  z-index: 10;
+  transition: opacity 0.3s ease-in 1s, visibility 0s linear 0s;
+  z-index: 100;
 }
 
-/* Show on hover */
-.displayName:hover::after,
-.username:hover::after {
+.username:hover::before ,
+.displayName:hover::before{
   opacity: 1;
-  transform: translateY(0);
+  visibility: visible;
+  opacity: 1;
 }
 
   .editButtons {
@@ -148,6 +147,8 @@
   
   .unlinked {
     color: var(--text-muted);
+    padding:0 1rem;
+
   }
   
   .verifiedBadge {

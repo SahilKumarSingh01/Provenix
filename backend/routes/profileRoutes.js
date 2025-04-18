@@ -10,6 +10,8 @@ router.get('/github', profileController.getGithub);
 
 // Fetch all users and user profile
 router.get('/all-users', profileController.getAll);
+router.get('/notifications', profileController.getNotifications);
+router.patch('/mark-read', profileController.markNotification);
 router.get('/my-profile', profileController.getMyProfile); // New route to get user's own profile
 router.get('/:username', profileController.getProfile);
 

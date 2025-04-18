@@ -13,8 +13,9 @@ const getCodeforces = require('./profile/getCodeforces');
 const getGithub = require('./profile/getGithub');
 
 const updateMyProfile = require('./profile/updateMyProfile');
-const recoverAccount=require('./profile/recoverAccount')
-
+const recoverAccount=require('./profile/recoverAccount');
+const getNotifications=require('./profile/getNotifications')
+const markNotification=require('./profile/markNotifiaction')
 const {generateToken,verifyAndDelete}=require('./profile/deleteAccount')
 
 module.exports = {
@@ -32,4 +33,6 @@ module.exports = {
     getLeetcode,
     getCodeforces,
     getGithub,
+    getNotifications,
+    markNotification,
 };

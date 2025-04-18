@@ -10,6 +10,9 @@ const notificationSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.Mixed, // Stores different structures based on type
     required: true,
   },
+  url:{
+    type: String,
+  },
   read: {
     type: Boolean,
     default: false, // Tracks if the notification has been read

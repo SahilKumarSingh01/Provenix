@@ -21,6 +21,8 @@
   --bg-highlight: #18B892; /* Adjusted for a more refined teal */
   --bg-selected: #1E5A55;  /* Deeper, balanced tone */
 
+
+  --text-header: #4773D4;
   --text-primary: #D0E0F5; /* Slightly brighter for readability */
   --text-secondary: #98A6B5; /* Softened to maintain hierarchy */
   --text-heading: #3FA1C3; /* Slightly adjusted for clarity */

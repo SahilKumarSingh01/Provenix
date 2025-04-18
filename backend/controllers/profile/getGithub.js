@@ -26,7 +26,6 @@ const getGithub = async (req, res) => {
         avatar_url: data.avatar_url,
       });
     } catch (err) {
-      // console.error(err);
       res.status(500).json({ error: 'Failed to fetch data from GitHub' });
     }
   };

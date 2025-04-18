@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "../api/axios";
 import styles from "../styles/LeetCodeCard.module.css";
 
-const LeetCodeCard = ({ username }) => {
+const LeetCodeCard = ({ username,isVerified }) => {
   const [leetCodeData, setLeetCodeData] = useState(null);
   const [error, setError] = useState(null);
 
@@ -15,7 +15,7 @@ const LeetCodeCard = ({ username }) => {
         setLeetCodeData(res.data);
         setError(null);
       } catch (err) {
-        console.error(err);
+        console.error("leetcode error",err);
         setError("Failed to fetch LeetCode data");
       }
     };
@@ -50,7 +50,7 @@ const LeetCodeCard = ({ username }) => {
   console.log(upcomingBadges);
   return (
     <div className={styles.card}>
-      <h3 className={styles.cardTitle}>LeetCode Profile</h3>
+      <h3 className={styles.cardTitle}>LeetCode Profile{" "}{!isVerified&&<span className={styles.errorText}>(Not verified)</span>}</h3>
       <div className={styles.cardContent}>
         <img src={profile.avatar} alt="Avatar" className={styles.avatar} />
         <div className={styles.twoColumnLayout}>

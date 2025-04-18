@@ -6,10 +6,8 @@ const routes = express.Router({ mergeParams: true });
 routes.post("/create", commentController.create); // Create a new comment
 routes.get("/all", commentController.getAll); // Get all comments 
 routes.post("/report/:commentId",commentController.report);
-routes.post("/:commentId/reply", commentController.create); // Create a reply 
-routes.get("/:commentId/replies", commentController.getAll); // Get all replies for a specific comment
-routes.get("/:commentId", commentController.getComment); // Get a specific comment
-routes.delete("/:commentId", commentController.remove); // Delete a comment
-routes.put("/:commentId", commentController.update); // Update a comment
+routes.delete("/remove/:commentId", commentController.remove); // Delete a comment
+routes.put("/update/:commentId", commentController.update); // Update a comment
+routes.get("/get/:commentId", commentController.getComment); // Get a specific comment
 
 module.exports = routes;

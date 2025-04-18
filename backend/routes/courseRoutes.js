@@ -10,6 +10,7 @@ const routes  =express.Router();
 routes.post('/create',courseController.createCourse);
 routes.get('/created-courses',courseController.getCreatedCourses);
 routes.post('/search',courseController.searchCourses);//use skip and limit for dynamic searching 
+routes.get('/stats',courseController.getStats)
 
 routes.use('/module/:moduleCollectionId',moduleRoutes);
 routes.use('/page/:pageCollectionId',pageRoutes);//check if authorize then pass

@@ -1,0 +1,46 @@
+.dashboardContainer {
+  height: 100%;
+  width: 100%;
+}
+
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 1.5rem 2rem; /* Adjusted to ensure padding consistency */
+  box-sizing: border-box; /* Prevents padding from affecting the width */
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--text-header);
+  padding-right: 1rem; /* To give space on the right side, if needed */
+}
+
+.panelGrid {
+  width: 80%;
+  min-width: 300px;
+  margin: 2rem auto;
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.panelCard {
+  flex: 1 1 45%;
+  min-width: 300px;  /* Adjust this based on your design */
+}
+
+/* Mobile responsiveness - ensures header doesn’t look too cramped */
+@media (max-width: 768px) {
+  .headerRow {
+    padding: 1rem 1.5rem; /* Reduced padding for smaller screens */
+  }
+
+  .title {
+    font-size: 1.75rem; /* Adjust font size on smaller screens */
+  }
+}

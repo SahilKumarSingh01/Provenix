@@ -35,11 +35,11 @@ const getLeetcode = async (req, res) => {
       upcomingBadges,
       activeBadge 
     });
-
+ 
   } catch (err) {
-    console.error('Error fetching LeetCode data:', err);
     res.status(500).json({ error: 'Failed to fetch LeetCode profile' });
   }
 };
+
 
 module.exports = getLeetcode;

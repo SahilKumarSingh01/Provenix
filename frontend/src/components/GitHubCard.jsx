@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "../api/axios";
 import styles from "../styles/GitHubCard.module.css";
 
-const GitHubCard = ({ username }) => {
+const GitHubCard = ({ username,isVerified }) => {
   const [ghData, setGhData] = useState(null);
   const [error, setError] = useState(null);
 
@@ -53,7 +53,7 @@ const GitHubCard = ({ username }) => {
 
   return (
     <div className={styles.card}>
-      <h3 className={styles.cardTitle}>GitHub Profile</h3>
+      <h3 className={styles.cardTitle}>GitHub Profile{" "}{!isVerified&&<span className={styles.errorText}>(Not verified)</span>}</h3>
       <div className={styles.cardContent}>
         <img src={avatar_url} alt="Avatar" className={styles.avatar} />
         <div className={styles.userInfo}>

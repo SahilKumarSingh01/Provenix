@@ -9,6 +9,40 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.6);
 }
 
+.repliesContainer {
+    width: 100%;
+    margin: 0;
+    background: var(--bg-primary);
+    box-shadow: none;
+    border-radius: 0;
+    /* margin-top: 0.5rem; */
+    padding-left: 2rem;
+}
+
+.replyHeader {
+    display: flex;
+    gap: 4rem;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    padding-left: 1rem;
+}
+
+.viewReplies {
+    color: #007bff;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.replyButton {
+    background-color: transparent;
+    border: none;
+    color: #28a745;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
 /* Title */
 .commentsTitle {
     color: var(--text-heading);
@@ -25,130 +59,6 @@
     gap: 10px;
 }
 
-/* Buttons */
-.addCommentButton,
-.editCommentButton,
-.deleteCommentButton {
-    color: var(--btn-primary-text);
-    border: none;
-    padding: 8px 14px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    transition: background 0.2s ease-in-out, transform 0.1s ease-in-out;
-}
-
-.addCommentButton,
-.editCommentButton {
-    background-color: var(--btn-primary-bg);
-}
-
-.deleteCommentButton {
-    background-color: var(--btn-danger-bg);
-}
-
-.addCommentButton:disabled,
-.editCommentButton:disabled {
-    background-color: var(--btn-disabled-bg);
-    cursor: not-allowed;
-    color: var(--btn-disabled-text);
-}
-
-.addCommentButton:hover:not(:disabled),
-.editCommentButton:hover {
-    background-color: var(--btn-primary-hover);
-}
-
-.deleteCommentButton:hover {
-    background-color: var(--btn-danger-hover);
-}
-
-.addCommentButton:active:not(:disabled),
-.editCommentButton:active,
-.deleteCommentButton:active {
-    transform: scale(0.95);
-}
-
-/* Comment Form */
-.commentForm {
-    margin-top: 15px;
-}
-
-.commentTextarea {
-    width: 100%;
-    min-height: 80px;
-    border-radius: 8px;
-    padding: 10px;
-    font-size: 14px;
-    resize: vertical;
-    border: 1px solid var(--border-light);
-    background-color: var(--bg-input);
-    color: var(--text-normal);
-}
-
-.formButtons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.submitCommentButton,
-.cancelCommentButton {
-    padding: 8px 14px;
-    font-size: 14px;
-    font-weight: 500;
-    border-radius: 6px;
-    cursor: pointer;
-    border: none;
-    transition: background 0.2s ease-in-out;
-}
-
-.submitCommentButton {
-    background-color: var(--btn-primary-bg);
-    color: var(--btn-primary-text);
-}
-
-.submitCommentButton:hover {
-    background-color: var(--btn-primary-hover);
-}
-
-.cancelCommentButton {
-    background-color: var(--btn-danger-bg);
-    color: var(--btn-primary-text);
-}
-
-.cancelCommentButton:hover {
-    background-color: var(--btn-danger-hover);
-}
-
-/* Comment Card */
-.commentCard {
-    background: var(--bg-primary);
-    padding: 12px 16px;
-    border-radius: 8px;
-    margin: 10px 0;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-}
-
-.commentAuthor {
-    font-weight: bold;
-    margin-bottom: 4px;
-    color: var(--text-heading);
-}
-
-.commentText {
-    margin: 6px 0;
-    color: var(--text-normal);
-}
-
-.commentDate {
-    font-size: 12px;
-    color: var(--text-muted);
-    text-align: right;
-}
-
 /* Loading and No Data */
 .loading {
     color: var(--text-muted);
@@ -160,11 +70,11 @@
 .pagination {
     display: flex;
     justify-content: end;
-    padding-right:20px;
+    padding-right: 20px;
     margin-top: 20px;
 }
 
-.pagination button {
+.actionButton {
     padding: 10px 14px;
     border: none;
     background: var(--btn-primary-bg);
@@ -175,11 +85,11 @@
     transition: background 0.3s ease-in-out;
 }
 
-.pagination button:hover {
+.actionButton:hover {
     background: var(--btn-primary-hover);
 }
 
-.pagination button:disabled {
+.actionButton:disabled {
     background: var(--text-muted);
     cursor: not-allowed;
 }

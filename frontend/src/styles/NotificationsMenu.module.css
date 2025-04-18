@@ -1,0 +1,108 @@
+.notificationWrapper {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .bellButton {
+    position:relative;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    /* padding: 0.5rem; */
+  }
+  .icon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+  .bellButton:active{
+    transform:scale(0.95);
+  }
+  .badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    width: 1rem;
+    height: 1rem;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .notificationDropdown {
+    position: absolute;
+    top: 110%;
+    right: 0;
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-primary);
+    border-radius: 10px;
+    padding: 16px;
+    width: 300px;
+    z-index: 5;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .notificationTitle {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-heading);
+    margin-bottom: 10px;
+  }
+  
+  .emptyMsg {
+    color: var(--text-muted);
+    font-style: italic;
+    text-align: center;
+  }
+  
+  .notificationList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 300px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .notificationList::-webkit-scrollbar {
+    display: none;
+  }
+  .notificationType {
+    font-weight: 600;
+    color: #007bff;  /* Style notification type dynamically */
+  }
+  
+  .mentionText {
+    font-size: 0.9rem;
+    padding:0.5rem 0.5rem;
+    text-indent: 1rem;
+  }
+  
+  .notificationItem {
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid var(--border-primary);
+    background-color: var(--bg-secondary);
+    font-size: 0.95rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .notificationItem.unread {
+    background-color: var(--bg-tertiary);
+    font-weight: 600;
+  }
+  
+  .notificationItem.read {
+    color: var(--text-muted);
+  }
+  
+  .time {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+  
