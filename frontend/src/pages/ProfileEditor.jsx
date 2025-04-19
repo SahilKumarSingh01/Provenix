@@ -7,7 +7,7 @@ import styles from "../styles/ProfileEditor.module.css";
 import ImageUploader from "../components/ImageUploader";
 import defaultProfile from "../assets/defaultPicture.png";
 import { AuthContext } from "../context/AuthContext.jsx";
-import ConfirmBox from "../components/confirmBox.jsx";
+import ConfirmBox from "../components/ConfirmBox.jsx";
 
 
 const platformSections = {
