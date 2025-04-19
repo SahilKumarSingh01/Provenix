@@ -1,7 +1,7 @@
 import React, { useState ,useRef,useEffect} from "react";
 import { useEditingContent } from "../context/EditingContentContext";
 import {toast} from 'react-toastify'
-import ConfirmBox from "./confirmBox";
+import ConfirmBox from "./ConfirmBox";
 import styles from "../styles/CodeBox.module.css";
 import hljs from "highlight.js";
 import "highlight.js/styles/atom-one-dark.css";

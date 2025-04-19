@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from 'react';
-import ConfirmBox from "../components/confirmBox.jsx";
+import ConfirmBox from "../components/ConfirmBox.jsx";
 import styles from "../styles/EditingContentContext.module.css"; // add correct path
 import {toast} from "react-toastify";
 import { useCache } from "../context/CacheContext.jsx";

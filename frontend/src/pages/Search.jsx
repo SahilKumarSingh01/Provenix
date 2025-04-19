@@ -2,17 +2,6 @@ import React, { useState } from 'react';
 import CourseCard from '../components/CourseCard';
 import styles from '../styles/Search.module.css'; // ✅ Updated to use CSS module
 
-const coursesData = [
-  { id: 1, title: 'React for Beginners', category: 'Web Development', price: 20 },
-  { id: 2, title: 'Advanced JavaScript', category: 'Programming', price: 30 },
-  { id: 3, title: 'Python for Data Science', category: 'Data Science', price: 40 },
-  { id: 4, title: 'Machine Learning Basics', category: 'AI & ML', price: 50 },
-  { id: 5, title: 'Web Design Masterclass', category: 'Web Development', price: 25 },
-  { id: 6, title: 'Django Full Course', category: 'Web Development', price: 35 },
-  { id: 7, title: 'C++ Algorithms', category: 'Programming', price: 28 },
-  { id: 8, title: 'Flutter Mobile Apps', category: 'App Development', price: 45 },
-];
-
 const Search = () => {
   const [keyword, setKeyword] = useState('');
   const [category, setCategory] = useState('');
