@@ -17,12 +17,12 @@ const Footer = () => {
         </div>
         <div className={styles.footerSection}>
           <h4>Contact</h4>
-          <p>support@provenix.com</p>
-          <p>+1 (555) 123-4567</p>
+          <p>provenixcreator@gmail.com</p>
+          {/* <p>+1 (555) 123-4567</p> */}
         </div>
       </div>
       <div className={styles.footerBottom}>
-        <p>© 2023 Provenix. All rights reserved.</p>
+        <p>© 2025 Provenix. All rights reserved.</p>
       </div>
     </footer>
   );

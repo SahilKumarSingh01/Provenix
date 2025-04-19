@@ -1,8 +1,23 @@
 import React from 'react';
 import FeatureCard from './FeatureCard';
-import { features } from '../assets/features';
 import styles from '../styles/FeaturesList.module.css';
-
+const features = [
+  {
+    icon: '📚',
+    title: '1000+ Courses',
+    description: 'From technology to arts, learn what you love'
+  },
+  {
+    icon: '🎓',
+    title: 'Expert Teachers',
+    description: 'Learn from industry professionals and experts'
+  },
+  {
+    icon: '💻',
+    title: 'Interactive Learning',
+    description: 'Engage with hands-on projects and quizzes'
+  }
+];
 const FeaturesList = () => {
   return (
     <section className={styles.features}>
