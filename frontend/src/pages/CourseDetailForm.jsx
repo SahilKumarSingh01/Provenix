@@ -7,7 +7,7 @@ import ImageUploader from "../components/ImageUploader";
 import styles from "../styles/CourseDetailForm.module.css";
 import BackspaceButton from "../components/BackspaceButton.jsx"
 import defaultThumbnail from '../assets/DefaultThumbnail.webp';
-import ConfirmBox from "../components/confirmBox.jsx";
+import ConfirmBox from "../components/ConfirmBox.jsx";
 import { useCache } from "../context/CacheContext.jsx";
 import {useCourse} from "../context/CourseContext"; // Import CourseContext
 
