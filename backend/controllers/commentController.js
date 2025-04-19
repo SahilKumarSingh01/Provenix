@@ -11,7 +11,7 @@ const notifyAllMentions = async (text, comment,url) => {
   const mentionedUsernames = text.match(mentionRegex)?.map(name => name.slice(1)) || [];
   
   if (mentionedUsernames.length === 0) return; // No mentions, exit
-
+  console.log(url);
   // Update all mentioned users, pushing notification while keeping max 10
   await User.updateMany(
     { username: { $in: mentionedUsernames } },

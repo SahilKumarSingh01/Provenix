@@ -68,7 +68,6 @@ const NotificationsMenu = () => {
                   }`}
                   onClick={() => handleNotificationClick(index)} // Pass notificationId
                 >
-                  <div className={styles.notificationContent}>
                     {/* Render notification type dynamically */}
                     <div className={styles.notificationType}>
                       {n.type}{" "}{n.read?"":"◉"}
@@ -77,10 +76,9 @@ const NotificationsMenu = () => {
                     <div className={styles.mentionText}>
                       {n.type === "comment" && <MentionText text={n.data.text} />}
                     </div>
-                    <span className={styles.time}>
+                    <div className={styles.time}>
                       {new Date(n.createdAt).toLocaleString()}
-                    </span>
-                  </div>
+                    </div>
                 </li>
               ))}
             </ul>

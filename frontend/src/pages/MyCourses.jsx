@@ -3,7 +3,7 @@ import axios from "../api/axios";
 import CourseCard from "../components/CourseCard";
 import styles from "../styles/CourseListing.module.css";
 import {toast} from 'react-toastify'
-const MyEnrollments = () => {
+const MyCourses = () => {
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [sortBy, setSortBy] = useState("updatedAt");
@@ -123,4 +123,4 @@ const MyEnrollments = () => {
     );
 };
 
-export default MyEnrollments;
+export default MyCourses;

@@ -3,7 +3,7 @@ import axios from "../api/axios";
 import CourseCard from "../components/CourseCard";
 import styles from "../styles/CourseListing.module.css";
 import {toast} from 'react-toastify'
-const MyCourses = () => {
+const MyEnrollments = () => {
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [sortBy, setSortBy] = useState("updatedAt");
@@ -22,8 +22,9 @@ const MyCourses = () => {
                 params: { sortBy, order, skip: 0, limit: limit + 1, status, level }
             });
             const fetchedCourses=data.enrollments.map((enrollment)=>{
-                return {...enrollment.course,completedPages:enrollment.completedPages};
+                return {...enrollment.course,completedPages:enrollment.completedPages,expiresAt:enrollment.expiresAt};
             })
+            console.log(data.enrollments);
             setCourses(fetchedCourses.slice(0, limit));
             setSkip(limit);
             setHasNext(fetchedCourses.length > limit);
@@ -37,18 +38,20 @@ const MyCourses = () => {
 
     // Load more courses on click
     const extendCourses = async () => {
-        console.log('extend this is call');
         try {
             setLoading(true);
-            const { data } = await axios.get("/api/course/created-courses", {
+            const { data } = await axios.get("/api/enrollment/enrolled-courses", {
                 params: { sortBy, order, skip, limit: limit + 1, status, level }
             });
-
-            setCourses((prevCourses) => [...prevCourses, ...data.courses.slice(0, limit)]);
+            const fetchedCourses=data.enrollments.map((enrollment)=>{
+                return {...enrollment.course,completedPages:enrollment.completedPages,expiresAt:enrollment.expiresAt};
+            })
+            setCourses([...courses,...fetchedCourses.slice(0, limit)]);
             setSkip(skip + limit);
-            setHasNext(data.courses.length > limit);
+            setHasNext(fetchedCourses.length > limit);
         } catch (error) {
-            toast.error("Error loading more courses:", error);
+            console.log(error);
+            toast.error("Error loading more courses");
         } finally {
             setLoading(false);
         }
@@ -118,4 +121,4 @@ const MyCourses = () => {
     );
 };
 
-export default MyCourses;
+export default MyEnrollments;

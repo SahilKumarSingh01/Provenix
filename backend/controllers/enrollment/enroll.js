@@ -9,7 +9,7 @@ const enroll = async (req, res) => {
         const userId = req.user.id;
 
         // Fetch course and enrollment in parallel
-        const [course, enrollment] = await Promise.all([
+        let [course, enrollment] = await Promise.all([
             Course.findOne({ _id: courseId, status: "published" })
             .populate("creator", "username photo displayName")
             .lean(),
@@ -23,16 +23,23 @@ const enroll = async (req, res) => {
         if (course.price === 0) {
             // If course is free, create enrollment and extend expiry
             if (!enrollment) {
-                const newEnrollment = await Enrollment.create({
-                    user: userId,
-                    course: courseId,
-                    status: "expired", // Mark as expired initially
-                    expiresAt: new Date()
-                });
-                await extendEnrollmentExpiry(newEnrollment._id); // Extend access immediately
-            } else {
-                await extendEnrollmentExpiry(enrollment._id); // Extend access for existing enrollment
+                    [enrollment,course] = await Promise.all([
+                    Enrollment.create({
+                      user: userId,
+                      course: courseId,
+                      status: "expired", // Mark as expired initially
+                      expiresAt: new Date()
+                    }),
+                    Course.findOneAndUpdate(
+                      { _id: courseId },
+                      { $inc: { totalEnrollment: 1 } },
+                      {new:true}
+                    ).populate("creator", "username photo displayName")
+                    .lean()
+                  ]);
             }
+            await extendEnrollmentExpiry(enrollment._id); 
+            console.log(course);
             return res.status(200).json({ success: true, 
                 message: "Free course enrolled successfully",
                 course:{...course,isEnrolled:true,isCreator:false} });

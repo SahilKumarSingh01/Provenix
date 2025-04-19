@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation ,Link } from "react-router-dom";
+import { toast } from "react-toastify";
+
 import styles from "../styles/Notification.module.css";
 import axios from "../api/axios";
 import MentionText from "../components/MentionText.jsx";
@@ -17,13 +19,12 @@ const Notification = () => {
       const allNotifs = res.data.notifications || [];
       setNotifications(allNotifs);
     } catch (err) {
-      console.error("Error fetching notifications", err);
+      toast.error("Error fetching notifications");
     }
   };
   const markRead = async () => {
     try {
       const notification=notifications[selectedIndex];
-      console.log("here is your",notification._id);
       await axios.patch("/api/profile/mark-read",{},{params:{notifId:notification._id}});
       const updatedNotifications=[...notifications];
       updatedNotifications[selectedIndex].read=true;
@@ -60,25 +61,20 @@ const Notification = () => {
       {/* LEFT PANEL */}
       <div className={`${styles.leftPanel} ${isMobile && !showLeftPane ? styles.leftPaneHidden : ""}`}>
         <h3>All Notifications</h3>
-        <ul className={`${styles.notificationList} ${isMobile ? styles.mobileList : ""}`}>
+        <ul className={styles.notificationList}>
           {notifications.map((n, index) => (
             <li
               key={n._id}
               className={`${styles.notificationItem} ${n.read ? styles.read : styles.unread}`}
-              onClick={() => handleNotificationClick(index)} // Pass notificationId
+              onClick={() => handleSelect(index)} // Pass notificationId
             >
-              <div className={styles.notificationContent}>
                 {/* Render notification type dynamically */}
                 <div className={styles.notificationType}>
                   {n.type} {n.read ? "" : "◉"}
                 </div>
-                <div className={styles.mentionText}>
-                  {n.type === "comment" && <MentionText text={n.data.text} />}
-                </div>
-                <span className={styles.time}>
+                <div className={styles.time}>
                   {new Date(n.createdAt).toLocaleString()}
-                </span>
-              </div>
+                </div>
             </li>
           ))}
         </ul>
@@ -103,21 +99,23 @@ const Notification = () => {
             <h3>
               {`${capitalize(selectedNotification.type)} Notification`}
             </h3>
-            <p>
-              {selectedNotification.type === "comment" && (
-                <>
-                 <MentionText text={selectedNotification.data.text} /> <br />
-                 <Link to={selectedNotification.url}>click here</Link>
-                 {/* {selectedNotification.url} */}
-                  <span className={styles.time}>
+            {selectedNotification.type === "comment" && (
+              <>
+              <div className={styles.notificationContentBox}>
+                <MentionText text={selectedNotification.data.text} /> <br />
+                <div>
+                  <div className={styles.time}>
                     {new Date(selectedNotification.createdAt).toLocaleString()}
-                  </span>
-                </>
-              )}
-            </p>
+                  </div>
+                  <Link to={selectedNotification.url} className={styles.viewLink}>Click here to view page of comment</Link>
+                </div>
+              </div>
+              
+              </>
+            )}
           </div>
         ) : (
-          <div className={styles.loadingText}>Loading notification details... ⏳</div>
+          <div className={styles.loadingText}>Loading notification details... </div>
         )}
       </div>
     </div>

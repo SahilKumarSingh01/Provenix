@@ -59,22 +59,24 @@
     text-align: center;
   }
   
-  .notificationList {
+    .notificationList {
     list-style: none;
-    padding: 0;
-    margin: 0;
-    max-height: 300px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    max-height:300px;
+    overflow-y:auto;
+    padding-right:8px;
+
   }
   .notificationList::-webkit-scrollbar {
-    display: none;
+    width: 8px;
   }
+  
+  .notificationList::-webkit-scrollbar-thumb {
+    background:var(--bg-tertiary);
+  }
+  
   .notificationType {
     font-weight: 600;
-    color: #007bff;  /* Style notification type dynamically */
+    color: #007bff;  
   }
   
   .mentionText {
@@ -86,6 +88,7 @@
   .notificationItem {
     padding: 8px;
     border-radius: 6px;
+    margin-bottom:10px;;
     border: 1px solid var(--border-primary);
     background-color: var(--bg-secondary);
     font-size: 0.95rem;
@@ -104,5 +107,6 @@
   .time {
     font-size: 0.8rem;
     color: var(--text-muted);
+    text-align:end;
   }
   

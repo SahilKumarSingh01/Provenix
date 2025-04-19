@@ -4,8 +4,11 @@
   }
   .RatingWrapper{
     display: flex;
+    align-items: center;
+    gap:0.25rem;
+    /* border:1px solid black; */
   }
-  .RatingCircles {
+  .RatingStars {
     font-size: 14px; /* Make circles smaller */
   }
   

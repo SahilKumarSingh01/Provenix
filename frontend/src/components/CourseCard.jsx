@@ -13,9 +13,17 @@ const CourseCard = ({ course }) => {
     navigate(`/course/${course._id}/view`);
   };
   const progess=course.completedPages?(course.completedPages.length/course.pageCount)*100:null;
+  const expiresAt = course?.expiresAt ? new Date(course.expiresAt) : null;
+  let daysLeft = null;
+  
+  if (expiresAt) {
+    const today = new Date();
+    const timeDiff = expiresAt - today;
+    daysLeft = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // convert ms to days
+  }
+
   return (
     <div className={styles.ccContainer} onClick={handleCardClick}>
-      {/* <Link to={`/course-view/${course._id}`} className={styles.ccLink}> */}
       <div className={styles.ccThumbnailWrapper}>
         <img
           src={course.thumbnail || defaultThumbnail}
@@ -23,41 +31,37 @@ const CourseCard = ({ course }) => {
           className={styles.ccThumbnailImage}
         />
       </div>
-      {/* </Link> */}
-      <div className={styles.ccInfo}>
-         {/* Profile + Title Wrapper */}
-        <div className={styles.ccProfileWrapper}>
-          <img
-            src={course.creator.photo || defaultProfile}
-            alt="Creator Profile"
-            className={styles.ccProfileImage}
-          />
-          <div>
-            <h3 className={styles.ccCourseTitle}>{course.title}</h3>
-            <Link to={`/profile/${course.creator.username}` } onClick={(e)=>e.stopPropagation()} className={styles.ccUsername}>
-              @{course.creator.username}
-            </Link>
-          </div>
+
+      <div className={styles.ccProfileWrapper}>
+        <img
+          src={course.creator.photo || defaultProfile}
+          alt="Creator Profile"
+          className={styles.ccProfileImage}
+        />
+        <div>
+          <h3 className={styles.ccCourseTitle}>{course.title}</h3>
+          <Link to={`/profile/${course.creator.username}` } onClick={(e)=>e.stopPropagation()} className={styles.ccUsername}>
+            @{course.creator.username}
+          </Link>
         </div>
-        
-        {/* Course Level & Status */}
+      </div>
+
+      <div className={styles.ccInfo}>
         <div className={styles.ccLevelStatus}>
           <span className={styles.ccLevel}>{course.level}</span>
           <span className={styles.ccStatus}>{course.status}</span>
         </div>
 
-        {/* Course Metadata */}
-        <p className={styles.ccCourseMeta}>{course.totalEnrollment} students • {course.pageCount} pages • {course.videoCount} videos • {course.codeCount} codes</p>
+        <p className={styles.ccCourseMeta}>{course.totalEnrollment} students • {course.pageCount} pages • {course.videoCount} videos • {course.codeCount} code block</p>
 
-        <div className={styles.ccPriceRatingWrapper}>
-        <div className={styles.ccCourseRating}><AvgRating course={course}/></div>
-          <p className={styles.ccCoursePrice}>
-            {progess!==null?progess.toFixed(2)+"%":
-            course.price > 0 ? `₹${course.price.toFixed(2)}` : "Free"}
-          </p>
-          
+        <div className={styles.ccCardFooter}>
+          <div className={styles.ccRating}><AvgRating course={course}/></div>
+          {daysLeft&&<span className={styles.ccDaysLeft}>{daysLeft} days left</span>}
+          <span className={styles.ccPriceOrProgress}>
+            {progess!==null?progess.toFixed(2)+"%":course.price > 0 ? `₹${course.price.toFixed(2)}` : "Free"}
+          </span>  
+          </div>
         </div>
-      </div>
     </div>
    
   );

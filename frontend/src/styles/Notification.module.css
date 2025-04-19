@@ -3,8 +3,7 @@
     position: relative;
     gap: 2rem;
     padding: 2rem;
-    width: 100%;
-    box-sizing: border-box;
+    align-items: flex-start; 
   }
   
   /* LEFT PANEL */
@@ -15,13 +14,9 @@
     border: 1px solid var(--border-primary);
     border-radius: 10px;
     padding: 1rem;
-    overflow-y: auto;
-    max-height: 85vh;
     transition: all 0.3s ease;
   }
-  .leftPanel::-webkit-scrollbar {
-    display: none;
-  }
+
   .leftPanel h3 {
     padding: 10px;
     margin-bottom: 1rem;
@@ -31,42 +26,66 @@
     color: var(--text-heading);
   }
   
+  .notificationList {
+    list-style: none;
+    max-height:65vh;
+    overflow-y:auto;
+    padding-right:8px;
+
+  }
+  .notificationList::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .notificationList::-webkit-scrollbar-thumb {
+    background:var(--bg-tertiary);
+  }
+  
+  .notificationType {
+    font-weight: 600;
+    color: #007bff;  
+  }
+  
+  .mentionText {
+    font-size: 0.9rem;
+    padding:0.5rem 0.5rem;
+    text-indent: 1rem;
+  }
   
   .notificationItem {
-    cursor: pointer;
-    padding: 0.75rem 1rem;
-    margin-bottom: 0.5rem;
-    border-radius: 8px;
-    background-color: var(--bg-tertiary);
-    border: 1px solid var(--border-secondary);
-    transition: background-color 0.2s ease;
-  }
-  .notificationItem p{
-    color:#007bff;
-  }
-  .notificationItem:hover {
-    /* background-color: var(--bg-primary); */
-    transform: scale(1.01);
+    padding: 8px;
+    border-radius: 6px;
+    margin-bottom:10px;;
+    border: 1px solid var(--border-primary);
+    background-color: var(--bg-secondary);
+    font-size: 0.95rem;
+    transition: background-color 0.3s ease;
   }
   
-  .read {
-    background-color: var(--bg-primary);
-    border-color: var(--highlight-border);
+  .notificationItem.unread {
+    background-color: var(--bg-tertiary);
+    font-weight: 600;
+  }
+  
+  .notificationItem.read {
+    color: var(--text-muted);
   }
   
   .time {
-    font-size: 0.75rem;
-    color: var(--text-secondary);
-    margin-top: 0.25rem;
-    display: inline-block;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-align:end;
   }
- 
+  
   /* RIGHT PANEL */
   .rightPanel {
     flex: 1;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
+  }
+  .rightPanel h2{
+    color:var(--text-heading);
   }
   
   .notificationDetail {
@@ -76,19 +95,43 @@
     padding: 1.5rem;
     font-size: 1rem;
     line-height: 1.6;
+    /* height:; */
   }
-  
+  .notificationDetail h3{
+    color:var(--text-heading);
+  }
+  .notificationContentBox{
+    padding:1rem;
+    height:80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
   .loadingText {
     font-size: 1rem;
     color: var(--text-secondary);
   }
   
+  .viewLink {
+    color: var(--text-highlight);
+    text-decoration: none;
+    font-weight: 600;
+    margin-top: 16px;
+    text-align: center;
+    display: block;
+    transition: color 0.2s ease;
+  }
+  
+  .viewLink:hover {
+    color: var(--text-selected);
+    text-decoration: underline;
+  }
   /* TOGGLE BUTTON */
   .toggleButton {
     cursor: pointer;
-    position: fixed;
+    position: absolute;
     z-index: 10;
-    top: 50%;
+    top: 50vh;
     transform: translateY(-50%);
     left: 0;
     width: 40px;
@@ -123,6 +166,9 @@
       top: 0;
       left: 0;
       z-index: 5;
+    }
+    .notificationList{
+      max-height:100%;
     }
   
     .rightPanel {

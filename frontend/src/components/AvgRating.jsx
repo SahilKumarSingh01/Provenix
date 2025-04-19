@@ -10,7 +10,7 @@ const AvgRating = ({course}) => {
   
     return (
       <div className={styles.RatingWrapper}>
-        <span className={styles.RatingCircles}>{<span style={{color:"gold"}}>{filled}</span>}{<span style={{color:"grey"}}>{empty}</span>}</span>
+        <span className={styles.RatingStars}>{<span style={{color:"gold"}}>{filled}</span>}{<span style={{color:"grey"}}>{empty}</span>}</span>
         <span className={styles.RatingNumber}>({course.numberOfRatings})</span>
       </div>
     );

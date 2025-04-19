@@ -1,17 +1,20 @@
-import React, { useEffect, useRef } from "react";
+import React, { useState,useEffect, useRef } from "react";
 import styles from "../styles/DisplayReference.module.css";
 import { useEditingContent } from "../context/EditingContentContext";
 
-const DisplayReference = ({ item, index, contentSection, setContentSection }) => {
+const DisplayReference = ({ item, index, contentSection, setContentSection ,insight,updateInsight}) => {
   const {
     editingItem,
     editingState,
     setEditingItem,
     updateItemData
   } = useEditingContent();
+  const [checked,setChecked]=useState(insight?.data||false);
 //   contentSection.isEnrolled=true;
   const isEditing = editingItem === item;
-
+  useEffect(()=>{
+    setChecked(insight?.data||false)
+    },[insight])
   const handleDoubleClick = () => {
     if (!contentSection.isCreator) return;
     setEditingItem(contentSection, setContentSection, index);
@@ -21,10 +24,20 @@ const DisplayReference = ({ item, index, contentSection, setContentSection }) =>
     updateItemData({ ...editingState.curData, [field]: value });
   };
 
+  const redirect=()=>{
+    try {
+      const url = new URL(item?.data?.url);
+      window.open(url.href, "_blank");
+    } catch (e) {
+      console.error("Invalid URL:", item?.data?.url);
+      alert("Oops! This link seems broken or invalid.");
+    }
+  }
+
   const renderViewMode = () => (
     <div className={styles.container} onDoubleClick={handleDoubleClick }>
     <div className={styles.contentWrapper}>
-    <span className={styles.title} onClick={() => window.open(item.data.url, "_blank")}>{item.data.title}</span>
+    <span className={styles.title} onClick={redirect}>{item.data.title}</span>
     <span className={styles.platform}>{item.data.platform}</span>
     <span className={`${styles.difficulty} ${styles["difficulty" + item.data.difficulty]}`}>
       {item.data.difficulty}
@@ -32,10 +45,11 @@ const DisplayReference = ({ item, index, contentSection, setContentSection }) =>
     <input
         type="checkbox"
         className={styles.tickBox}
-        // checked={false}
-        // disabled={!contentSection.isEnrolled}
-        onChange={(e) =>{}
-        //   updateItemData({ ...item.data, completed: e.target.checked })
+        checked={checked}
+        onChange={(e) =>{
+          setChecked(!checked);
+          contentSection.isEnrolled&&updateInsight({itemId:item._id,data:!checked},index);
+        }
         }
     />
     </div>

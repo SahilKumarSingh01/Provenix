@@ -143,6 +143,8 @@ const DisplayContents = ({ contentSectionId }) => {
                         key={index} 
                         item={item} 
                         index={index}
+                        insight={insightSection?.insights[index]}
+                        updateInsight={updateInsight}
                         contentSection={contentSection}
                         setContentSection={setContentSection} />;
             case "image":
