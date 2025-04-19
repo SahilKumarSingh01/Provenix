@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import {useCourse} from "../context/CourseContext"; // Import CourseContext
-import ConfirmBox from "../components/confirmBox.jsx";
+import ConfirmBox from "../components/ConfirmBox.jsx";
 import BackspaceButton from "../components/BackspaceButton.jsx"
 
 import axios from "../api/axios";
