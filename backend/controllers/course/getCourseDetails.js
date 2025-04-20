@@ -6,9 +6,9 @@ const getCourseDetails = async (req, res) => {
                     .populate("creator", "username photo displayName") // Populate creator
                     .lean();
       if (!course) return res.status(404).json({ success: false, message: "Course not found" });
-  
-      const isCreator = course.creator._id.equals(req.user.id);
-      const isEnrolled = await Enrollment.exists({ user: req.user.id, course: course._id, status: "active" });
+      const userId=req.user?.id;
+      const isCreator = course.creator._id.equals(userId);
+      const isEnrolled = await Enrollment.exists({ user: userId, course: course._id, status: "active" });
   
       if (!isCreator && course.status !== "published" && !isEnrolled)
         return res.status(403).json({ success: false, message: "Access denied!" });

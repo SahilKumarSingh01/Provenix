@@ -48,7 +48,7 @@ const EnrollmentState = () => {
 
   return (
     <div className={styles.stateCard}>
-      <h3 className={styles.cardTitle}>My Enrollment Stats</h3>
+      <h3 className={styles.cardTitle}>My Enrollments</h3>
       <div className={styles.stats}>
         <StatBlock title="General Stats" data={generalStats} />
         <StatBlock title="Enrollment Status" data={enrollmentStats.statusCounts} />

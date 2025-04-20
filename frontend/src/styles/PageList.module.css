@@ -62,21 +62,22 @@
   appearance: none; /* Remove default checkbox style */
   width: 16px;
   height: 16px;
-  border: 2px solid var(--gray-color); /* Default border color */
   border-radius: 4px;
-  background-color:white; /* Default background */
+  background-color:var(--bg-primary); /* Default background */
+  border:1px solid var(--border-primary);
+  outline:none;
   display: inline-block;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
 }
 
 .pageCard input[type="checkbox"]:hover {
-  border-color: var(--primary-color); /* Highlight border on hover */
+  border-color: var(--text-highlight);
 }
 
 .pageCard input[type="checkbox"]:checked {
-  background-color: var(--success-color); /* Change color when checked */
-  border-color: var(--success-color);
+  background-color: transparent; /* Change color when checked */
+  border-color:transparent;
   position: relative;
 }
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useRef } from "react";
 
 import { useCourse } from "../context/CourseContext";
 import axios from '../api/axios.js';
@@ -24,12 +24,24 @@ const DisplayContents = ({ contentSectionId }) => {
   const [contentSection, setContentSection] = useState(null);
   const [insightSection,setInsightSection]=useState(null);
   const [showMenu, setShowMenu] = useState(false);
+  const [hasAccess,setHasAccess]=useState(true);
   const {editingState,saveEditing}=useEditingContent();
+  const menuRef = useRef(null);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setShowMenu(false); // This is your state for toggling the menu
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+  
   useEffect(() => {
     const fetchAll = async () => {
       const fetchedCS = await fetchContentSection(contentSectionId);
-      if (!fetchedCS) return;
+      if (!fetchedCS) return setHasAccess(false);
   
       setContentSection(fetchedCS);
   
@@ -90,6 +102,7 @@ const DisplayContents = ({ contentSectionId }) => {
       setShowMenu(false);
     }
   };
+  if(!hasAccess)  return <p>You do not have access to view this content.</p>  ;
   if (!contentSection) return <p>Loading content...</p>;
   const itemsToDisplay=editingState.contentSection?._id==contentSection._id?editingState.items:contentSection.items;
   return (
@@ -175,7 +188,7 @@ const DisplayContents = ({ contentSectionId }) => {
 
       {/* Quick Selection Menu */}
       {showMenu && (
-        <div className={styles.selectionMenu}>
+        <div className={styles.selectionMenu} ref={menuRef}>
           {["heading", "text", "code", "mcq", "hidden", "reference","image","video"].map((type) => (
             <button key={type} onClick={() => addElement(type)}>{type}</button>
           ))}

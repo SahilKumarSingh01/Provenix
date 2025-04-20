@@ -19,11 +19,14 @@
   font-size: 17px;
   width:300px;
   color: var(--text-highlight);
+  word-wrap: break-word; /* Ensures long words break */
   transition: color 0.2s ease;
 }
 
 .title:hover {
   color: var(--text-selected);
+ 
+
 }
 
 .platform {
@@ -35,6 +38,10 @@
   color:var(--text-secondary);
   border: 1px solid var(--border-primary);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  white-space: nowrap;         /* Prevents text from wrapping */
+  overflow: hidden;            /* Hides text that overflows */
+  text-overflow: ellipsis;     /* Adds '...' when text overflows */
+  max-width: 200px;
 }
 
 .difficulty {

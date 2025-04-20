@@ -64,7 +64,7 @@ export const CourseProvider = ({ children }) => {
             return data.contentSection;
         } catch (err) {
             console.log(err);
-            toast.error(err?.response?.data?.message || "Failed to load page collection");
+            toast.error(err?.response?.data?.message || "Failed to load page Content");
             return null;
         }
     }

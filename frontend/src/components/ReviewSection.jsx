@@ -41,6 +41,7 @@ const ReviewSection = ({ course }) => {
     // Fetch my review separately
     const fetchMyReview = async () => {
         try {
+            if(!user)return;
             const { data } = await axios.get(`/api/course/${course._id}/review/my-review`);
             setMyReview(data.review || null);
         } catch (error) {

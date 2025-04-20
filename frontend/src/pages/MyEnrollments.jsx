@@ -1,9 +1,16 @@
 import { useEffect, useState } from "react";
 import axios from "../api/axios";
 import CourseCard from "../components/CourseCard";
+import ConfirmBox from "../components/ConfirmBox.jsx";
+
 import styles from "../styles/CourseListing.module.css";
 import {toast} from 'react-toastify'
+import { useCache } from "../context/CacheContext.jsx";
+
 const MyEnrollments = () => {
+    const { setCache}=useCache();
+    const [overlay, setOverlay] = useState(null);
+    
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [sortBy, setSortBy] = useState("updatedAt");
@@ -22,9 +29,8 @@ const MyEnrollments = () => {
                 params: { sortBy, order, skip: 0, limit: limit + 1, status, level }
             });
             const fetchedCourses=data.enrollments.map((enrollment)=>{
-                return {...enrollment.course,completedPages:enrollment.completedPages,expiresAt:enrollment.expiresAt};
+                return {...enrollment,...enrollment.course,enrollmentId:enrollment._id,isEnrolled:true};
             })
-            console.log(data.enrollments);
             setCourses(fetchedCourses.slice(0, limit));
             setSkip(limit);
             setHasNext(fetchedCourses.length > limit);
@@ -44,7 +50,7 @@ const MyEnrollments = () => {
                 params: { sortBy, order, skip, limit: limit + 1, status, level }
             });
             const fetchedCourses=data.enrollments.map((enrollment)=>{
-                return {...enrollment.course,completedPages:enrollment.completedPages,expiresAt:enrollment.expiresAt};
+                return {...enrollment,...enrollment.course,enrollmentId:enrollment._id,isEnrolled:true};
             })
             setCourses([...courses,...fetchedCourses.slice(0, limit)]);
             setSkip(skip + limit);
@@ -56,7 +62,46 @@ const MyEnrollments = () => {
             setLoading(false);
         }
     };
-
+    const handleDelete=(index)=>{
+        const onConfirm=async()=>{
+            try {
+                const enrollmentId=courses[index].enrollmentId;
+                const {data} = await axios.delete(`api/enrollment/${enrollmentId}`);
+                toast.success(data.message);
+                const updatedCourses=[...courses];
+                updatedCourses.splice(index, 1);
+                setCourses(updatedCourses);
+                setOverlay(null);
+            } catch (error) {
+                console.log(error);
+                toast.error(error.response?.data?.message || "Something went wrong!");
+            }
+        }
+        setOverlay(<ConfirmBox 
+            onConfirm={onConfirm} 
+            onCancel={() => { setOverlay(null) }}
+            message={`Are you sure you want to remove your enrollment from this course? 
+                      Doing so will completely remove your enrollment, including any insights, history, 
+                      and progress you’ve made in the course. 
+                      Please note that if you’ve purchased the course, the payment will not be refunded, 
+                      and you will lose access to the content once removed, even if the course has not yet expired.`}
+        />);
+        
+    }
+    const handleReEnroll=async(index)=>{
+        try {
+            const courseId=courses[index]._id;
+            const {data} = await axios.post(`api/enrollment/${courseId}/enroll`);
+            toast.success(data.message);
+            setCache(courseId,data.course);
+            const updatedCourses=[...courses];
+            updatedCourses[index]={...data.enrollment,...data.course,enrollmentId:data.enrollment._id,isEnrolled:true};
+            setCourses(updatedCourses);
+        } catch (error) {
+            console.log(error);
+            toast.error(error.response?.data?.message || "Something went wrong!");
+        }
+    }
     // Fetch fresh courses when filters change
     useEffect(() => {
         fetchCourses();
@@ -64,6 +109,7 @@ const MyEnrollments = () => {
 
     return (
         <div className={styles.courseContainer}>
+            {overlay}
             <div className={styles.courseHeader}>
                 <h2>My Enrollments</h2>
                 <div className={styles.sortOptions}>
@@ -103,7 +149,8 @@ const MyEnrollments = () => {
             ) : (
                 <div className={styles.courseList}>
                     {courses.length > 0 ? (
-                        courses.map((course) => <CourseCard key={course._id} course={course} />)
+                        courses.map((course,index) => <CourseCard key={course._id} course={course} 
+                            onDelete={()=>handleDelete(index)} onReEnroll={()=>handleReEnroll(index)}/>)
                     ) : (
                         <p>No courses found.</p>
                     )}

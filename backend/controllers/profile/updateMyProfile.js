@@ -7,6 +7,18 @@ const updateProfile = async (req, res) => {
         const { username, photo, displayName, email, bio } = req.body;
         const userId=req.user.id;
 
+        const limits = {
+            username: 30,
+            displayName: 30,
+            bio: 500,
+          };
+          
+          for (const key of Object.keys(limits)) {
+            if (req.body[key] && req.body[key].length > limits[key]) {
+              return res.status(400).json({ message: `${key} must be at most ${limits[key]} characters.` });
+            }
+          }
+          
         const publicId = photo ? extractPublicId(photo) : "";
 
         const [isOrphanPhoto, currentUser] = await Promise.all([

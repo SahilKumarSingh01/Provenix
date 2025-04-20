@@ -16,7 +16,7 @@ const create = async (req, res) => {
     if (!parentContentSection) {
       return res.status(404).json({ message: "Parent content section not found or unauthorized" });
     }
-
+    
     // Create a new content section
     const newContentSection = await ContentSection.create({
       pageId: parentContentSection.pageId,

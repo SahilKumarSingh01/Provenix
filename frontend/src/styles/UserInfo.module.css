@@ -13,15 +13,25 @@
   }
   
   .displayName {
-    font-size:0.9rem;
+    font-size: 0.9rem;
     font-weight: bold;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 200px; /* Or set a px value like 150px */
   }
   
   .username {
+    display: block;
     font-size: 0.8rem;
     text-decoration: none;
     color: var(--text-muted);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 200px; /* Adjust as needed */
   }
+  
   /* Add hover effect if needed */
 .username:hover {
   color: var(--text-highlight); /* Change color on hover */

@@ -52,9 +52,9 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use('/auth',authRoutes);
-app.use('/api/course',isAuthenticated,courseRoutes);
 app.use('/api/upload',isAuthenticated,uploadRoutes);
 app.use('/api/enrollment',isAuthenticated,enrollmentRoutes);
+app.use('/api/course',courseRoutes);
 app.use('/api/profile',isAuthenticated,profileRoutes)
 app.use('/api/webhook',webhookRoutes);
 

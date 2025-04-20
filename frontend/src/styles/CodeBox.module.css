@@ -23,10 +23,12 @@
     border: 1px solid transparent;
     border-bottom: none;
     transition: all 0.3s ease;
-    white-space: nowrap;
-    max-width: 300px;
-    overflow: hidden;
+    white-space: nowrap;  /* Prevents text from wrapping */
+    overflow: hidden;     /* Hides overflowing text */
+    text-overflow: ellipsis;  /* Adds the ellipsis (...) when the text overflows */
+    max-width: 300px;     /* Limits the width of the box */
   }
+  
   
   .codeboxTab:hover {
     color: var(--text-highlight);

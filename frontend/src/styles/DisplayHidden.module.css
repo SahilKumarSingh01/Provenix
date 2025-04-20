@@ -14,6 +14,7 @@
     font-weight: 600;
     font-size: 16px;
     transition: color 0.2s ease;
+    word-wrap: break-word; /* Ensures long words break */
     user-select: none;
   }
   

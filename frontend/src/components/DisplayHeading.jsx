@@ -25,6 +25,7 @@ const DisplayHeading = ({ item,index,contentSection ,setContentSection,insight,u
   },[insight])
   const adjustHeight = () => {
     const textarea = textareaRef.current;
+    textarea.style.height = 'auto'; // Reset the height before calculating
     textarea.style.height = textarea.scrollHeight + "px"; // Set to scroll height
   };
 

@@ -27,9 +27,9 @@ const verifyGithub = async (req, res) => {
             await Profile.updateOne({ user: userId }, { $set: { "codingProfiles.github.isVerified": true } });
             return res.status(200).json({ message: "GitHub profile verified successfully!" });
         } else {
-            return res.status(200).json({
-                message: "Verification failed. Please update your GitHub bio with the provided code and retry.",
-                hashCode
+            return res.status(400).json({ 
+                message: "Verification failed. 'bio' does not match the stored hashCode.",
+                hashCode: profile.codingProfiles.codeforces.hashCode
             });
         }
     } catch (error) {

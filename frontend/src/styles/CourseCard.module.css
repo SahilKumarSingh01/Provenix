@@ -1,83 +1,146 @@
-
 /* Course Card */
-.ccContainer {
-  display:inline-block;
+.container {
+  display: inline-block;
   width: 300px;
   vertical-align: top;
   background: var(--bg-secondary);
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   padding: 12px;
-  margin:10px;
-  cursor:pointer;
+  margin: 10px;
+  cursor: pointer;
   border: 1px solid var(--border-primary);
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
-.ccContainer:hover {
+.container:hover {
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
 }
 
 /* Thumbnail */
-.ccThumbnailWrapper {
+.thumbnailWrapper {
+  position: relative;
   width: 100%;
   height: 200px;
   overflow: hidden;
-  margin-bottom:0.5rem;
+  margin-bottom: 0.5rem;
   border-radius: 8px;
 }
 
-.ccThumbnailImage {
+/* Dropdown Wrapper */
+.dropdownWrapper {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+}
+
+/* Dropdown Toggle Button */
+.dropdownToggle {
+  padding:0.5rem;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Show button on hover */
+.container:hover .dropdownToggle {
+  opacity: 1;
+}
+
+/* Dropdown Menu */
+.dropdownMenu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 0.5rem;
+  z-index: 100;
+  display: block; /* Hidden by default */
+  min-width: 140px;
+}
+
+/* Dropdown Item Styles */
+.dropdownItem {
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  padding: 0.4rem 0.8rem;
+  text-align: left;
+  font-size: 0.85rem;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.2s;
+}
+
+/* Hover effect for dropdown items */
+.dropdownItem:hover {
+  background-color: var(--bg-tertiary);
+}
+
+.thumbnailImage {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
 /* Profile & Title */
-.ccProfileWrapper {
+.profileWrapper {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.ccProfileImage {
+.profileImage {
   width: 32px;
   height: 32px;
   border-style: solid;
-  border-color:var(--border-primary);
+  border-color: var(--border-primary);
   border-radius: 50%;
   object-fit: cover;
 }
-/* Remove underline from the username link */
-.ccUsername {
-  text-decoration: none;
-  color: var(--text-muted); /* Brighter version */
-  font-size: 0.875rem;
-  /* margin-top: 3px; */
-}
 
-/* Add hover effect if needed */
-.ccUsername:hover {
-  text-decoration: underline;
-}
-
-.ccCourseTitle {
+.courseTitle {
   font-size: 1rem;
   font-weight: 600;
   color: var(--text-primary);
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
+  white-space: nowrap;
   overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 230px;
+}
+
+/* Remove underline from the username link */
+.username {
+  display: block;
+  text-decoration: none;
+  color: var(--text-muted); /* Brighter version */
+  font-size: 0.875rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 230px;
+}
+
+/* Add hover effect if needed */
+.username:hover {
+  text-decoration: underline;
 }
 
 /* Course Info */
-.ccInfo {
+.info {
   /* border:1px solid black; */
 }
 
 /* Metadata */
-.ccCourseMeta {
+.courseMeta {
   font-size: 0.8rem;
   opacity: 0.85;
   color: var(--text-secondary);
@@ -85,56 +148,52 @@
 }
 
 /* Level & Status */
-.ccLevelStatus {
-  margin:10px 0px 10px 0px;
+.levelStatus {
+  margin: 10px 0px 10px 0px;
   display: flex;
-  /* padding-left:10px; */
   gap: 6px;
-  /* justify-content: end; */
   font-size: 0.8rem;
 }
 
-.ccLevel, .ccStatus {
+.level, .status {
   padding: 4px 8px;
   border-radius: 5px;
   font-weight: 600;
   text-transform: capitalize;
-
 }
 
-.ccLevel {
+.level {
   background: var(--bg-highlight);
   color: var(--btn-primary-text);
 }
 
-.ccStatus {
+.status {
   background: #145a32; /* Slightly darker green */
   color: white;
 }
 
 /* Price & Rating */
-.ccCardFooter {
+.cardFooter {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 6px;
 }
 
-.ccPriceOrProgress {
+.priceOrProgress {
   font-weight: bold;
   color: var(--text-success);
 }
-.ccDaysLeft{
+
+.daysLeft {
   font-weight: bold;
   color: var(--text-warning);
-  /* font-size: small; */
   font-size: 0.9rem;
 }
 
-.ccRating {
-  margin-right:10px;
+.rating {
+  margin-right: 10px;
   display: flex;
   align-items: center;
   gap: 6px; /* Adjust spacing */
 }
-
