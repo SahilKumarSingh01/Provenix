@@ -96,74 +96,75 @@ const SearchCourses = () => {
                         {order === 1 ? "Ascending" : "Descending"}
                     </button>
                 </div>
+                {/* Filters */}
+                <div className={styles.filters}>
+                    <input
+                        type="text"
+                        placeholder="Search by keyword..."
+                        value={keyword}
+                        onChange={(e) => setKeyword(e.target.value)}
+                    />
+                    <input
+                        type="text"
+                        placeholder="Category"
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
+                    />
+                    <input
+                        type="text"
+                        placeholder="Tags (comma separated)"
+                        value={tags}
+                        onChange={(e) => setTags(e.target.value)}
+                    />
+                    <input
+                        type="number"
+                        placeholder="Min Price"
+                        min="0"
+                        value={minPrice}
+                        onChange={(e) => setMinPrice(e.target.value)}
+                    />
+                    <input
+                        type="number"
+                        placeholder="Max Price"
+                        min="0"
+                        value={maxPrice}
+                        onChange={(e) => setMaxPrice(e.target.value)}
+                    />
+                    <select
+                        value={priceType}
+                        onChange={(e) => {
+                            const selected = e.target.value;
+                            setPriceType(selected);
+
+                            if (selected === "Free") {
+                                setMinPrice("0");
+                                setMaxPrice("0");
+                            } else if (selected === "Paid") {
+                                setMinPrice("1");
+                                setMaxPrice(""); // No upper bound
+                            } else {
+                                setMinPrice("");
+                                setMaxPrice("");
+                            }
+                        }}
+                    >
+                        <option value="">All Types</option>
+                        <option value="Free">Free</option>
+                        <option value="Paid">Paid</option>
+                    </select>
+                    <select value={level} onChange={(e) => setLevel(e.target.value)}>
+                        <option value="">All Levels</option>
+                        <option value="Beginner">Beginner</option>
+                        <option value="Intermediate">Intermediate</option>
+                        <option value="Advanced">Advanced</option>
+                    </select>
+                    <button className={styles.searchButton} onClick={fetchCourses}>
+                        Search
+                    </button>
+                </div>
             </div>
 
-            {/* Filters */}
-            <div className={styles.filters}>
-                <input
-                    type="text"
-                    placeholder="Search by keyword..."
-                    value={keyword}
-                    onChange={(e) => setKeyword(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="Category"
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="Tags (comma separated)"
-                    value={tags}
-                    onChange={(e) => setTags(e.target.value)}
-                />
-                <input
-                    type="number"
-                    placeholder="Min Price"
-                    min="0"
-                    value={minPrice}
-                    onChange={(e) => setMinPrice(e.target.value)}
-                />
-                <input
-                    type="number"
-                    placeholder="Max Price"
-                    min="0"
-                    value={maxPrice}
-                    onChange={(e) => setMaxPrice(e.target.value)}
-                />
-                <select
-                    value={priceType}
-                    onChange={(e) => {
-                        const selected = e.target.value;
-                        setPriceType(selected);
-
-                        if (selected === "Free") {
-                            setMinPrice("0");
-                            setMaxPrice("0");
-                        } else if (selected === "Paid") {
-                            setMinPrice("1");
-                            setMaxPrice(""); // No upper bound
-                        } else {
-                            setMinPrice("");
-                            setMaxPrice("");
-                        }
-                    }}
-                >
-                    <option value="">All Types</option>
-                    <option value="Free">Free</option>
-                    <option value="Paid">Paid</option>
-                </select>
-                <select value={level} onChange={(e) => setLevel(e.target.value)}>
-                    <option value="">All Levels</option>
-                    <option value="Beginner">Beginner</option>
-                    <option value="Intermediate">Intermediate</option>
-                    <option value="Advanced">Advanced</option>
-                </select>
-                <button className={styles.searchButton} onClick={fetchCourses}>
-                    Search
-                </button>
-            </div>
+            
 
             {/* Course List */}
             {loading && courses.length === 0 ? (

@@ -53,36 +53,80 @@
   }
   
   /* Light Theme */
-  [data-theme="light"] {
-    --bg-primary: #f5f7fa; /* Light background */
-    --bg-secondary: #e3e7ed; /* Slightly darker section */
-    --bg-tertiary: #d1d5db; /* Darker section for contrast */
-    --bg-card: #fff; /* Course cards */
-    --bg-highlight: #1565c0; /* Blue accent instead of cyan */
+  [data-theme="light"]{
+    --bg-primary: #F4F7FA;       /* Soft off-white background */
+    --bg-secondary: #FFFFFF;     /* Clean white for boxes */
+    --bg-tertiary: #E8EEF3;      /* Light grey-blue for contrast */
+    --bg-highlight: #1FA7A0;     /* Soft teal pop */
+    --bg-selected: #CFF4EF;      /* Muted teal for selection */
   
-    --text-primary: #333; /* Default text */
-    --text-secondary: #666; /* Muted text */
-    --text-heading: #111; /* Bold headings */
-    --text-muted: #999; /* Less emphasized text */
-    --text-error: #d9534f; /* Error messages */
-    --text-success: #28a745; /* Success messages */
-    --text-warning: #f0ad4e; /* Warnings */
+    --text-header: #2B5DB9;      /* Deep blue for headers */
+    --text-primary: #1A1A1A;     /* Primary dark text for readability */
+    --text-secondary: #4A5568;   /* Medium grey for subtext */
+    --text-heading: #2997B8;     /* Calm and clear for headings */
+    --text-muted: #718096;       /* Soft muted grey */
+    --text-error: #D32F2F;       /* Red tone with visibility */
+    --text-success: #2E7D32;     /* Gentle green */
+    --text-warning: #F9A825;     /* Golden amber */
+    --text-highlight: #118D92;   /* Deep teal for highlights */
+    --text-selected: #0C5B59;    /* Rich teal-grey */
   
-    --btn-primary-bg: #1565c0;
-    --btn-primary-hover: #0d47a1;
-    --btn-primary-text: #fff;
+    --btn-primary-bg: #1565C0;
+    --btn-primary-hover: #0D47A1;
+    --btn-primary-text: #FFFFFF;
   
-    --btn-secondary-bg: #50e3c2;
-    --btn-secondary-hover: #3ac5a8;
-    --btn-secondary-text: #fff;
+    --btn-secondary-bg: #1AA29E;
+    --btn-secondary-hover: #128C89;
+    --btn-secondary-text: #FFFFFF;
   
-    --btn-danger-bg: #e74c3c;
-    --btn-danger-hover: #c0392b;
-    --btn-danger-text: #fff;
+    --btn-danger-bg: #D32F2F;
+    --btn-danger-hover: #B71C1C;
+    --btn-danger-text: #FFFFFF;
   
-    --border-primary: #d1d5db;
+    --btn-disabled-bg: #E0E0E0;
+    --btn-disabled-text: #A0A0A0;
+  
+    --border-primary: #D0D7DE;  /* Subtle light border */
   }
   
+  [data-theme="dark"] {
+    --bg-primary: #0A192F;         /* Deep navy blue */
+    --bg-secondary: #112240;       /* Dark blue-grey for boxes */
+    --bg-tertiary: #1B3248;        /* Slightly lighter blue-grey */
+    --bg-highlight: #18B892;       /* Refined teal pop */
+    --bg-selected: #1E5A55;        /* Balanced deep tone for selected items */
+  
+    --text-header: #4773D4;        /* Soft blue for headers */
+    --text-primary: #F1F1F1;       /* Light text for high readability */
+    --text-secondary: #A0AEC0;     /* Muted grey for subtext */
+    --text-heading: #5ECBEF;       /* Calming aqua for headings */
+    --text-muted: #718096;         /* Neutral grey */
+    --text-error: #EF5350;         /* Gentle red, still visible */
+    --text-success: #66BB6A;       /* Soft green for success */
+    --text-warning: #FDD835;       /* Bright, but not harsh */
+    --text-highlight: #30D5C8;     /* Vibrant teal */
+    --text-selected: #A2FFF8;      /* Soft glow for selected text */
+  
+    --btn-primary-bg: #1E88E5;
+    --btn-primary-hover: #1565C0;
+    --btn-primary-text: #FFFFFF;
+  
+    --btn-secondary-bg: #26A69A;
+    --btn-secondary-hover: #1E817A;
+    --btn-secondary-text: #FFFFFF;
+  
+    --btn-danger-bg: #EF5350;
+    --btn-danger-hover: #C62828;
+    --btn-danger-text: #FFFFFF;
+  
+    --btn-disabled-bg: #374151;
+    --btn-disabled-text: #A0A0A0;
+  
+    --border-primary: #2C3E50;     /* Subtle dark border */
+  }
+  :root {
+    --toastify-z-index: 99; /* Or whatever value you prefer */
+  }
   input[type=number]::-webkit-inner-spin-button {
     -webkit-appearance: none;
   }

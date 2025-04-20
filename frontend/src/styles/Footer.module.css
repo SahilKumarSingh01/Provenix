@@ -1,7 +1,7 @@
 .footer {
-  background: #0A192F;
+  background: var(--bg-primary); /* Deep Navy Blue */
   padding: 4rem 5% 2rem;
-  border-top: 1px solid #233554;
+  border-top: 1px solid var(--border-primary); /* Soft Modern Grey */
 }
 
 .footerContent {
@@ -12,28 +12,28 @@
 }
 
 .footerSection {
-  color: #A8B2D1;
+  color: var(--text-muted); /* Soft grayish-blue */
 }
 
 .footerSection h4 {
-  color: #4F46E5;
+  color: var(--text-heading); /* Light Teal */
   margin-bottom: 1rem;
 }
 
 .link {
   display: block;
-  color: #A8B2D1;
+  color: var(--text-muted); /* Soft grayish-blue */
   text-decoration: none;
   margin-bottom: 0.5rem;
 }
 
 .link:hover {
-  color: #4F46E5;
+  text-decoration: underline;
 }
 
 .footerBottom {
   text-align: center;
   padding-top: 2rem;
-  border-top: 1px solid #233554;
-  color: #8892B0;
+  border-top: 1px solid var(--border-primary); /* Soft Modern Grey */
+  color: var(--text-muted); /* Soft grayish-blue */
 }

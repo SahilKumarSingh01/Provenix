@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from '../styles/Footer.module.css';
-
+import {Link} from 'react-router-dom'
 const Footer = () => {
   return (
     <footer className={styles.footer}>
@@ -11,9 +11,18 @@ const Footer = () => {
         </div>
         <div className={styles.footerSection}>
           <h4>Quick Links</h4>
-          <a href="#courses" className={styles.link}>Courses</a>
-          <a href="#teach" className={styles.link}>Teach</a>
-          <a href="#about" className={styles.link}>About</a>
+          <Link to="/explore" className={styles.link}>Courses</Link>
+          <Link
+            to="#"
+            className={styles.link}
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = "mailto:provenixcreator@gmail.com";
+            }}
+          >
+            Support
+          </Link>          
+          <Link to="/about" className={styles.link}>About</Link>
         </div>
         <div className={styles.footerSection}>
           <h4>Contact</h4>
@@ -22,7 +31,7 @@ const Footer = () => {
         </div>
       </div>
       <div className={styles.footerBottom}>
-        <p>© 2025 Provenix. All rights reserved.</p>
+        <p>© 2025 Provenix. Connecting learners with expert instructors worldwide.</p>
       </div>
     </footer>
   );

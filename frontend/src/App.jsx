@@ -50,6 +50,8 @@ function App() {
         draggable
         pauseOnHover
         theme="dark" // Options: "light", "dark", "colored"
+        style={{ marginTop: '4rem' }} // adjust based on your navbar height
+
       />
       <Routes>
         {/* public routes */}

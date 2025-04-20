@@ -3,7 +3,7 @@
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
   padding: 5rem 5%;
-  background: #112240;
+  background: var(--bg-tertiary);
 }
 
 @media (max-width: 768px) {

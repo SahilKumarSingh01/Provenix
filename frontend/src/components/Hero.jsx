@@ -1,20 +1,22 @@
 // src/components/Hero.jsx
 import React from 'react';
-import Button from './Button';
+import {useNavigate } from 'react-router-dom';
+
 import styles from '../styles/Hero.module.css';
 
 const Hero = () => {
+  const navigate=useNavigate();
   return (
     <section className={styles.hero}>
       <div className={styles.heroContent}>
-        <h1>Learn. Teach. Grow.</h1>
+        <h1>Code. Share. Empower.</h1>
         <p className={styles.heroSubtext}>
-          Join the revolution in online education. Learn new skills from expert instructors 
-          or share your knowledge with the world.
+          Provenix is where devs grow — learn from real coders, or teach and inspire others. Build your profile, 
+          share your skills, and become part of a community that codes together.
         </p>
         <div className={styles.heroButtons}>
-          <Button variant="primary">Start Learning</Button>
-          <Button variant="secondary">Become an Instructor</Button>
+          <button className={`${styles.btn} ${styles.primary}`} onClick={()=>{navigate('/explore')}}>Start Learning</button>
+          <button className={`${styles.btn} ${styles.secondary}`} onClick={()=>{navigate('/course/create')}}>Create a Course</button>
         </div>
       </div>
     </section>

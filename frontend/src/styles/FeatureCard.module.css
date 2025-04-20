@@ -1,5 +1,5 @@
 .featureCard {
-  background: #0A192F;
+  background: var(--bg-primary);
   padding: 2rem;
   border-radius: 4px;
   text-align: center;
@@ -11,6 +11,6 @@
 }
 
 .featureCard h3 {
-  color: #4F46E5;
+  color: var(--text-heading);
   margin-bottom: 1rem;
 }

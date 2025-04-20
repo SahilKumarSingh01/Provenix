@@ -52,7 +52,7 @@ const CourseCard = ({ course }) => {
           <span className={styles.ccStatus}>{course.status}</span>
         </div>
 
-        <p className={styles.ccCourseMeta}>{course.totalEnrollment} students • {course.pageCount} pages • {course.videoCount} videos • {course.codeCount} code block</p>
+        <p className={styles.ccCourseMeta}>{course.totalEnrollment} students • {course.pageCount} pages • {course.videoCount} videos • {course.codeCount} code</p>
 
         <div className={styles.ccCardFooter}>
           <div className={styles.ccRating}><AvgRating course={course}/></div>

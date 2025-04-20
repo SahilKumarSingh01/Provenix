@@ -20,6 +20,12 @@
     text-transform: uppercase;
     letter-spacing: 1.5px;
   }
+  .mobileHeader {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    justify-content: flex-end; /* or space-between */
+  }
   
   /* Navigation Links */
   .navLinks {

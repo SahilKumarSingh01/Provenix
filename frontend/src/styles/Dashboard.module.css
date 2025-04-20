@@ -10,7 +10,6 @@
   gap: 16px;
   flex-wrap: wrap;
   padding: 1.5rem 2rem; /* Adjusted to ensure padding consistency */
-  box-sizing: border-box; /* Prevents padding from affecting the width */
 }
 
 .title {

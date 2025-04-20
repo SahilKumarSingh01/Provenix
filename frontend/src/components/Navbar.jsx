@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext ,useEffect} from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext.jsx";
 import defaultPicture from "../assets/defaultPicture.png";
@@ -8,27 +8,59 @@ import UserMenu from "./UserMenu.jsx";
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useContext(AuthContext);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768); // initial check
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "dark");
 
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prev => (prev === "dark" ? "light" : "dark"));
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   return (
     <>
     <nav className={styles.navbar}>
       <h1 className={styles.logo}>Provenix</h1>
-
-      {/* Hamburger Menu Icon */}
-      <div className={styles.menuIcon} onClick={() => setIsOpen(!isOpen)}>
-        <div className={isOpen ? `${styles.bar} ${styles.rotate1}` : styles.bar}></div>
-        <div className={isOpen ? `${styles.bar} ${styles.hide}` : styles.bar}></div>
-        <div className={isOpen ? `${styles.bar} ${styles.rotate2}` : styles.bar}></div>
+      <div className={styles.mobileHeader}>
+        {user&&isMobile&&
+          <UserMenu>
+            <img 
+              src={user.photo || defaultPicture} 
+              alt="Profile" 
+              className={styles.profilePic}
+            />
+          </UserMenu>
+        }
+        {/* Hamburger Menu Icon */}
+        <div className={styles.menuIcon} onClick={() => setIsOpen(!isOpen)}>
+          <div className={isOpen ? `${styles.bar} ${styles.rotate1}` : styles.bar}></div>
+          <div className={isOpen ? `${styles.bar} ${styles.hide}` : styles.bar}></div>
+          <div className={isOpen ? `${styles.bar} ${styles.rotate2}` : styles.bar}></div>
+        </div>
       </div>
-
       {/* Navigation Links */}
       <div className={`${styles.navLinks} ${isOpen ? styles.active : ""}`}>
         <Link to="/" className={styles.navLink} onClick={() => setIsOpen(false)}>Home</Link>
         <Link to="/explore" className={styles.navLink} onClick={() => setIsOpen(false)}>Explore</Link>
         <Link to="/about" className={styles.navLink} onClick={() => setIsOpen(false)}>About</Link>
-        
-        {user ? (
-          <UserMenu>
+        <span
+          className={styles.navLink}
+          onClick={toggleTheme}
+        >
+          {theme === "dark" ? "Light Theme" : "Dark Theme"}
+        </span>
+        {user ? !isMobile&&(<UserMenu>
             <img 
               src={user.photo || defaultPicture} 
               alt="Profile" 

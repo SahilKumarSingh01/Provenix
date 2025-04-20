@@ -2,7 +2,7 @@
 /* Course Card */
 .ccContainer {
   display:inline-block;
-  width: 344px;
+  width: 300px;
   vertical-align: top;
   background: var(--bg-secondary);
   border-radius: 10px;
@@ -53,7 +53,7 @@
   text-decoration: none;
   color: var(--text-muted); /* Brighter version */
   font-size: 0.875rem;
-  margin-top: 3px;
+  /* margin-top: 3px; */
 }
 
 /* Add hover effect if needed */
@@ -73,7 +73,6 @@
 
 /* Course Info */
 .ccInfo {
-  padding: 6px;
   /* border:1px solid black; */
 }
 
@@ -89,7 +88,9 @@
 .ccLevelStatus {
   margin:10px 0px 10px 0px;
   display: flex;
+  /* padding-left:10px; */
   gap: 6px;
+  /* justify-content: end; */
   font-size: 0.8rem;
 }
 

@@ -1,19 +1,45 @@
 .courseContainer {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  padding: 20px; /* Added padding to prevent elements from touching edges */
-  margin-top: 20px; /* Ensures content starts below fixed navbar */
 }
 
 .courseHeader {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
-  padding: 15px 0;
+  gap:12px;
+  flex-wrap: wrap;
+  padding: 15px;
 }
 .courseHeader h2{
-  color: var(--text-heading);
+  /* padding: 1.5rem 2rem 1.5rem 0;  */
+  /* padding-left:2rem; */
+  padding-top:1.5rem;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--text-header);
+  color: var(--text-header);
+}
+
+
+.sortOptions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: end;
+}
+
+.sortOptions select,
+.sortOptions button {
+  padding: 8px 12px;
+  min-width:100px;
+  border: 1px solid var(--border-primary);
+  border-radius: 6px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  cursor: pointer;
+  outline: none; /* Prevents default focus border */
+
 }
 
 .filters {
@@ -63,33 +89,12 @@
   transform:scale(0.95);
 }
 
-
-.sortOptions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.sortOptions select,
-.sortOptions button {
-  padding: 8px 12px;
-  border: 1px solid var(--border-primary);
-  border-radius: 6px;
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-  cursor: pointer;
-  outline: none; /* Prevents default focus border */
-
-}
-
 .courseList {
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
-  padding: 15px;
   border-radius: 8px;
   justify-content: center;
-
   margin: 0 auto;
   transition: all 0.3s ease-in-out;
 }
@@ -101,6 +106,7 @@
   display: flex;
   justify-content: center;
   margin-top: 20px;
+
 }
 
 .pagination button {

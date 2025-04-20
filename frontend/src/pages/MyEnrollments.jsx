@@ -78,23 +78,24 @@ const MyEnrollments = () => {
                         {order === 1 ? "Ascending" : "Descending"}
                     </button>
                 </div>
+                 {/* Filters */}
+                <div className={styles.filters}>
+                    <select value={status} onChange={(e) => setStatus(e.target.value)}>
+                        <option value="">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="expired">expired</option>
+                    </select>
+
+                    <select value={level} onChange={(e) => setLevel(e.target.value)}>
+                        <option value="">All Levels</option>
+                        <option value="Beginner">Beginner</option>
+                        <option value="Intermediate">Intermediate</option>
+                        <option value="Advanced">Advanced</option>
+                    </select>
+                </div>
             </div>
 
-            {/* Filters */}
-            <div className={styles.filters}>
-                <select value={status} onChange={(e) => setStatus(e.target.value)}>
-                    <option value="">All Status</option>
-                    <option value="active">Active</option>
-                    <option value="expired">expired</option>
-                </select>
-
-                <select value={level} onChange={(e) => setLevel(e.target.value)}>
-                    <option value="">All Levels</option>
-                    <option value="Beginner">Beginner</option>
-                    <option value="Intermediate">Intermediate</option>
-                    <option value="Advanced">Advanced</option>
-                </select>
-            </div>
+           
 
             {/* Course List */}
             {loading && courses.length === 0 ? (

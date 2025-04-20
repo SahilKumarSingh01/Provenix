@@ -1,47 +1,48 @@
 .userMenu {
-    position: relative;
-    display: inline-block;
-  }
+  position: relative;
+  display: inline-block;
+  z-index:101;
+}
+
+.profileBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: var(--bg-secondary); /* Global background color */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+  border-radius: 8px;
+  list-style: none;
+  padding: 10px 0;
+  margin: 5px 0;
+  min-width: 120px;
+  z-index: 5000;
+  transition: all 0.2s ease-in-out;
+}
+
+.dropdownMenu li {
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.2s ease-in-out;
+  /* color: var(--text-primary); */
+}
+
+.dropdownMenu li:hover {
+  background: var(--btn-primary-bg); /* Use highlight color from theme */
   
-  .profileBtn {
-    background: none;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .dropdownMenu {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background: #1E293B; /* Dark Blue - Same as your theme */
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Subtle shadow */
-    border-radius: 8px;
-    list-style: none;
-    padding: 10px 0;
-    margin: 5px 0;
-    min-width: 120px;
-    z-index: 1000;
-    transition: all 0.2s ease-in-out;
-  }
-  
-  .dropdownMenu li {
-    padding: 10px 15px;
-    cursor: pointer;
-    transition: background 0.2s ease-in-out;
-  }
-  
-  .dropdownMenu li:hover {
-    background: rgba(79, 70, 229, 0.2); /* Slight hover effect */
-    border-radius: 6px;
-  }
-  
-  .logout {
-    color: #EF4444; /* Red */
-    font-weight: bold;
-  }
-  
-  .logout:hover {
-    background: rgba(239, 68, 68, 0.2);
-    border-radius: 6px;
-  }
-  
+}
+
+.logout {
+  color: var(--text-error); /* Global red error color */
+  font-weight: bold;
+}
+
+.logout:hover{
+  color:var(--btn-danger-text) ;
+}
