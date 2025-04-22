@@ -6,8 +6,8 @@ const removeOrphanResource = async () => {
     const now = new Date();
 
     // Find orphan resources that have expired
-    const orphanResources = await OrphanResource.find({ expiresAt: { $lte: now } });
-
+    // const orphanResources = await OrphanResource.find({ expiresAt: { $lte: now } });
+    const orphanResources=await OrphanResource.find();
     if (orphanResources.length === 0) {
       console.log("[CRON] No orphan resources to remove.");
       return;
@@ -25,8 +25,8 @@ const removeOrphanResource = async () => {
     // Bulk delete images
     if (imageIds.length > 0) {
       try {
-        await cloudinary.api.delete_resources(imageIds, { resource_type: "image" });
-        console.log(`[CRON] Removed ${imageIds.length} images from Cloudinary.`);
+        const result=await cloudinary.api.delete_resources(imageIds, { resource_type: "image" ,type:"authenticated" });
+        console.log(`[CRON] Removed ${imageIds.length} images from Cloudinary.`,result);
       } catch (error) {
         console.error("[CRON] Failed to delete images from Cloudinary:", error);
       }
@@ -35,8 +35,8 @@ const removeOrphanResource = async () => {
     // Bulk delete videos
     if (videoIds.length > 0) {
       try {
-        await cloudinary.api.delete_resources(videoIds, { resource_type: "video" });
-        console.log(`[CRON] Removed ${videoIds.length} videos from Cloudinary.`);
+        const result=await cloudinary.api.delete_resources(videoIds, { resource_type: "video" ,type:"authenticated"});
+        console.log(`[CRON] Removed ${videoIds.length} videos from Cloudinary.`,result);
       } catch (error) {
         console.error("[CRON] Failed to delete videos from Cloudinary:", error);
       }

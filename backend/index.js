@@ -10,9 +10,12 @@ const profileRoutes  = require('./routes/profileRoutes.js');
 const webhookRoutes    = require('./routes/webhookRoutes.js');
 const isAuthenticated=require('./middlewares/authMiddleware');
 const passport   = require('./config/passport.js');
+const worker     = require('./cron/worker.js');
 const connectDatabase=require('./utils/connectDatabase.js');
 const razorpay=require('./config/razorpay.js');
+const removeOrphanResource=require('./cron/tasks/removeOrphanResource.js');
 require("dotenv").config();
+// const cloudinary = require("./config/cloudinary");
 
 // Connect to MongoDB
 connectDatabase(); 
@@ -62,7 +65,14 @@ app.use('/api/webhook',webhookRoutes);
 app.get('/', (req, res) => {
   res.status(200).json({ data: "this is backend entry point has nothing to offer " });
 });
-
+app.get('/run-maintenance', async (req, res) => {
+  try {
+    await worker(); // Call the worker function to run tasks
+    res.status(200).json({ message: "Tasks completed successfully." });
+  } catch (error) {
+    res.status(500).json({ message: "Error executing tasks.", error: error.message });
+  }
+})
 
 
 // Handle unhandled promise rejections
