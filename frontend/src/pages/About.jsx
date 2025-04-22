@@ -8,7 +8,7 @@ const AboutPage = () => {
   return (
     <div className={styles.aboutContainer}>
       {/* Hero Section */}
-      <section className={styles.aboutHero} style={{ backgroundImage: `linear-gradient(rgba(10, 25, 47, 0.9), rgba(10, 25, 47, 0.9)), url(${backgroundImg})` }}>
+      <section className={styles.aboutHero} style={{ backgroundImage: ` url(${backgroundImg})` }}>
         <div className={styles.heroContent}>
           <h1>About Provenix</h1>
           <p>A platform for software developers to help each other learn programming languages.</p>

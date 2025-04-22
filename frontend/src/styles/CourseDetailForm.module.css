@@ -98,13 +98,14 @@
 .buttonGroup {
   display: flex;
   justify-content: space-between; /* Align delete left, actions right */
-  margin-top: 10px;
+  /* margin-top: 10px; */
   align-items: center;
+  flex-wrap:wrap;
 }
 
 .actionGroup {
   display: flex;
-  gap:10px;
+  /* gap:10px;/ */
 }
 
 
@@ -114,6 +115,7 @@
 .actionButton ,
 .deleteBtn ,
 .publishBtn {
+  margin:10px;
   padding: 10px 14px;
   border: none;
   border-radius: 6px;

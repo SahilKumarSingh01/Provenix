@@ -18,7 +18,7 @@ const ModuleList = () => {
   const [course,setCourse]=useState();
   const [moduleCollection,setModuleCollection]=useState();
   const [modules,setModules]=useState();
-  const [editingModule, setEditingModule] = useState(null);
+  const [editing, setEditing] = useState(null);
   const [overlay,setOverlay]=useState(null);  
   const clickTimeoutRef = useRef(null);
 
@@ -44,7 +44,7 @@ const ModuleList = () => {
 
 
   const handleClick = (module, index) => {
-    if (editingModule?.curIndex === index) {
+    if (editing?.curIndex === index) {
       handleSaveEdit();
       return ;
     }
@@ -60,43 +60,43 @@ const ModuleList = () => {
   const handleDoubleClick = async(module,index) => {
     if (!course.isCreator) return;
     clearTimeout(clickTimeoutRef.current); // Clear the single click action
-    if(editingModule)
+    if(editing)
       await handleSaveEdit();//saving previous changes
-    const neweditingModule={prevTitle:module.title,curTitle:module.title,prevIndex:index,curIndex:index};
-    setEditingModule(neweditingModule);
+    const newediting={prevTitle:module.title,curTitle:module.title,prevIndex:index,curIndex:index,modules:[...modules]};
+    setEditing(newediting);
   };
 
   const handleTitleChange=(e)=>{
-    setEditingModule({...editingModule ,curTitle:e.target.value});
+    setEditing({...editing ,curTitle:e.target.value});
   }
 
   const handleSaveEdit = async() => {
     try{
-        if(!editingModule)return ;
+        if(!editing)return ;
         let promises=[];
-        const index=editingModule.curIndex;
-        if(!editingModule.curTitle)
+        const index=editing.curIndex;
+        if(!editing.curTitle)
             return toast.warn('module title is required');
-        if(editingModule.prevTitle!==editingModule.curTitle)
+        if(editing.prevTitle!==editing.curTitle)
           promises.push(axios.put(`/api/course/module/${course.moduleCollection}/update`,{
-            moduleId:modules[index]._id,
-            title:editingModule.curTitle,
+            moduleId:editing.modules[index]._id,
+            title:editing.curTitle,
           })
         )
-        if(editingModule.prevIndex!==editingModule.curIndex)
+        if(editing.prevIndex!==editing.curIndex)
           promises.push(axios.put(`/api/course/module/${course.moduleCollection}/reorder`,{
-            oldIndex:editingModule.prevIndex,
-            newIndex:editingModule.curIndex
+            oldIndex:editing.prevIndex,
+            newIndex:editing.curIndex
           })
         )
         const results=await Promise.all(promises);
         results.forEach((result)=>toast.success(result.data.message));
         
-        const updatedModules=[...modules];
-        updatedModules[index].title=editingModule.curTitle;
+        const updatedModules=[...editing.modules];
+        updatedModules[index].title=editing.curTitle;
         setModules(updatedModules);
-        setCache(moduleCollection._id,{...moduleCollection,modules});
-        setEditingModule(null);
+        setCache(moduleCollection._id,{...moduleCollection,modules:updatedModules});
+        setEditing(null);
       }catch(e){
         console.log(e);
         toast.error(e.response?.data?.message||"failed to save changes");
@@ -107,13 +107,15 @@ const ModuleList = () => {
     const onConfirm=async ()=>{
         try{
         const {data}=await axios.delete(`/api/course/module/${course.moduleCollection}/remove`,
-            {params:{moduleId:modules[editingModule.curIndex]._id,courseId:course._id}});
+            {params:{moduleId:editing.modules[editing.curIndex]._id,courseId:course._id}});
         const newModules=data.modules;
         const pageCount =data.pageCount;
+        const videoCount=data.videoCount;
+        const codeCount=data.codeCount;
         setCache(moduleCollection._id,{...moduleCollection,modules:newModules});
-        setCache(course._id,{...course,pageCount})
+        setCache(course._id,{...course,pageCount,videoCount,codeCount});
         setModules(newModules);
-        setEditingModule(null);
+        setEditing(null);
         toast.success(data.message);
       }catch(e){
         console.log(e);
@@ -130,17 +132,17 @@ const ModuleList = () => {
   };
 
   const handleShift = (direction) => {
-    const curIndex =editingModule.curIndex;
+    const curIndex =editing.curIndex;
     const newIndex = direction === "left" ? curIndex - 1 : curIndex + 1;
-    if (newIndex < 0 || newIndex >= modules.length) return;
-    const updatedmodules = [...modules];
-    [updatedmodules[curIndex], updatedmodules[newIndex]] = [updatedmodules[newIndex], updatedmodules[curIndex]];
-    setModules(updatedmodules);
-    setEditingModule({...editingModule,curIndex:newIndex});
+    if (newIndex < 0 || newIndex >= editing.modules.length) return;
+    [editing.modules[curIndex], editing.modules[newIndex]] = [editing.modules[newIndex], editing.modules[curIndex]];
+    // setModules(updatedmodules);
+    setEditing({...editing,curIndex:newIndex});
   };
 
   const handleAddmodule = async() => {
     try{
+      await handleSaveEdit();
       const {data}=await axios.post(`/api/course/module/${course.moduleCollection}/create`,{title:"Double click to edit"});
       const newModules=data.modules;
       setModules(newModules);
@@ -156,6 +158,7 @@ const ModuleList = () => {
   {
     return <p>Loading...</p>
   }
+  const modulesToDisplay=editing==null?modules:editing.modules;
 
   return (
     <>
@@ -166,25 +169,26 @@ const ModuleList = () => {
         {course.title}
       </h1>
 
-      {editingModule !== null && (
+      {editing !== null && (
         <div className={styles.editBox} >
-          <input type="text" value={editingModule.curTitle} onChange={handleTitleChange}/>
-          <button onClick={handleSaveEdit} className={styles.saveButton}>✔ Save</button>
-          <button onClick={handleRemoveModule} className={styles.removeButton}>❌ Remove</button>
+          <input type="text" value={editing.curTitle} onChange={handleTitleChange}/>
+          <button onClick={handleSaveEdit} className={styles.actionButton}>✔ Save</button>
+          <button onClick={()=>setEditing(null)} className={styles.actionButton}>✗ cancel</button>
+          <button onClick={handleRemoveModule} className={styles.removeButton}>✗ Remove</button>
           <button onClick={() => handleShift("left")} className={styles.shiftButton}>⬅ Left</button>
           <button onClick={() => handleShift("right")} className={styles.shiftButton}>➡ Right</button>
         </div>
       )}
 
       <div className={styles.optionsGrid}>
-        {modules.map((module, index) => (
+        {modulesToDisplay.map((module, index) => (
           <div
             key={index}
-            className={`${styles.optionCard} ${editingModule?.curIndex === index ? styles.editingHighlight : ""}`}
+            className={`${styles.optionCard} ${editing?.curIndex === index ? styles.editingHighlight : ""}`}
             onClick={() => handleClick(module, index)}
             onDoubleClick={() => course.isCreator && handleDoubleClick(module,index)}
           >
-            <p>{editingModule?.curIndex === index ? editingModule.curTitle :module.title}</p>
+            <p>{editing?.curIndex === index ? editing.curTitle :module.title}</p>
           </div>
         ))}
 

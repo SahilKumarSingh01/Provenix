@@ -108,7 +108,7 @@ const remove = async (req, res) => {
     const { publicId } = section.items[itemIndex].data;
     section.items.splice(itemIndex, 1);
 
-    await OrphanResource.create({ publicId, type: "image", category: "pagePhoto" });
+    publicId&&await OrphanResource.create({ publicId, type: "image", category: "pagePhoto" });
 
     res.json({ success: true, message: "Image removed successfully", items: section.items });
   } catch (error) {

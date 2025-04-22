@@ -166,8 +166,8 @@ export const EditingContentProvider = ({ children }) => {
       <>
       <div className={styles.editBox}>
         <button onClick={save} className={styles.actionButton}>✔ Save</button>
-        <button onClick={clearEditingState} className={styles.actionButton}>X cancel</button>
-        <button onClick={remove} className={styles.removeButton}>X Remove</button>
+        <button onClick={clearEditingState} className={styles.actionButton}>✗ cancel</button>
+        <button onClick={remove} className={styles.removeButton}>✗ Remove</button>
         <button onClick={() => shift("up")} className={styles.shiftButton}>⬆ Up</button>
         <button onClick={() => shift("down")} className={styles.shiftButton}>⬇ Down</button>
       </div>

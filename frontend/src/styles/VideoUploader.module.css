@@ -24,6 +24,7 @@
   .uploaderForm h2 {
     color: var(--text-heading);
     text-align: center;
+    padding:10px;
   }
   
   /* Video preview container */

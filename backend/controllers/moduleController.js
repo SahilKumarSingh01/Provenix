@@ -4,6 +4,8 @@ const PageCollection = require("../models/PageCollection");
 const Comment = require("../models/Comment");
 const ContentSection = require("../models/ContentSection");
 const Course = require("../models/Course");
+const removeContentSection=require('../utils/removeContentSection');
+
 
 const createModule = async (req, res) => {
   try {
@@ -93,30 +95,23 @@ const removeModule = async (req, res) => {
 
     const moduleCollectionId = course.moduleCollection._id;
 
-    const [pageDeletionResult, commentsResult, contentSectionsResult, updatedModuleCollection] = await Promise.all([
+    const [pageDeletionResult, commentsResult, result, updatedModuleCollection] = await Promise.all([
         PageCollection.findOneAndDelete({ courseId, moduleId }).select("pages"),
         Comment.deleteMany({ courseId, moduleId }),
-        ContentSection.updateMany({ courseId, moduleId ,status:"active"}, { status: "deleted" }), // Soft delete ContentSection
+        removeContentSection(courseId,moduleId, null, true),
         ModuleCollection.findOneAndUpdate(
           { _id: moduleCollectionId },
           { $pull: { modules: { _id: moduleId } } },
           { new: true }
         )
       ]);
-      
     const pagesDeleted = pageDeletionResult?.pages.length || 0;
-
-    // Update pageCount in Course
-    const updatedCourse= await Course.findOneAndUpdate(
-      { _id: courseId },
-      { $inc: { pageCount: -pagesDeleted } },
-      {new:true}
-    ).select({pageCount:1});
-
     res.json({
-      message: `Removed ${pagesDeleted} pages, ${commentsResult.deletedCount} comments, and ${contentSectionsResult.modifiedCount} content sections. Module removed from collection.`,
+      message: `Removed ${pagesDeleted} pages, ${commentsResult.deletedCount} comments. Module removed from collection.`,
       modules: updatedModuleCollection.modules,
-      pageCount:updatedCourse.pageCount,
+      pageCount:result.course.pageCount,
+      codeCount:result.course.codeCount,
+      videoCount:result.course.videoCount,
     });
 
   } catch (error) {

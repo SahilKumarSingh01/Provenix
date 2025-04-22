@@ -180,23 +180,35 @@ const remove = async (req, res) => {
 
     section.items.splice(itemIndex, 1);
 
-    await OrphanResource.create({ publicId, type: "video", category: "pageVideo" });
-    const course= await Course.findOneAndUpdate(
-      { _id: section.courseId },
-      { $inc: { videoCount: -1 } },
-      { new: true, lean: true }
-    ).select("videoCount");
+    // Only perform actions if publicId is defined
+    if (publicId) {
+      const [orphanResource, course] = await Promise.all([
+        OrphanResource.create({ publicId, type: "video", category: "pageVideo" }),
+        Course.findOneAndUpdate(
+          { _id: section.courseId },
+          { $inc: { videoCount: -1 } },
+          { new: true, lean: true }
+        ).select("videoCount")
+      ]);
 
-    res.json({
-      success: true,
-      message: "Video removed successfully",
-      items: section.items,
-      videoCount:course.videoCount,
-    });
+      res.json({
+        success: true,
+        message: "Video removed successfully",
+        items: section.items,
+        videoCount: course.videoCount,
+      });
+    } else {
+      res.json({
+        success: true,
+        message: "Video element (empty element) removed successfully",
+        items: section.items
+      });
+    }
 
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
  
 module.exports = { create, refreshUrl,update, remove };

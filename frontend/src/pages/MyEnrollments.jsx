@@ -115,10 +115,14 @@ const MyEnrollments = () => {
                 <div className={styles.sortOptions}>
                     <label>Sort by: </label>
                     <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-                        <option value="course.title">Title</option>
-                        <option value="course.price">Price</option>
-                        <option value="completedPagesSize">Progress</option>
-                        <option value="createdAt">Date Created</option>
+                    <option value="expiresAt">Expiry Time</option>
+                        <option value="course.title">Course Title</option>
+                        <option value="course.price">Course Price</option>
+                        <option value="course.videoCount">Total Videos</option>
+                        <option value="course.codeCount">Total Codes</option>
+                        <option value="completedPagesSize">Your Progress</option>
+                        <option value="expiresAt">Expiry Time</option>
+                        <option value="createdAt">Created Date</option>
                     </select>
                     <button onClick={() => setOrder(order * -1)}>
                         {order === 1 ? "Ascending" : "Descending"}

@@ -2,7 +2,7 @@ const Enrollment = require("../models/Enrollment");
 
 async function extendEnrollmentExpiry(enrollmentId) {
     try {
-        const updated = await Enrollment.updateOne(
+        const updated = await Enrollment.findOneAndUpdate(
             { _id:enrollmentId },
             [
                 {
@@ -22,8 +22,9 @@ async function extendEnrollmentExpiry(enrollmentId) {
                         status: "active"
                     }
                 }
-            ]
-        );
+            ],
+            {new:true}
+        ).lean();
         return updated;
     } catch (error) {
         console.error("Error extending enrollment expiry:", error);

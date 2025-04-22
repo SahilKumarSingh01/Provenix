@@ -1,7 +1,7 @@
 const ContentSection = require("../../models/ContentSection");
 const canEditText = require("../../utils/canEditText");
 const Enrollment = require("../../models/Enrollment");
-
+const removeContentSection =require('../../utils/removeContentSection.js');
 const create = async (req, res) => {
   try {
     const { contentSectionId } = req.params;
@@ -10,11 +10,15 @@ const create = async (req, res) => {
     // Find the parent content section (to copy values)
     const parentContentSection = await ContentSection.findOne(
       { _id: contentSectionId, creatorId, status: "active" },
-      { pageId: 1, moduleId: 1, courseId: 1, creatorId: 1 } // Fetch only required fields
+      { pageId: 1, moduleId: 1, courseId: 1, creatorId: 1, parentContent: 1 } // Fetch only required fields
     );
 
     if (!parentContentSection) {
       return res.status(404).json({ message: "Parent content section not found or unauthorized" });
+    }
+    // Check if this section already has a parent (prevent nesting under nesting)
+    if (parentContentSection.parentContent) {
+      return res.status(400).json({ message: "This section already has a parent and cannot be nested again." });
     }
     
     // Create a new content section
@@ -115,7 +119,7 @@ const remove = async (req, res) => {
     const [parentContentSection, activeEnrollment] = await Promise.all([
       ContentSection.findOne(
         { _id: contentSectionId, creatorId, status: "active", items: {$elemMatch: {_id: itemId,type: "hidden"}} },
-        { "items.$": 1 } // Fetch only the matched item
+        { "items.$": 1 ,courseId:1,moduleId:1} // Fetch only the matched item
       ),
       Enrollment.exists({ courseId, status: "active" })
     ]);
@@ -136,33 +140,6 @@ const remove = async (req, res) => {
       return res.status(400).json({ message: "Invalid hidden section reference" });
     }
 
-    // Use $graphLookup to find all descendants of the hidden content section
-    const relatedSections = await ContentSection.aggregate([
-      {
-        $match: { _id: hiddenContentSectionId }
-      },
-      {
-        $graphLookup: {
-          from: "contentsections", // Collection name (ensure it matches the actual collection name)
-          startWith: "$_id",
-          connectFromField: "_id",
-          connectToField: "parentContent",
-          as: "descendants"
-        }
-      },
-      {
-        $project: {
-          allSections: { $concatArrays: [["$_id"], "$descendants._id"] }
-        }
-      }
-    ]);
-
-    if (!relatedSections.length) {
-      return res.status(400).json({ message: "No related sections found" });
-    }
-
-    const sectionIdsToDelete = relatedSections[0].allSections;
-
     // Update all found sections to status "deleted" and remove the hidden section concurrently
     const[updatedSection,result]=await Promise.all([
       ContentSection.findOneAndUpdate(
@@ -170,17 +147,14 @@ const remove = async (req, res) => {
         { $pull: { items: { _id: itemId, type: "hidden" } } },
         {new:true},
       ),
-
-      ContentSection.updateMany(
-        { _id: { $in: sectionIdsToDelete }, status: "active" },
-        { $set: { status: "deleted" } }
-      ),
-      
+      removeContentSection(parentContentSection.courseId,parentContentSection.moduleId,hiddenContentSectionId)
     ]);
     res.json({
       success: true,
-      message: `${result.modifiedCount} Hidden section marked as deleted`,
+      message: ` Hidden section marked as deleted successfully`,
       items: updatedSection.items,
+      videoCount:result.course.videoCount,
+      codeCount: result.course.codeCount,
     });
 
   } catch (error) {

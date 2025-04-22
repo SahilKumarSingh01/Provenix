@@ -14,6 +14,20 @@ const searchCourses = async (req, res) => {
       }
   
       const pipeline = [{ $match: matchStage }];
+      
+      pipeline.push({
+        $addFields: {
+          avgRating: {
+            $cond: {
+              if: { $eq: ["$numberOfRatings", 0] },
+              then: 0,
+              else: {
+                $divide: ["$totalRating", "$numberOfRatings"],
+              },
+            },
+          },
+        },
+      });
   
       if (keyword) {
         const words = keyword.trim().split(/\s+/).map(w => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
@@ -34,11 +48,13 @@ const searchCourses = async (req, res) => {
         });
   
         pipeline.push({ $match: { matchCount: { $gt: 0 } } });
-        pipeline.push({ $sort: { matchCount: -1 } });
+        pipeline.push({ $sort: { matchCount: -1 ,[sortBy]: order} });
       }
-
+      else {
+        pipeline.push({ $sort: { [sortBy]: order } });
+      }
       pipeline.push({ $skip: Number(skip) }, { $limit: Number(limit) });
-      pipeline.push({ $sort: { [sortBy]: order } });
+      
 
       pipeline.push({
         $lookup: {

@@ -19,6 +19,7 @@
     color: #4F46E5; /* Keeping this fixed as requested */
     text-transform: uppercase;
     letter-spacing: 1.5px;
+    cursor:pointer;
   }
   .mobileHeader {
     display: flex;
@@ -148,10 +149,10 @@
       width: 100%;
       display: block;
     }
-  
+/*   
     .navLink:hover {
       background: var(--bg-highlight);
       color: var(--bg-primary);
-    }
+    } */
   }
   

@@ -18,7 +18,7 @@ const PageList = () => {
   const [pages, setPages] = useState([]);
   const [moduleTitle ,setModuleTitle]=useState('');
   const [completedPages, setCompletedPages] = useState([]);
-  const [editingPage, setEditingPage] = useState(null);
+  const [editing, setEditing] = useState(null);
   const [overlay, setOverlay] = useState(null);
   const clickTimeoutRef = useRef(null);
 
@@ -61,7 +61,7 @@ const PageList = () => {
   }, [courseId, pageCollectionId]);
 
   const handleClick = (page, index) => {
-    if (editingPage?.curIndex === index) {
+    if (editing?.curIndex === index) {
       handleSaveEdit();
       return;
     }
@@ -97,34 +97,34 @@ const PageList = () => {
   const handleDoubleClick = async (page, index) => {
     if (!course.isCreator) return;
     clearTimeout(clickTimeoutRef.current);
-    if (editingPage) await handleSaveEdit();
-    setEditingPage({ prevTitle: page.title, curTitle: page.title, prevIndex: index, curIndex: index });
+    if (editing) await handleSaveEdit();
+    setEditing({ prevTitle: page.title, curTitle: page.title, prevIndex: index, curIndex: index ,pages:[...pages]});
   };
 
   const handleTitleChange = (e) => {
-    setEditingPage({ ...editingPage, curTitle: e.target.value });
+    setEditing({ ...editing, curTitle: e.target.value });
   };
 
   const handleSaveEdit = async () => {
     try {
-      console.log(pages);
+      if(!editing)return ;
       let promises = [];
-      const oldIndex=editingPage.prevIndex;
-      const newIndex=editingPage.curIndex;
-      const title= editingPage.curTitle;
-      const pageId=pages[newIndex]._id;
-      if (!editingPage.curTitle) return toast.warn("Page title is required");
-      if (editingPage.prevTitle !== editingPage.curTitle)
+      const oldIndex=editing.prevIndex;
+      const newIndex=editing.curIndex;
+      const title= editing.curTitle;
+      const pageId=editing.pages[newIndex]._id;
+      if (!editing.curTitle) return toast.warn("Page title is required");
+      if (editing.prevTitle !== editing.curTitle)
         promises.push(axios.put(`/api/course/page/${pageCollection._id}/update`,{title},{params:{pageId}}));
-      if (editingPage.prevIndex !== editingPage.curIndex)
+      if (editing.prevIndex !== editing.curIndex)
         promises.push(axios.put(`/api/course/page/${pageCollection._id}/reorder`,{oldIndex,newIndex}));
       const results = await Promise.all(promises);
-      results.forEach((result) => {toast.success(result.data.message);console.log(result.data.message,result.data.pages);});
-      const updatedPages=[...pages];
-      updatedPages[newIndex].title=editingPage.curTitle;
+      results.forEach((result) => {toast.success(result.data.message);});
+      const updatedPages=[...editing.pages];
+      updatedPages[newIndex].title=editing.curTitle;
       setPages(updatedPages);
-      setCache(pageCollection._id,{...pageCollection,pages});
-      setEditingPage(null);
+      setCache(pageCollection._id,{...pageCollection,pages:editing.pages});
+      setEditing(null);
     } catch (e) {
       console.log(e);
       toast.error(e.response?.data?.message || "Failed to save page changes");
@@ -134,16 +134,18 @@ const PageList = () => {
   const handleRemovePage = async () => {
     const onConfirm = async () => {
       try {
-        const pageId= pages[editingPage.curIndex]._id;
+        const pageId= editing.pages[editing.curIndex]._id;
         const { data } = await axios.delete(`/api/course/page/${pageCollection._id}/remove`,
           {params:{courseId:course._id,pageId}}
         );
         const newPages=data.pages;
         const pageCount=data.pageCount;
+        const codeCount=data.codeCount;
+        const videoCount=data.videoCount;
         setCache(pageCollection._id,{...pageCollection,pages:newPages});
-        setCache(course._id,{...course,pageCount});
+        setCache(course._id,{...course,pageCount,codeCount,videoCount});
         setPages(newPages);
-        setEditingPage(null);
+        setEditing(null);
         toast.success(data.message);
       } catch (e) {
         toast.error(e.response?.data?.message || "Failed to remove page");
@@ -160,18 +162,16 @@ const PageList = () => {
   };
 
   const handleShift = (direction) => {
-    const curIndex = editingPage.curIndex;
+    const curIndex = editing.curIndex;
     const newIndex = direction === "up" ? curIndex - 1 : curIndex + 1;
-    if (newIndex < 0 || newIndex >= pages.length) return;
-    const updatedPages = [...pages];
-    [updatedPages[curIndex], updatedPages[newIndex]] = [updatedPages[newIndex], updatedPages[curIndex]];
-    setPages(updatedPages);
-    setEditingPage({ ...editingPage, curIndex: newIndex });
-    
+    if (newIndex < 0 || newIndex >= editing.pages.length) return;
+    [editing.pages[curIndex], editing.pages[newIndex]] = [editing.pages[newIndex], editing.pages[curIndex]];
+    setEditing({ ...editing, curIndex: newIndex});
   };
 
   const handleAddPage = async () => {
     try {
+      await handleSaveEdit();
       const { data } = await axios.post(`/api/course/page/${pageCollection._id}/create`, {
         title: "Double click to edit",
       });
@@ -189,6 +189,7 @@ const PageList = () => {
   {
     return <p>Loading...</p>;
   }
+  const pagesToDisplay=editing==null?pages:editing.pages;
   return (
     <>
       {overlay}
@@ -196,26 +197,27 @@ const PageList = () => {
 
       <div className={styles.container}>
         <h1 className={styles.courseTitle} onClick={()=>navigate(`/course/${course._id}/view`)}>{course?.title} - {moduleTitle}</h1>
-        {editingPage !== null && (
+        {editing !== null && (
           <div className={styles.editBox}>
-            <input type="text" value={editingPage.curTitle} onChange={handleTitleChange} />
-            <button onClick={handleSaveEdit} className={styles.saveButton}>✔ Save</button>
-            <button onClick={handleRemovePage} className={styles.removeButton}>❌ Remove</button>
+            <input type="text" value={editing.curTitle} onChange={handleTitleChange} />
+            <button onClick={handleSaveEdit} className={styles.actionButton}>✔ Save</button>
+            <button onClick={()=>setEditing(null)} className={styles.actionButton}>✗ cancel</button>
+            <button onClick={handleRemovePage} className={styles.removeButton}>✗ Remove</button>
             <button onClick={() => handleShift("up")} className={styles.shiftButton}>⬆ Up</button>
             <button onClick={() => handleShift("down")} className={styles.shiftButton}>⬇ Down</button>
           </div>
         )}
         <div className={styles.pagesGrid}>
-          {pages.map((page, index) => (
+          {pagesToDisplay.map((page, index) => (
             <div
               key={page._id}
               className={`${styles.pageCard} 
                           ${completedPages[index] ? styles.completed : ""} 
-                          ${editingPage?.curIndex === index ? styles.selected : ""}`}
+                          ${editing?.curIndex === index ? styles.selected : ""}`}
               onClick={() => handleClick(page, index)}
               onDoubleClick={() => course.isCreator && handleDoubleClick(page, index)}
             >
-              <span>{index + 1}. {editingPage?.curIndex === index ? editingPage.curTitle: page.title}</span>
+              <span>{index + 1}. {editing?.curIndex === index ? editing.curTitle: page.title}</span>
               {!course.isCreator?<input 
                 type="checkbox" 
                 checked={completedPages[index]!==true?false:true} 

@@ -87,10 +87,14 @@ const SearchCourses = () => {
                 <div className={styles.sortOptions}>
                     <label>Sort by: </label>
                     <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-                        <option value="title">Title</option>
-                        <option value="price">Price</option>
-                        <option value="createdAt">Date Created</option>
-                        <option value="updatedAt">Date Modified</option>
+                    <option value="avgRating">Avg. Rating</option>
+                    <option value="totalEnrollment">Enrollments</option>
+                    <option value="price">Course Price</option>
+                    <option value="videoCount">Video Lessons</option>
+                    <option value="codeCount">Code Exercises</option>
+                    <option value="createdAt">Created On</option>
+                    <option value="updatedAt">Last Updated</option>
+
                     </select>
                     <button onClick={() => setOrder(order * -1)}>
                         {order === 1 ? "Ascending" : "Descending"}

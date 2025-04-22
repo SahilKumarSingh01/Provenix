@@ -24,6 +24,7 @@
 .uploaderForm h2 {
   color: var(--text-heading);
   text-align: center;
+  padding:10px;
 }
 
 /* Styling for the cropper container */
@@ -49,6 +50,7 @@
   display: flex;
   justify-content: end;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .actionButton,

@@ -37,7 +37,7 @@ const enroll = async (req, res) => {
                     .lean()
                   ]);
             }
-            await extendEnrollmentExpiry(enrollment._id); 
+            enrollment=await extendEnrollmentExpiry(enrollment._id); 
             return res.status(200).json({ success: true, 
                 message: "Free course enrolled successfully",
                 course:{...course,isEnrolled:true,isCreator:false} ,

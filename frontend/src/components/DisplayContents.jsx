@@ -190,7 +190,11 @@ const DisplayContents = ({ contentSectionId }) => {
       {showMenu && (
         <div className={styles.selectionMenu} ref={menuRef}>
           {["heading", "text", "code", "mcq", "hidden", "reference","image","video"].map((type) => (
-            <button key={type} onClick={() => addElement(type)}>{type}</button>
+             (type !== "hidden" || !contentSection.parentContent) && (
+              <button key={type} onClick={() => addElement(type)}>
+                {type}
+              </button>
+            )
           ))}
         </div>
       )}

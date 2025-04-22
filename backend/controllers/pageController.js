@@ -3,7 +3,7 @@ const PageCollection = require("../models/PageCollection");
 const ContentSection = require("../models/ContentSection");
 const Course = require('../models/Course');
 const Comment = require("../models/Comment");
-
+const removeContentSection=require('../utils/removeContentSection');
 const create = async (req, res) => {
   try {
     const { title} = req.body;
@@ -61,7 +61,8 @@ const remove = async (req, res) => {
     // Fetch course and pageCollection concurrently, including page existence check in PageCollection query
     const [isCourse, pageCollection] = await Promise.all([
       Course.exists({ _id: courseId, creator: userId, status: "draft" }),
-      PageCollection.findOne({ _id: pageCollectionId,courseId,creatorId: userId,"pages._id": pageId}),
+      PageCollection.findOne({ _id: pageCollectionId,courseId,creatorId: userId,"pages._id": pageId})
+        .select('moduleId pages.$'),
     ]);
 
     if (!isCourse) {
@@ -70,31 +71,29 @@ const remove = async (req, res) => {
     if (!pageCollection) {
       return res.status(404).json({ message: "Page not found in the collection or unauthorized" });
     }
-
+    const moduleId=pageCollection.moduleId;
+    const contentSectionId=pageCollection.pages[0].contentSection;
     // Use Promise.all to run the operations concurrently, including course update
-    const [updatedPageCollection, contentSectionUpdate, commentDeletion, updatedCourse] = await Promise.all([
+    const [updatedPageCollection, commentDeletion, result] = await Promise.all([
       PageCollection.findOneAndUpdate(
         { _id: pageCollectionId },
         { $pull: { pages: { _id: pageId } } },
         { new: true }
       ),
-      ContentSection.updateMany(
-        { courseId,pageId,status:"active" },
-        { $set: { status: "deleted" } }
-      ),
       Comment.deleteMany({ courseId, pageId }),
-      Course.findOneAndUpdate({ _id: courseId }, { $inc: { pageCount: -1 } },{new:true}).select({pageCount:1}),
+      removeContentSection(courseId,moduleId, contentSectionId, true),
     ]);
 
     // Prepare the response message
     const pagesDeleted = 1;
     const commentsDeleted = commentDeletion.deletedCount;
-    const contentSectionsDeleted = contentSectionUpdate.modifiedCount;
 
     res.json({
-      message: `Removed ${pagesDeleted} page, ${commentsDeleted} comments, and ${contentSectionsDeleted} content sections. Page removed from collection.`,
+      message: `Removed ${pagesDeleted} page, ${commentsDeleted} comments. Page removed from collection.`,
       pages: updatedPageCollection.pages || [], // Use the updatedPageCollection directly
-      pageCount:updatedCourse.pageCount,
+      pageCount:result.course.pageCount,
+      videoCount:result.course.videoCount,
+      codeCount:result.course.codeCount,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });

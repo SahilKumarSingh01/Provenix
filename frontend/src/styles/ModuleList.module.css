@@ -118,7 +118,7 @@
 .container input:focus{
   border-color: var(--btn-primary-hover);
 }
-.saveButton, .removeButton, .shiftButton {
+.actionButton, .removeButton, .shiftButton {
   padding: 8px 12px;
   margin: 5px;
   font-size: 14px;
@@ -129,12 +129,12 @@
   transition: background 0.3s ease;
 }
 
-.saveButton {
+.actionButton {
   background-color: var(--btn-primary-bg);
   color: var(--btn-primary-text);
 }
 
-.saveButton:hover {
+.actionButton:hover {
   background-color: var(--btn-primary-hover);
 }
 
@@ -155,7 +155,7 @@
 .shiftButton:hover {
   background-color: var(--btn-secondary-hover);
 }
-.saveButton:active,
+.actionButton:active,
 .removeButton:active,
 .shiftButton:active{
   transform: scale(0.95);

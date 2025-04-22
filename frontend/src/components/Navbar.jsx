@@ -1,11 +1,12 @@
 import { useState, useContext ,useEffect} from "react";
-import { Link } from "react-router-dom";
+import { Link ,useNavigate} from "react-router-dom";
 import { AuthContext } from "../context/AuthContext.jsx";
 import defaultPicture from "../assets/defaultPicture.png";
 import styles from "../styles/Navbar.module.css";
 import UserMenu from "./UserMenu.jsx";
 
 function Navbar() {
+  const navigate=useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useContext(AuthContext);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768); // initial check
@@ -31,7 +32,7 @@ function Navbar() {
   return (
     <>
     <nav className={styles.navbar}>
-      <h1 className={styles.logo}>Provenix</h1>
+      <h1 className={styles.logo} onClick={()=>navigate('/')}>Provenix</h1>
       <div className={styles.mobileHeader}>
         {user&&isMobile&&
           <UserMenu>
