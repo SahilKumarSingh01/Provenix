@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
       setUser(response.data.user);
     } catch (error) {
       console.log(error);
-      toast.error('User session is not in backend');
+      user&&toast.error(error.response.data?.message||"Something went wrong while logging you in");
       setUser(null);
     }
   };
