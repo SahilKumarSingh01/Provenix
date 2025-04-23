@@ -1,15 +1,17 @@
-import React, {useState,useEffect,useRef} from "react";
+import React, {useState,useEffect,useContext,useRef} from "react";
 import { Link, useNavigate } from "react-router-dom"; // Import React Router Link
+import { AuthContext } from "../context/AuthContext.jsx";
 
 import styles from "../styles/CourseCard.module.css";
 import AvgRating from '../components/AvgRating';
 import defaultThumbnail from "../assets/DefaultThumbnail.webp";
 import defaultProfile from '../assets/defaultPicture.png';
 
-const CourseCard = ({ course ,onDelete,onReEnroll}) => {
+const CourseCard = ({ course ,onDelete,onReEnroll,onReport}) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate(); // Initialize navigate function
   const menuRef = useRef(); 
+  const { user } = useContext(AuthContext);
 
   const handleCardClick = () => {
     navigate(`/course/${course._id}/view`);
@@ -50,18 +52,18 @@ const CourseCard = ({ course ,onDelete,onReEnroll}) => {
           alt="Course Thumbnail"
           className={styles.thumbnailImage}
         />
-        {course?.isEnrolled && (
-          <div className={styles.dropdownWrapper} onClick={handleDropdownClick}>
-            <button className={styles.dropdownToggle}>⋮</button>
-            {menuOpen && (
-              <div ref={menuRef} className={styles.dropdownMenu}>
-                <button className={styles.dropdownItem} onClick={onDelete}>Delete Enrollment</button>
-                <button className={styles.dropdownItem} onClick={onReEnroll}>Re-enroll</button>
-              </div>
-            )}
-          </div>
+        
+        {user&&user._id!=course.creator._id&&<div className={styles.dropdownWrapper} onClick={handleDropdownClick}>
+          <button className={styles.dropdownToggle}>⋮</button>
+          {menuOpen && (
+            <div ref={menuRef} className={styles.dropdownMenu}>
+              {course?.isEnrolled&&<button className={styles.dropdownItem} onClick={onReEnroll}>Re-enroll</button>}
+              <button className={styles.dropdownItem} onClick={onReport}>Report</button>
+              {course?.isEnrolled&&<button className={styles.dropdownItem} onClick={onDelete}>Delete Enrollment</button>}
 
-        )}
+            </div>
+          )}
+        </div>}
       </div>
 
       <div className={styles.profileWrapper}>

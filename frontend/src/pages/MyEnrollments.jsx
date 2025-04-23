@@ -19,7 +19,7 @@ const MyEnrollments = () => {
     const [status, setStatus] = useState(""); 
     const [level, setLevel] = useState("");  
     const [skip, setSkip] = useState(0);  
-    const limit = 3;  
+    const limit = 9;  
 
     // Fetch fresh courses when filters or sorting change
     const fetchCourses = async () => {

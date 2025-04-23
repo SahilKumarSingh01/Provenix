@@ -13,7 +13,6 @@ const passport   = require('./config/passport.js');
 const worker     = require('./cron/worker.js');
 const connectDatabase=require('./utils/connectDatabase.js');
 const razorpay=require('./config/razorpay.js');
-const removeOrphanResource=require('./cron/tasks/removeOrphanResource.js');
 require("dotenv").config();
 // const cloudinary = require("./config/cloudinary");
 
@@ -58,7 +57,7 @@ app.use('/auth',authRoutes);
 app.use('/api/upload',isAuthenticated,uploadRoutes);
 app.use('/api/enrollment',isAuthenticated,enrollmentRoutes);
 app.use('/api/course',courseRoutes);
-app.use('/api/profile',isAuthenticated,profileRoutes)
+app.use('/api/profile',profileRoutes)
 app.use('/api/webhook',webhookRoutes);
 
  // Home Route
@@ -66,6 +65,10 @@ app.get('/', (req, res) => {
   res.status(200).json({ data: "this is backend entry point has nothing to offer " });
 });
 app.get('/run-maintenance', async (req, res) => {
+  const secret = req.headers['x-cron-secret'];
+  if (secret !== process.env.CRON_SECRET) {
+    return res.status(403).json({ message: "Access denied." });
+  }
   try {
     await worker(); // Call the worker function to run tasks
     res.status(200).json({ message: "Tasks completed successfully." });

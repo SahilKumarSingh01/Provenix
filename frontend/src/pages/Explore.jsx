@@ -11,7 +11,7 @@ const SearchCourses = () => {
     const [order, setOrder] = useState(-1);
     const [hasNext, setHasNext] = useState(false);
     const [skip, setSkip] = useState(0);
-    const limit = 3;
+    const limit = 9;
 
     // Filters
     const [keyword, setKeyword] = useState("");
@@ -47,10 +47,8 @@ const SearchCourses = () => {
             setLoading(false);
         }
     };
-    console.log(courses);
     const extendCourses = async () => {
         try {
-            console.log(skip,limit);
             setLoading(true);
             const { data } = await axios.post("/api/course/search", {
                 keyword,
@@ -74,7 +72,19 @@ const SearchCourses = () => {
             setLoading(false);
         }
     };
-
+    const onReport=async(index)=>{
+        const course=courses[index];
+        if(!course)return;
+        try {
+            const {data} = await axios.put(`api/course/${course._id}/report`);
+            toast.success(data.message);
+            setCourses([...courses.filter((_, i) => i !== index)]);
+        } catch (err) {
+            console.log(err);
+            toast.error(err.response?.data?.message || "Failed to report comment");
+        }
+    }
+    console.log(courses);
     // Re-fetch when filters change
     useEffect(() => {
         fetchCourses();
@@ -176,8 +186,8 @@ const SearchCourses = () => {
             ) : (
                 <div className={styles.courseList}>
                     {courses.length > 0 ? (
-                        courses.map((course) => (
-                            <CourseCard key={course._id} course={course} />
+                        courses.map((course,index) => (
+                            <CourseCard key={course._id} course={course} onReport={()=>onReport(index)}/>
                         ))
                     ) : (
                         <p>No courses found.</p>

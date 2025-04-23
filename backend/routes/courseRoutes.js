@@ -23,6 +23,8 @@ routes.put('/:courseId',isAuthenticated,courseController.updateDetails);
 routes.put('/:courseId/publish',isAuthenticated,courseController.publishCourse);
 routes.put('/:courseId/recover',isAuthenticated,courseController.recoverCourse);
 routes.put('/:courseId/draft',isAuthenticated,courseController.draftCourse);
+routes.put('/:courseId/report',isAuthenticated,courseController.reportCourse);
+
 
 
 module.exports=routes;

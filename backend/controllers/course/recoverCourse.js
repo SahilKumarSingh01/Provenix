@@ -1,6 +1,6 @@
 const Course = require("../../models/Course");
 const Enrollment = require("../../models/Enrollment");
-
+const MAX_REPORT=3;
 const recoverCourse = async (req, res) => {
     try {
         const { courseId } = req.params;
@@ -14,7 +14,10 @@ const recoverCourse = async (req, res) => {
         if (!course) {
             return res.status(404).json({ message: "Course not found or not recoverable" });
         }
-
+         // Check if course is reported too many times
+        if (course.reportedBy.length >= MAX_REPORT) {
+            return res.status(403).json({ message: "Course cannot be recovered due to multiple reports" });
+        }
         const deletionTime = new Date(course.updatedAt).getTime() + 3600000; // updatedAt + 1 hour
         const recoveryDeadline = deletionTime - 300000; // 5 minutes before deletion
 

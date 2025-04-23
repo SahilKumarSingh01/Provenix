@@ -28,6 +28,8 @@ const courseSchema = new mongoose.Schema({
   numberOfRatings: { type: Number, default: 0 },
 
   moduleCollection: { type: mongoose.Schema.Types.ObjectId, ref: "ModuleCollection" }, // Reference to ModuleCollection
+ 
+  reportedBy: [{ type: mongoose.Schema.Types.ObjectId,ref:'User' }], // Array of user IDs who reported the review
 
 }, { timestamps: true });
 

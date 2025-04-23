@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const profileController = require('../controllers/profileController.js');
+const isAuthenticated=require('../middlewares/authMiddleware.js')
 
 
 // LeetCode profile route
@@ -10,26 +11,26 @@ router.get('/github', profileController.getGithub);
 
 // Fetch all users and user profile
 router.get('/all-users', profileController.getAll);
-router.get('/notifications', profileController.getNotifications);
-router.patch('/mark-read', profileController.markNotification);
-router.get('/my-profile', profileController.getMyProfile); // New route to get user's own profile
+router.get('/notifications',isAuthenticated, profileController.getNotifications);
+router.patch('/mark-read',isAuthenticated, profileController.markNotification);
+router.get('/my-profile',isAuthenticated, profileController.getMyProfile); // New route to get user's own profile
 router.get('/:username', profileController.getProfile);
 
 // Routes for setting profile links
-router.put('/set', profileController.setCodingProfile);
+router.put('/set',isAuthenticated, profileController.setCodingProfile);
 
 // Routes for verifying profile links
-router.put('/verify/leetcode', profileController.verifyLeetcode);
-router.put('/verify/codeforces', profileController.verifyCodeforces);
-router.put('/verify/github', profileController.verifyGithub);
+router.put('/verify/leetcode',isAuthenticated, profileController.verifyLeetcode);
+router.put('/verify/codeforces',isAuthenticated, profileController.verifyCodeforces);
+router.put('/verify/github',isAuthenticated, profileController.verifyGithub);
 // Routes for getting all public Ids
 
 
 // Route to update user's own profile
-router.put('/update-my-profile', profileController.updateMyProfile); // New route to update user profile
+router.put('/update-my-profile',isAuthenticated, profileController.updateMyProfile); // New route to update user profile
 
 // Account management routes
-router.post('/generate-token', profileController.generateToken);         // To generate deletion token
-router.delete('/delete-account', profileController.verifyAndDelete);  // To verify token & mark deleted
-router.post('/recover-account', profileController.recoverAccount);       
+router.post('/generate-token,',isAuthenticated, profileController.generateToken);         // To generate deletion token
+router.delete('/delete-account',isAuthenticated, profileController.verifyAndDelete);  // To verify token & mark deleted
+router.post('/recover-account',isAuthenticated, profileController.recoverAccount);       
 module.exports = router;
