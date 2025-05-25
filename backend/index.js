@@ -47,6 +47,8 @@ app.use(session({
     httpOnly: true,
     maxAge: 30*60*1000,  // 30 minutes 
     sameSite:process.env.NODE_ENV === 'PROD'?'none':'lax',
+    partitioned: process.env.NODE_ENV === 'PROD', // Only set in production for cross-site context
+
   }
 }));
 
