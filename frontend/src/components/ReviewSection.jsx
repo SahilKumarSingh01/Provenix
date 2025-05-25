@@ -70,7 +70,6 @@ const ReviewSection = ({ course }) => {
             toast.error(error.response?.data?.message || "Failed to submit review");
         }
     };
-    console.log(myReview)
     const handleDeleteReview = async () => {
         try {
             await axios.delete(`/api/course/${course._id}/review/${myReview._id}`);

@@ -80,7 +80,6 @@ export const EditingContentProvider = ({ children }) => {
         const course=getCache(contentSection.courseId);
         if(course)
             setCache(course._id,{...course,...updates});
-        console.log(updates);
         setCache(contentSection._id,updatedSection);
         editingState.setContentSection(updatedSection);
         clearEditingState();

@@ -84,7 +84,6 @@ const SearchCourses = () => {
             toast.error(err.response?.data?.message || "Failed to report comment");
         }
     }
-    console.log(courses);
     // Re-fetch when filters change
     useEffect(() => {
         fetchCourses();

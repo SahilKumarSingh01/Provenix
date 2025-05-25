@@ -165,7 +165,7 @@ const ModuleList = () => {
     {overlay}
     <BackspaceButton to={`/course/${course._id}/view`}/>
     <div className={styles.container}>
-      <h1 className={styles.courseTitle} onClick={() => {console.log("navigate is trigger");navigate(`/course/${course._id}/view`)}}>
+      <h1 className={styles.courseTitle} onClick={() => {navigate(`/course/${course._id}/view`)}}>
         {course.title}
       </h1>
 

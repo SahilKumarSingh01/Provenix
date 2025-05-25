@@ -47,7 +47,6 @@ const LeetCodeCard = ({ username,isVerified }) => {
     upcomingBadges,
     badges,
   } = leetCodeData;
-  console.log(upcomingBadges);
   return (
     <div className={styles.card}>
       <h3 className={styles.cardTitle}>LeetCode Profile{" "}{!isVerified&&<span className={styles.errorText}>(Not verified)</span>}</h3>

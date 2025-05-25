@@ -15,7 +15,6 @@ const getCodeforces = async (req, res) => {
         return res.status(404).json({ error: 'User not found on Codeforces' });
       }
       
-      // console.log(data.result[0]);
       res.status(200).json(data.result[0]);
     } catch (err) {
       res.status(500).json({ error: 'Failed to fetch data from Codeforces' });

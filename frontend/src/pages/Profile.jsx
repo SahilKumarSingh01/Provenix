@@ -65,7 +65,6 @@ const Profile = () => {
   }
 
   const codingProfiles = user.profile?.codingProfiles || {};
-  // console.log(user);
   return (
       <div className={styles.profileContainer}>
 

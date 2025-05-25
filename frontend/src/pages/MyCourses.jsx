@@ -35,7 +35,6 @@ const MyCourses = () => {
 
     // Load more courses on click
     const extendCourses = async () => {
-        console.log('extend this is call');
         try {
             setLoading(true);
             const { data } = await axios.get("/api/course/created-courses", {

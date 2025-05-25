@@ -156,7 +156,6 @@ const CourseDetailForm = () => {
   const onUpload=async(image)=>{
     try{
       const formData = new FormData();
-      // console.log(image);
       formData.append("file", image);
       const{data}=await axios.post('api/upload/thumbnail',formData,{
       headers: {

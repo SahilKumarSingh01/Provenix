@@ -45,7 +45,6 @@ const CourseView = () => {
         try {
             const response = await axios.post(`api/enrollment/${course._id}/enroll`);
             toast.success(response.data.message);
-            console.log(response.data)
             setCache(courseId,response.data.course);
             setCourse(response.data.course);
         } catch (error) {

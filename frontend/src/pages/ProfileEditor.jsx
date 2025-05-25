@@ -37,7 +37,6 @@ const ProfileEditor = () => {
           photo: data.photo,
           status:data.status,
         };
-        console.log(data);
         setProfile(mergedData);
       } catch (err) {
         toast.error("Failed to load profile 😿");

@@ -38,9 +38,7 @@ const DisplayVideo = ({ item, index, contentSection, setContentSection,insight,u
 
   const fetchSignedUrl = async (e) => {
     if (!publicId) return;
-    console.log("fetching url")
     const currentTime = videoRef.current?.currentTime || 0;
-    console.log(e.target.error);
     try {
       const { data } = await axios.get(`/api/course/content/${contentSection._id}/video`, {
         params: { itemId: item._id, courseId: contentSection.courseId },

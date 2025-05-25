@@ -79,8 +79,6 @@ const DisplayContents = ({ contentSectionId }) => {
       console.error("Error updating insight:", error);
     }
   };
-  
-  // console.log("from content Display",contentSection);
   const addElement = async (type) => {
     try{
       await saveEditing();
