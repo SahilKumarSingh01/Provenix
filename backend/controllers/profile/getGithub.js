@@ -1,17 +1,20 @@
 // Controller to fetch GitHub profile
+require('dotenv').config();
+
 const getGithub = async (req, res) => {
     const { username } = req.query;
   
     if (!username) {
       return res.status(400).json({ error: 'Username is required' });
     }
-  
-    const apiUrl = `https://api.github.com/users/${username}`;
-  
+    const clientId = process.env.GITHUB_CLIENT_ID;
+    const clientSecret = process.env.GITHUB_CLIENT_SECRET;
+
+    const apiUrl = `https://api.github.com/users/${username}?client_id=${clientId}&client_secret=${clientSecret}`;
+
     try {
       const response = await fetch(apiUrl);
       const data = await response.json();
-      console.log(data);
       if (!data) {
         return res.status(404).json({ error: 'User not found on GitHub' });
       }
