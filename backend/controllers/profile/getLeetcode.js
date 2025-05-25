@@ -16,7 +16,7 @@ const getLeetcode = async (req, res) => {
 
     const { matchedUser, allQuestionsCount, recentSubmissionList } = userData;
     const { profile, badges, upcomingBadges, activeBadge, submitStats } = matchedUser;
-
+    console.log( userData);
     res.status(200).json({
       profile: {
         username: matchedUser.username,

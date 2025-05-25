@@ -57,7 +57,7 @@ passport.use(new GoogleStrategy({
                       { fetch_format: "auto" }                   // Use best format (WebP, JPEG)
                   ]
               });
-                  const photo =result.url;
+                  const photo =result.secure_url;
                   const displayName=profile.displayName;
                   const username=await UniqueUsername(displayName);
                   const [newUser, newProfile] = await Promise.all([
@@ -99,7 +99,7 @@ passport.use(new GithubStrategy({
                     { fetch_format: "auto" }                   // Use best format (WebP, JPEG)
                 ]
             });
-                const photo =result.url;
+                const photo =result.secure_url;
                 const displayName=profile.displayName;
                 const username=await UniqueUsername(displayName);
                 const [newUser, newProfile] = await Promise.all([
