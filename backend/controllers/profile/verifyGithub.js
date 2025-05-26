@@ -1,5 +1,6 @@
 // const fetch = require('node-fetch');
 const Profile = require('../../models/Profile');
+require('dotenv').config();
 
 const verifyGithub = async (req, res) => {
     try {
@@ -14,9 +15,13 @@ const verifyGithub = async (req, res) => {
 
         // Get GitHub username directly
         const username = profile.codingProfiles.github.username;
+        const clientId = process.env.GITHUB_CLIENT_ID;
+        const clientSecret = process.env.GITHUB_CLIENT_SECRET;
+
+        const apiUrl = `https://api.github.com/users/${username}?client_id=${clientId}&client_secret=${clientSecret}`;
 
         // Fetch GitHub profile data
-        const response = await fetch(`https://api.github.com/users/${username}`);
+        const response = await fetch(apiUrl);
         if (!response.ok) {
             return res.status(400).json({ message: "GitHub profile not found." });
         }
