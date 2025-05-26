@@ -5,6 +5,7 @@ import styles from "../styles/form.module.css";
 import GoogleLogo from "../assets/google.svg";
 import GitHubLogo from "../assets/github.svg";
 import { AuthContext } from "../context/AuthContext.jsx";
+const SERVER_URL=import.meta.env.VITE_SERVER_URL;
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -27,13 +28,13 @@ const Login = () => {
 
   // Function to open OAuth login in a popup
   const handlePopupLogin = (provider) => {
-    const authUrl = `https://provenix.onrender.com/auth/${provider}`;
+    const authUrl = SERVER_URL+`/auth/${provider}`;
     const width = 600, height = 600;
     const left = (window.innerWidth - width) / 2;
     const top = (window.innerHeight - height) / 2;
     window.open(authUrl, "_blank", `width=${width},height=${height},top=${top},left=${left}`);
     const handleMessage = (event) => {
-      if (event.origin !== "https://provenix.onrender.com") return; // Ensure it's from backend
+      // if (event.origin !== SERVER_URL) return; // Ensure it's from backend
       if (event.data.success) {
         setUser(event.data.user);
         navigate("/", { state: { user: event.data.user } });

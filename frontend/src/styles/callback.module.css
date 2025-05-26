@@ -1,0 +1,75 @@
+/* src/styles/callback.module.css */
+
+.callbackContainer {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem; /* Equivalent to p-4 */
+  background: linear-gradient(to bottom right, #e0f2fe, #eef2ff); /* from-blue-50 to-indigo-100 */
+  text-align: center;
+  font-family: Arial, sans-serif; /* Consistent with common web fonts */
+}
+
+.card {
+  background-color: var(--bg-secondary); /* Using your variable for consistency */
+  padding: 2rem; /* Equivalent to p-8 */
+  border-radius: 0.75rem; /* Equivalent to rounded-xl */
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); /* Equivalent to shadow-2xl */
+  border: 1px solid var(--border-primary); /* Using your variable */
+  width: 100%;
+  max-width: 28rem; /* Equivalent to max-w-md, a common size for forms/cards */
+  display: flex; /* To center content within the card */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.title {
+  font-size: 2.25rem; /* Equivalent to text-3xl */
+  font-weight: 800;    /* Equivalent to font-extrabold */
+  color: var(--text-heading); /* Using your variable for headings */
+  margin-bottom: 1rem; /* Equivalent to mb-4 */
+}
+
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1); /* Base border color */
+  border-top: 4px solid var(--btn-primary-bg); /* Top border color from your primary button */
+  border-radius: 50%;
+  width: 3rem;   /* Equivalent to h-12 w-12 */
+  height: 3rem;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem; /* Equivalent to mb-4 */
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.message {
+  font-size: 1.125rem; /* Equivalent to text-lg */
+  color: var(--text-primary); /* Using your variable for primary text */
+  margin-bottom: 1.5rem; /* Equivalent to mb-6 */
+}
+
+.errorMessageBlock {
+  background-color: #fee2e2; /* Similar to bg-red-100 */
+  border: 1px solid #ef4444; /* Similar to border-red-400 */
+  color: #b91c1c;          /* Similar to text-red-700 */
+  padding: 0.75rem 1rem; /* Equivalent to px-4 py-3 */
+  border-radius: 0.5rem;    /* Equivalent to rounded-lg */
+  position: relative;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.errorMessageBlock strong {
+  font-weight: 700; /* Equivalent to font-bold */
+}
+
+.successMessage {
+  color: #16a34a; /* Equivalent to text-green-600 */
+  font-weight: 600; /* Equivalent to font-semibold */
+}

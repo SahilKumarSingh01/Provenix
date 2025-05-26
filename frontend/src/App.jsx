@@ -8,9 +8,9 @@ import {ToastContainer} from 'react-toastify'
 
 import ProfileEditor from "./pages/ProfileEditor";
 
-import Search from "./pages/Search";
+// import Search from "./pages/Search";
 
-import PrivacyPolicy from "./pages/PrivacyPolicy";
+// import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 import Error404 from "./pages/Error404";
 
@@ -26,7 +26,7 @@ import ForgotPassword from "./pages/ForgotPassword"
 import ResetPassword from './pages/ResetPassword'
 import {AuthProvider} from'./context/AuthContext.jsx';
 import AccountDeletion from "./pages/AccountDeletion"
-
+import Callback from "./pages/Callback.jsx"
 
 import {CacheProvider} from'./context/CacheContext.jsx';
 
@@ -58,31 +58,30 @@ function App() {
         <Route path='/' element={<Home/>}/>
         <Route path='/about' element={<About/>}/>
         {/* <Route path='/explore' element={<Editor/>}/> */}
+
         <Route path='/explore' element={<Explore/>}/>
         <Route path='/login' element={<Login/>}/>
-        <Route path="/course/*" element={<CourseRoutes />} />
-        <Route path="/dashboard" element={<Dashboard/>}/>
-        <Route path="/notification" element={<Notification/>}/>
-
-        <Route path="/profile/:username" element={<Profile/>}/>
-
-
-        <Route path='/*' element={<Error404/>}/>
-
-        <Route path='/edit-profile' element={<ProfileEditor/>}/>
-
-        <Route path='/privacy-policy' element={<PrivacyPolicy/>}/>
-
-        <Route path='/search' element={<Search/>}/>
-
-
-        <Route path='/account-delete' element={<AccountDeletion/>}/>
-
-
         <Route path='/signup' element={<Signup/>}/>
         <Route path='/email-verify' element={<EmailVerify/>}/>
         <Route path='/forgot-password' element={<ForgotPassword/>}/>
         <Route path='/reset-password' element={<ResetPassword/>}/>
+        <Route 
+          path='auth/google/callback' 
+          element={<Callback strategy="google" />} 
+        />
+        <Route 
+          path='auth/github/callback' 
+          element={<Callback strategy="github" />} 
+        />
+        <Route path="/course/*" element={<CourseRoutes />} />
+
+        <Route path="/dashboard" element={<Dashboard/>}/>
+        <Route path="/notification" element={<Notification/>}/>
+        <Route path='/account-delete' element={<AccountDeletion/>}/>
+        <Route path="/profile/:username" element={<Profile/>}/>
+        <Route path='/edit-profile' element={<ProfileEditor/>}/>
+
+        <Route path='/*' element={<Error404/>}/>
       </Routes>
     </Router>
     </CacheProvider>
