@@ -1,14 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const profileController = require('../controllers/profileController.js');
+const razorpayAccountController=require('../controllers/razorpayAccountController.js');
 const isAuthenticated=require('../middlewares/authMiddleware.js')
-
 
 // LeetCode profile route
 router.get('/leetcode', profileController.getLeetcode);
 router.get('/codeforces', profileController.getCodeforces);
 router.get('/github', profileController.getGithub);
 
+//razorpay account routes
+router.post('/create-razorpay-account',isAuthenticated,razorpayAccountController.create);
+router.get('/get-razorpay-account',isAuthenticated,razorpayAccountController.get);
+router.put('/update-razorpay-account',isAuthenticated,razorpayAccountController.update);
+router.delete('/delete-razorpay-account',isAuthenticated,razorpayAccountController.remove);
+router.put('/activate-razorpay-account',isAuthenticated,razorpayAccountController.activate);
 // Fetch all users and user profile
 router.get('/all-users', profileController.getAll);
 router.get('/notifications',isAuthenticated, profileController.getNotifications);
@@ -24,6 +30,7 @@ router.put('/verify/leetcode',isAuthenticated, profileController.verifyLeetcode)
 router.put('/verify/codeforces',isAuthenticated, profileController.verifyCodeforces);
 router.put('/verify/github',isAuthenticated, profileController.verifyGithub);
 // Routes for getting all public Ids
+
 
 
 // Route to update user's own profile

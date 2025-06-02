@@ -22,9 +22,9 @@ const updateDetails = async (req, res) => {
         if (thumbnail && course.thumbnail !== thumbnail && !isOrphanResource) {
             return res.status(400).json({ message: "Invalid thumbnail reference." });
         }
-        if(price>0&&!user.accountId)
+        if(price>0&&!user.activatedAccount)
         {
-            return res.status(400).json({message:"You don't have any account associated with us"});
+            return res.status(400).json({message:"You don't have any activated account associated with us"});
         }
         // Prepare update object with only the provided fields
         const updateFields = {};

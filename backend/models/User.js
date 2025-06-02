@@ -25,6 +25,7 @@ const userSchema = new mongoose.Schema({
   displayName: String,
   profile: {type:mongoose.Schema.Types.ObjectId,ref:"Profile"},
   accountId: { type: String ,default:""},
+  activatedAccount:{type:Boolean , default:false},
   password: String,
   email: { type: String, unique: true ,sparse:true},
   googleid: { type: String, unique: true, sparse: true },

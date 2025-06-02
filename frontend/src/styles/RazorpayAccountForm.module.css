@@ -1,0 +1,144 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  max-width:650px;
+  width:80%;
+  gap: 20px;
+  padding: 25px;
+  margin: 20px auto;
+  border-radius: 8px;
+  border: 1px solid var(--border-primary);  
+
+  background: var(--bg-secondary);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.formHeading {
+  color: var(--text-heading);
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.sectionTitle {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-top: 20px;
+  color: var(--text-heading);
+}
+.formGoupWrapper{
+  display:flex;
+  justify-content: space-between;
+  /* flex-wrap: wrap; */
+}
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.formGroupWrapper .formGroup {
+  flex: 1;
+}
+.formGroup label {
+  font-weight: 600;
+  font-size: 0.8rem;
+  padding: 0px 6px;
+  color: var(--text-primary);
+}
+
+.formGroup input,
+.formGroup textarea,
+.formGroup select {
+  padding: 10px;
+  border: 1px solid var(--border-primary);
+  border-radius: 6px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  outline: none;
+  transition: border 0.3s ease-in-out;
+}
+
+.formGroup input:focus,
+.formGroup textarea:focus,
+.formGroup select:focus {
+  border-color: var(--btn-primary-bg);
+}
+.formGroup textarea{
+  resize:none;
+  height:100px;
+}
+.buttonGroup {
+  display: flex;
+  justify-content: space-between; /* Align delete left, actions right */
+  /* margin-top: 10px; */
+  align-items: center;
+  flex-wrap:wrap;
+}
+
+.actionGroup {
+  display: flex;
+  /* gap:10px;/ */
+}
+
+
+
+
+/* COMMON BUTTON STYLES WITHIN .buttonGroup */
+.actionButton ,
+.deleteBtn ,
+.updateBtn {
+  margin:10px;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out, transform 0.2s;
+}
+
+.deleteBtn {
+  background: var(--btn-danger-bg);
+  color: var(--btn-danger-text);
+}
+
+.deleteBtn:not(:disabled):hover {
+  background: var(--btn-danger-hover);
+}
+
+.actionButton {
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+}
+
+.actionButton:not(:disabled):hover {
+  background: var(--btn-primary-hover);
+}
+
+.updateBtn {
+  background: var(--btn-secondary-bg);
+  color: var(--btn-secondary-text);
+}
+
+.updateBtn:not(:disabled):hover {
+  background: var(--btn-secondary-hover);
+}
+
+.actionButton:not(:disabled):active, 
+.updateBtn:not(:disabled):active,
+.deleteBtn:not(:disabled):active{
+  transform: scale(0.95);
+}
+
+
+@media (max-width: 768px) {
+  .formGoupWrapper{
+    flex-direction: column;
+    gap:15px;
+  }
+}

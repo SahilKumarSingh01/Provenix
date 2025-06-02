@@ -27,7 +27,7 @@ import ResetPassword from './pages/ResetPassword'
 import {AuthProvider} from'./context/AuthContext.jsx';
 import AccountDeletion from "./pages/AccountDeletion"
 import Callback from "./pages/Callback.jsx"
-
+import RazorpayAccountCreation from "./pages/RazorpayAccountForm.jsx";
 import {CacheProvider} from'./context/CacheContext.jsx';
 
 // import Signup from "../pages/Signup";
@@ -65,14 +65,9 @@ function App() {
         <Route path='/email-verify' element={<EmailVerify/>}/>
         <Route path='/forgot-password' element={<ForgotPassword/>}/>
         <Route path='/reset-password' element={<ResetPassword/>}/>
-        <Route 
-          path='auth/google/callback' 
-          element={<Callback strategy="google" />} 
-        />
-        <Route 
-          path='auth/github/callback' 
-          element={<Callback strategy="github" />} 
-        />
+        <Route path='auth/google/callback' element={<Callback strategy="google" />} />
+        <Route path='auth/github/callback' element={<Callback strategy="github" />} />
+        
         <Route path="/course/*" element={<CourseRoutes />} />
 
         <Route path="/dashboard" element={<Dashboard/>}/>
@@ -80,7 +75,8 @@ function App() {
         <Route path='/account-delete' element={<AccountDeletion/>}/>
         <Route path="/profile/:username" element={<Profile/>}/>
         <Route path='/edit-profile' element={<ProfileEditor/>}/>
-
+        <Route path='/configure-razorpay-account' element={<RazorpayAccountCreation/>}/>
+        
         <Route path='/*' element={<Error404/>}/>
       </Routes>
     </Router>

@@ -36,10 +36,12 @@ const ProfileEditor = () => {
           verifiedEmail: data.verifiedEmail,
           photo: data.photo,
           status:data.status,
+          accountId:data.accountId,
+          activatedAccount:data.activatedAccount,
         };
         setProfile(mergedData);
       } catch (err) {
-        toast.error("Failed to load profile 😿");
+        toast.error("Failed to load profile ");
       } finally {
         setLoading(false);
       }
@@ -278,11 +280,11 @@ const ProfileEditor = () => {
             <button
               type="button"
               onClick={() => {
-                window.location.href = "/generate-account-id";
+                window.location.href = "/configure-razorpay-account";
               }}
               className={styles.actionButton}
             >
-              Generate
+              Configure
             </button>
           </div>
         </div>
