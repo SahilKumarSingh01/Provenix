@@ -12,8 +12,8 @@ router.get('/github', profileController.getGithub);
 //razorpay account routes
 router.post('/create-razorpay-account',isAuthenticated,razorpayAccountController.create);
 router.get('/get-razorpay-account',isAuthenticated,razorpayAccountController.get);
-router.put('/update-razorpay-account',isAuthenticated,razorpayAccountController.update);
-router.delete('/delete-razorpay-account',isAuthenticated,razorpayAccountController.remove);
+// router.put('/update-razorpay-account',isAuthenticated,razorpayAccountController.update);
+router.put('/deactivate-razorpay-account',isAuthenticated,razorpayAccountController.deactivate);
 router.put('/activate-razorpay-account',isAuthenticated,razorpayAccountController.activate);
 // Fetch all users and user profile
 router.get('/all-users', profileController.getAll);

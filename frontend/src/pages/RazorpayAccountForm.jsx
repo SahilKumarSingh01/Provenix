@@ -58,19 +58,6 @@ const RazorpayAccountForm = () => {
     setAddress((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleUpdate=async (e)=>{
-    setError("");
-    setSuccess("Updating...");
-    try{
-      const response = await axios.put("/api/profile/update-razorpay-account");
-      setStatus(response.data.status);
-      setSuccess("Your account has beed updated");
-    }catch(err){
-      setError(err?.response?.data?.message || "Oops! Something went wrong.");
-    }finally{
-      setSuccess("");
-    }
-  }
   const handleActivate=async (e)=>{
     setError("");
     setSuccess("Activating...");
@@ -84,27 +71,20 @@ const RazorpayAccountForm = () => {
       setSuccess("");
     }
   }
-  const handleDelete=async (e)=>{
+  const handleDeactivate=async (e)=>{
     
     const onConfirm = async () => {
             setError("");
-            setSuccess("Deleting...");
+            setSuccess("Deactivating...");
             try{
-              const response = await axios.delete("/api/profile/delete-razorpay-account");
-              setSuccess("Your account deleted successfully ");
-              setName("");
-              setPhone("");
-              setIfscCode("");
-              setAccountNumber("");
-              setAddress( {});
-              setAccountId( "");
-              setProductId("");
-              setStatus( "");
-
+              const response = await axios.put("/api/profile/deactivate-razorpay-account");
+              setSuccess("Your account deactivated successfully ");
+              setStatus( response.data.status);
             }catch(err){
               setError(err?.response?.data?.message || "Oops! Something went wrong.");
             }finally{
               setSuccess("");
+              setOverlay(null);
             }
           };
         
@@ -112,11 +92,10 @@ const RazorpayAccountForm = () => {
             <ConfirmBox
               onConfirm={onConfirm}
               onCancel={() => setOverlay(null)}
-              message={`Deleting your Razorpay account will permanently remove your payout details from our system. 
-                        You will not be able to receive payments from any course sales unless a new account is created. 
-                        Please note: If you wish to create a new account later, you must update your registered email address first.
+              message={`Deactivating your Razorpay account will deactivate your payout channel.
+                        You will no longer be able to receive payments from your course sales. All future payouts will be redirected to Provenix's default account.
 
-                        Are you sure you want to proceed with deleting your Razorpay account?`}
+                        Are you sure you want to proceed with deactivating your Razorpay account?`}
             />
           );
   }
@@ -129,25 +108,35 @@ const RazorpayAccountForm = () => {
       setError("Please fill all required fields!");
       return;
     }
+    
+    const onConfirm = async () => {
+      setLoading(true);
+      setSuccess("Creating...");
 
-    setLoading(true);
-    try {
-      const response = await axios.post("/api/profile/create-razorpay-account", {
-        name,
-        phone,
-        ifsc_code,
-        account_number,
-        address,
-      });
-      setStatus(response.data.status);
-      setAccountId(response.data.accountId);
-      setProductId(response.data.productId);
+      try {
+        const response = await axios.post("/api/profile/create-razorpay-account", {name,phone,ifsc_code,account_number,address,});
+        setStatus(response.data.status);
+        setAccountId(response.data.accountId);
+        setProductId(response.data.productId);
+        setSuccess("Razorpay account created successfully!");
+      } catch (err) {
+        setError(err?.response?.data?.message || "Oops! Something went wrong.");
+      }
+      setLoading(false);
+      setSuccess("");
+      setOverlay(null);
 
-      setSuccess("Razorpay account created successfully!");
-    } catch (err) {
-      setError(err?.response?.data?.message || "Oops! Something went wrong.");
-    }
-    setLoading(false);
+    
+    };
+
+    setOverlay(
+      <ConfirmBox
+        onConfirm={onConfirm}
+        onCancel={() => setOverlay(null)}
+        message={`Please check your details carefully. **Changes are not permitted once the account is created.**
+           If anything is wrong, you will need to contact our technical support team to get it rectified.`}
+      />
+    );
   };
 
   return (
@@ -304,28 +293,21 @@ const RazorpayAccountForm = () => {
 
         {error && <p className={styles.errorMessage}>{error}</p>}
         {success && <p className={styles.successMessage}>{success}</p>}
-        <div className={styles.buttonGroup}>
-          <button type="button" className={styles.deleteBtn} disabled={!accountId} onClick={handleDelete}>
-            Delete
-          </button>
           <div className={styles.actionGroup}>
             {accountId?
-              <>
-                <button type="button" className={styles.actionButton} disabled={status=="Activated"} onClick={handleActivate}>
-                    Activate
-                </button>
-
-                <button type="button" className={styles.updateBtn} onClick={handleUpdate}>
-                    Update
-                </button>
-              </>
+                status!="Activated"?
+                    <button type="button" className={styles.actionButton} onClick={handleActivate}>
+                        Activate
+                    </button>
+                  : <button type="button" className={styles.deleteBtn} disabled={status!="Activated"} onClick={handleDeactivate}>
+                      Deactivate
+                    </button>
             :
               <button type="submit" className={styles.actionButton} disabled={loading} >
                 Create Account
               </button>
             }
           </div>
-        </div>
       </form>
     </div>
     </>

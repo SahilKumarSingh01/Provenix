@@ -73,17 +73,11 @@
   resize:none;
   height:100px;
 }
-.buttonGroup {
-  display: flex;
-  justify-content: space-between; /* Align delete left, actions right */
-  /* margin-top: 10px; */
-  align-items: center;
-  flex-wrap:wrap;
-}
 
 .actionGroup {
   display: flex;
   /* gap:10px;/ */
+  justify-content: end;
 }
 
 

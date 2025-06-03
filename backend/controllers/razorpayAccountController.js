@@ -42,7 +42,7 @@ const create = async (req, res) => {
       }),
       razorpay.products.requestProductConfiguration(account.id, {
         product_name: "route",
-        tnc_accepted: true,
+        // tnc_accepted: true,
       }),
       User.findByIdAndUpdate(req.user.id, {
         accountId: account.id,
@@ -68,7 +68,7 @@ const create = async (req, res) => {
       address:account.profile.addresses.registered, 
       phone:account.phone.slice(-10),
       accountId:account.id,
-      proudctId:product.id,
+      productId:product.id,
       status:user.activatedAccount?"Activated":"Deactivated",
     });
 
@@ -81,70 +81,68 @@ const create = async (req, res) => {
     });
   }
 };
-const update=async(req,res)=>{
-  try{
-    const { name, phone,address,account_number,ifsc_code} = req.body;
+// const update=async(req,res)=>{
+//   try{
+//     const { name, phone,address,account_number,ifsc_code} = req.body;
 
-    const user = await User.findById(req.user.id);
+//     const user = await User.findById(req.user.id);
 
-    if (!user.verifiedEmail)
-      return res.status(400).json({ message: "Email address is missing or has not been verified." });
-    if(!user.accountId)
-      return res.status(400).json({message:"You don't have account"});
+//     if(!user.accountId)
+//       return res.status(400).json({message:"You don't have account"});
     
-    payload={
-      phone,
-      legal_business_name:name,
-      profile:{
-        addresses:{
-          registered:address,
-        }
-      },
-    }
+//     payload={
+//       phone,
+//       legal_business_name:name,
+//       profile:{
+//         addresses:{
+//           registered:address,
+//         }
+//       },
+//     }
 
-    const account = await razorpay.accounts.edit(user.accountId,payload);
-    console.log(account.profile.addresses.registered);
+//     const account = await razorpay.accounts.edit(user.accountId,payload);
+//     console.log(account);
 
-    const [ product, updatedUser] = await Promise.all([
-      razorpay.products.requestProductConfiguration(account.id, {
-        product_name: "route",
-      }),
-      User.findByIdAndUpdate(req.user.id, {
-        activatedAccount: false,
-      }),
-    ]);
+//     const [ product, updatedUser] = await Promise.all([
+//       razorpay.products.requestProductConfiguration(account.id, {
+//         product_name: "route",
+//       }),
+//       User.findByIdAndUpdate(req.user.id, {
+//         activatedAccount: false,
+//       }),
+//     ]);
     
-    const updatedProduct=await razorpay.products.edit(account.id,product.id,{
-      settlements:{
-          account_number,
-          ifsc_code,
-          beneficiary_name:name,
-      },
-    });
+//     const updatedProduct=await razorpay.products.edit(account.id,product.id,{
+//       settlements:{
+//           account_number,
+//           ifsc_code,
+//           beneficiary_name:name,
+//       },
+//     });
     
-    const settlements=product.active_configuration.settlements;
+//     const settlements=product.active_configuration.settlements;
 
-    return res.status(201).json({
-      success: true,
-      message: 'Razorpay account updated successfully',
-      name:settlements.beneficiary_name,
-      account_number:settlements.account_number,
-      ifsc_code:settlements.ifsc_code,    
-      address:account.profile.addresses.registered, 
-      phone:account.phone.slice(-10),
-      accountId:account.id,
-      proudctId:product.id,
-      status:"Deactivated",
-    });
-  }catch (error) {
-    console.error('Razorpay SDK error:', error);
-    return res.status(error.statusCode).json({
-      success: false,
-      message: error.error.description,
-      error: error.message || error.toString()
-    });
-  }
-}
+//     return res.status(201).json({
+//       success: true,
+//       message: 'Razorpay account updated successfully',
+//       name:settlements.beneficiary_name,
+//       account_number:settlements.account_number,
+//       ifsc_code:settlements.ifsc_code,    
+//       address:account.profile.addresses.registered, 
+//       phone:account.phone.slice(-10),
+//       accountId:account.id,
+//       productId:product.id,
+//       status:"Deactivated",
+//     });
+//   }catch (error) {
+//     console.error('Razorpay SDK error:', error);
+//     return res.status(error.statusCode).json({
+//       success: false,
+//       message: error.error.description,
+//       error: error.message || error.toString()
+//     });
+//   }
+// }
 const activate = async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
@@ -179,19 +177,18 @@ const activate = async (req, res) => {
     return res.status(500).json({ message: "Something went wrong during activation." });
   }
 };
-const remove =async (req,res)=>{
+const deactivate =async (req,res)=>{
 
   try{
     const user=await User.findById(req.user.id);
     if (!user.accountId) {
       return res.status(400).json({ message: "You don't have an account to delete." });
     }
-    await razorpay.accounts.delete(user.accountId);
-    await User.findByIdAndUpdate(req.user.id,{activatedAccount:false,accountId:""});
-    res.status(204).json({message:"Your account has beed deleted "});
+    await User.findByIdAndUpdate(req.user.id,{activatedAccount:false});
+    res.status(204).json({message:"Your account has beed deactivated ",status:"Deactivated"});
 
   }catch(err){
-    return res.status(500).json({message:"Fail to remove your account "});
+    return res.status(500).json({message:"Fail to deactivate your account "});
   }
 }
 const get=async(req,res)=>{
@@ -221,7 +218,6 @@ const get=async(req,res)=>{
 module.exports = {
     create,
     get,
-    update,
     activate,
-    remove,
+    deactivate,
 };
