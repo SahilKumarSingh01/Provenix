@@ -17,7 +17,7 @@ const CourseCard = ({ course ,onDelete,onReEnroll,onReport}) => {
     navigate(`/course/${course._id}/view`);
   };
 
-  const progess = course.completedPages ? (course.completedPages.length / course.pageCount) * 100 : null;
+  const progess = course.completedPages ?course.completedPages.length ?(course.completedPages.length / course.pageCount) * 100:0 : null;
   const expiresAt = course?.expiresAt ? new Date(course.expiresAt) : null;
   let daysLeft = null;
   
@@ -43,7 +43,7 @@ const CourseCard = ({ course ,onDelete,onReEnroll,onReport}) => {
     const timeDiff = expiresAt - today;
     daysLeft = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // convert ms to days
   }
-
+  console.log(progess,course.completedPages);
   return (
     <div className={styles.container} onClick={handleCardClick}>
       <div className={styles.thumbnailWrapper}>

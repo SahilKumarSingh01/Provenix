@@ -120,9 +120,9 @@ const DisplayCode = ({ item, index, contentSection, setContentSection }) => {
                         )}
                     </button>
                 ))}
-                <button className={styles.addTabBtn} onClick={() => handleCreate()}>
+                {contentSection.isCreator&&<button className={styles.addTabBtn} onClick={() => handleCreate()}>
                     ➕
-                </button>
+                </button>}
             </div>
 
             {/* Code Display */}
