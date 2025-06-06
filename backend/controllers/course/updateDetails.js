@@ -11,7 +11,7 @@ const updateDetails = async (req, res) => {
 
         const [course, user, isOrphanResource] = await Promise.all([
             Course.findOne({ _id: courseId, creator: req.user.id }).select("thumbnail"),
-            User.findById(req.user.id).select("accountId"),
+            User.findById(req.user.id).select("activatedAccount"),
             publicId ? OrphanResource.exists({ publicId, type: "image", category: "thumbnail" }) : null,
         ]);
 

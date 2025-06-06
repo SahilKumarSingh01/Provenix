@@ -22,6 +22,7 @@ routes.post("/razorpay-webhook", async (req, res) => {
         }
 
         // Process events after signature verification
+        console.log("we are here");
         const event = req.body.event;
         switch (event) {
             case "payment.captured":

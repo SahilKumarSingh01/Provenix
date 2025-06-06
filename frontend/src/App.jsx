@@ -29,7 +29,8 @@ import AccountDeletion from "./pages/AccountDeletion"
 import Callback from "./pages/Callback.jsx"
 import RazorpayAccountCreation from "./pages/RazorpayAccountForm.jsx";
 import {CacheProvider} from'./context/CacheContext.jsx';
-
+import RazorpayOrder from "./pages/RazorpayOrder.jsx";
+import Payments from "./pages/Payments.jsx"
 // import Signup from "../pages/Signup";
 import "./App.css";
 
@@ -65,9 +66,10 @@ function App() {
         <Route path='/email-verify' element={<EmailVerify/>}/>
         <Route path='/forgot-password' element={<ForgotPassword/>}/>
         <Route path='/reset-password' element={<ResetPassword/>}/>
-        <Route path='auth/google/callback' element={<Callback strategy="google" />} />
-        <Route path='auth/github/callback' element={<Callback strategy="github" />} />
-        
+        <Route path='/auth/google/callback' element={<Callback strategy="google" />} />
+        <Route path='/auth/github/callback' element={<Callback strategy="github" />} />
+        <Route path='/razorpay-order' element={<RazorpayOrder/>}/>
+        <Route path='/payments/:enrollmentId' element={<Payments/>}/>
         <Route path="/course/*" element={<CourseRoutes />} />
 
         <Route path="/dashboard" element={<Dashboard/>}/>

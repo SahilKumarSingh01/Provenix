@@ -1,0 +1,109 @@
+.paymentsContainer {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  width: 90%;
+  max-width: 1200px;
+  margin: 40px auto;
+}
+
+.paymentsContainer h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-heading);
+  text-align: center;
+}
+
+.paymentTable {
+  width: 100%;
+  border-collapse: separate;
+  margin-top: 10px;
+}
+
+.paymentTable th {
+  background-color: var(--bg-secondary);
+  font-weight: 600;
+  text-align: left;
+  padding: 12px;
+  color: var(--text-heading);
+  border-bottom: 2px solid var(--border-primary);
+}
+
+.paymentTable td {
+  /* background-color: var(--bg-secondary); */
+  padding: 12px;
+  font-size: 0.95rem;
+  vertical-align: middle;
+}
+.orderIdCell {
+  max-width: 180px; /* or 120px on mobile if you want */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: monospace; /* Optional: makes it look more techy */
+}
+.statusAccepted {
+  color: #22c55e;
+  font-weight: 600;
+}
+
+.statusCreated {
+  color: #facc15;
+  font-weight: 600;
+}
+/* for stronger alert vibes */
+.statusRefunded {
+  color: #dc2626; /* Tailwind's red-600 */
+  font-weight: 600;
+}
+
+
+/* Timestamp */
+.timestamp {
+  font-family: monospace;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.recheckBtn {
+  background-color: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  padding: 8px 14px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.recheckBtn:hover {
+  background-color: var(--btn-primary-hover);
+}
+
+
+@media (max-width: 768px) {
+  .hideOnMobile {
+    display: none;
+  }
+  .paymentsContainer {
+    padding: 15px;
+    width: 95%;
+  }
+
+  .paymentTable th,
+  .paymentTable td {
+    padding: 8px;
+    font-size: 0.85rem;
+  }
+  .orderIdCell {
+    max-width: 120px;
+  }
+}

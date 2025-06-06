@@ -6,6 +6,7 @@ const pushProgress  =require('./enrollment/pushProgress');
 const pullProgress  =require('./enrollment/pullProgress');
 const getProgress   =require('./enrollment/getProgress')
 const getStats=require('./enrollment/getStats')
+const getEnrollment=require('./enrollment/getEnrollment')
 module.exports = {
   enroll,
   getEnrolledCourses,
@@ -15,4 +16,5 @@ module.exports = {
   pullProgress,
   removeEnrollment,
   getStats,
+  getEnrollment,
 };

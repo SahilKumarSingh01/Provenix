@@ -42,7 +42,7 @@ const create = async (req, res) => {
       }),
       razorpay.products.requestProductConfiguration(account.id, {
         product_name: "route",
-        // tnc_accepted: true,
+        tnc_accepted: true,
       }),
       User.findByIdAndUpdate(req.user.id, {
         accountId: account.id,
@@ -153,6 +153,7 @@ const activate = async (req, res) => {
 
     const product = await razorpay.products.requestProductConfiguration(user.accountId, {
       product_name: "route",
+      // tnc_accepted: true,
     });
 
     if (product.activation_status !== "activated") {
@@ -165,7 +166,7 @@ const activate = async (req, res) => {
     // Update status using updateOne to avoid overwriting the user doc unintentionally
     await User.updateOne(
       { _id: req.user.id },
-      { status: "Activated" }
+      { activatedAccount:1 }
     );
 
     return res.status(200).json({

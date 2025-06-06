@@ -1,52 +1,44 @@
 const Enrollment = require("../../models/Enrollment");
 const razorpay = require("../../config/razorpay");
+const User =require("../../models/User");
+const extendEnrollmentExpiry  = require("../../utils/extendEnrollmentExpiry"); // Import extendCourseExpiry
+const Course = require("../../models/Course");
 
 const verifyPayment = async (req, res) => {
-    try {
-        const { enrollmentId } = req.params;
-        const { index } = req.body;
-        const userId = req.user.id;
-
-        // Fetch the enrollment for the given user
-        const enrollment = await Enrollment.findOne({ _id: enrollmentId, user: userId });
-
-        if (!enrollment) {
-            return res.status(404).json({ success: false, message: "Enrollment not found" });
-        }
-
-        // Check if the order index is valid
-        if (!enrollment.orderIds[index]) {
-            return res.status(400).json({ success: false, message: "Invalid order index" });
-        }
-
-        // Get the orderId from the specified index
-        const orderId = enrollment.orderIds[index].orderId;
-
-        // Fetch order details and payments in parallel
-        const [orderDetails, paymentsResponse] = await Promise.all([
+    try{
+        const {orderId}=req.body;
+        const {enrollmentId}=req.params;
+        // const orderDetails = await razorpay.orders.fetch(orderId);
+        // console.log("here ",orderDetails);]
+        const [order,paymentCollection,enrollment]=await Promise.all([
             razorpay.orders.fetch(orderId),
-            razorpay.orders.fetchPayments(orderId)
+            razorpay.orders.fetchPayments(orderId),
+            Enrollment.findById(enrollmentId).populate("course"),
         ]);
+        // console.log(order);
+        const payment=paymentCollection.items[0];
+        const course=enrollment.course;
+        if(!order)
+            return res.status(400).json({message:"OrderId is not valid"});
+        if(!payment)
+            return res.status(400).json({message:"payment is not made try again!"});
+        if(order.status=="paid")
+            return res.status(400).json({message:"Your order is already accepted"});
+        if(course.status!=='published'){
+            await Enrollment.findByIdAndUpdate(enrollmentId,{$set:{[`orderIds.${order.notes.orderIndex}.status`]:'refunded'}});
+            return res.status(400).json({message:"course is not longer available"});
+        }
+        // console.log(payment);
+        const [updatedPayment,updatedEnrollment]=await Promise.all([
+            razorpay.payments.capture(payment.id,payment.amount,payment.currency),
+            Enrollment.findByIdAndUpdate(enrollmentId,{$set:{[`orderIds.${order.notes.orderIndex}.status`]:'accepted'}}),
+            extendEnrollmentExpiry(enrollment._id),
+        ]) 
+        res.status(200).json({message:"Successfully updated ",enrollment:updatedEnrollment});
 
-        // Extract extended payment details (if available)
-        const paymentDetails = paymentsResponse.items.length > 0 ? paymentsResponse.items[0] : null;
-
-        // Update order status in enrollment (parallel execution)
-        await Enrollment.updateOne(
-            { _id: enrollmentId },
-            { $set: { [`orderIds.${index}.status`]: orderDetails.status } }
-        );
-
-
-        // Send updated order & extended payment details to frontend
-        res.status(200).json({ 
-            success: true, 
-            order: orderDetails, 
-            payment: paymentDetails || null  
-        });
-
-    } catch (error) {
-        res.status(500).json({ success: false, message: "Something went wrong", error: error.message });
+    }catch(err){
+        console.log(err);
+        res.status(500).json({message:"fail to verify payments status",error:err})
     }
 };
 

@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import axios from "../api/axios";
 import CourseCard from "../components/CourseCard";
 import ConfirmBox from "../components/ConfirmBox.jsx";
@@ -9,6 +11,7 @@ import { useCache } from "../context/CacheContext.jsx";
 
 const MyEnrollments = () => {
     const { setCache}=useCache();
+    const navigate=useNavigate();
     const [overlay, setOverlay] = useState(null);
     
     const [courses, setCourses] = useState([]);
@@ -93,6 +96,11 @@ const MyEnrollments = () => {
             const courseId=courses[index]._id;
             const {data} = await axios.post(`api/enrollment/${courseId}/enroll`);
             toast.success(data.message);
+            if(data.order){
+                console.log(data.order);
+                navigate(`/razorpay-order?orderId=${data.order.id}&courseId=${courseId}&enrollmentId=${data.enrollment._id}`,
+                    {state:{course:courses[index],order:data.order}});
+            }
             setCache(courseId,data.course);
             const updatedCourses=[...courses];
             updatedCourses[index]={...data.enrollment,...data.course,enrollmentId:data.enrollment._id,isEnrolled:true};

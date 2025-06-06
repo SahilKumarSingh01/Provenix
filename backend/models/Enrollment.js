@@ -10,8 +10,8 @@ const enrollmentSchema = new mongoose.Schema({
   course: { type: mongoose.Schema.Types.ObjectId, ref: "Course", required: true },
   completedPages: [{ type: mongoose.Schema.Types.ObjectId, ref: "Page" }],
   orderIds: [orderIdSchema],
-  status: { type: String, enum: ["active", "expired"], default: "active" },
-  expiresAt: { type: Date, required: true },
+  status: { type: String, enum: ["active", "expired"], default: "expired" },
+  expiresAt: { type: Date, required: true ,default:Date.now},
 }, { timestamps: true });
 
 enrollmentSchema.index({ course: 1, status: 1 });

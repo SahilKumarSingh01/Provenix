@@ -1,5 +1,5 @@
 import React, {  useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate} from "react-router-dom";
 import {toast} from 'react-toastify'
 import {useCourse} from "../context/CourseContext"; // Import CourseContext
 import axios from '../api/axios.js';
@@ -43,10 +43,15 @@ const CourseView = () => {
     }
     const handleEnrollment=async()=>{
         try {
-            const response = await axios.post(`api/enrollment/${course._id}/enroll`);
-            toast.success(response.data.message);
-            setCache(courseId,response.data.course);
-            setCourse(response.data.course);
+            const {data} = await axios.post(`api/enrollment/${course._id}/enroll`);
+            toast.success(data.message);
+            if(data.order){
+                console.log(data.order);
+                navigate(`/razorpay-order?orderId=${data.order.id}&courseId=${course._id}&enrollmentId=${data.enrollment._id}`,
+                    {state:{course,order:data.order}});
+            }
+            setCache(courseId,data.course);
+            setCourse(data.course);
         } catch (error) {
             console.log(error);
             toast.error(error.response?.data?.message || "Something went wrong!");

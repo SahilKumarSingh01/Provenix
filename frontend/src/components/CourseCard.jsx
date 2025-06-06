@@ -60,6 +60,8 @@ const CourseCard = ({ course ,onDelete,onReEnroll,onReport}) => {
               {course?.isEnrolled&&<button className={styles.dropdownItem} onClick={onReEnroll}>Re-enroll</button>}
               <button className={styles.dropdownItem} onClick={onReport}>Report</button>
               {course?.isEnrolled&&<button className={styles.dropdownItem} onClick={onDelete}>Delete Enrollment</button>}
+              {course?.enrollmentId&&course?.price>0&&<button className={styles.dropdownItem} 
+                  onClick={()=>navigate(`/payments/${course.enrollmentId}`)}>Payments</button>}
 
             </div>
           )}
@@ -90,7 +92,9 @@ const CourseCard = ({ course ,onDelete,onReEnroll,onReport}) => {
 
         <div className={styles.cardFooter}>
           <div className={styles.rating}><AvgRating course={course} /></div>
-          {daysLeft && <span className={styles.daysLeft}>{daysLeft} days left</span>}
+          {daysLeft>0 && <span className={styles.daysLeft}>{daysLeft} days left</span>}
+          {daysLeft==0 && <span className={styles.daysLeft}>Expired</span>}
+
           <span className={styles.priceOrProgress}>
             {progess !== null ? progess.toFixed(2) + "%" : course.price > 0 ? `₹${course.price.toFixed(2)}` : "Free"}
           </span>
